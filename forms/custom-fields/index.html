@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Extending Forms | Wire Docs</title>
+    <meta name="description" content="Wire Forms is built to be extended. Most apps never need to — the built-in field set covers the common cases — but when you need a field that does not ship with the package, you write a small PHP class plus a Blade view and use it exactly like a first-party field.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/forms/custom-fields/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/forms/custom-fields/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/forms/custom-fields/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/forms/custom-fields/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Extending Forms | Wire Docs">
+    <meta property="og:description" content="Wire Forms is built to be extended. Most apps never need to — the built-in field set covers the common cases — but when you need a field that does not ship with the package, you write a small PHP class plus a Blade view and use it exactly like a first-party field.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/forms/custom-fields/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Extending Forms | Wire Docs">
+    <meta name="twitter:description" content="Wire Forms is built to be extended. Most apps never need to — the built-in field set covers the common cases — but when you need a field that does not ship with the package, you write a small PHP class plus a Blade view and use it exactly like a first-party field.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../forms/custom-fields/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../cs/forms/custom-fields/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Start Here</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Wire Documentation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Getting Started                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Project Map                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Configuration                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Authorization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Error Handling                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Theming &amp; Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testing                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Cookbook                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Troubleshooting                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Upgrade Guide                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Forms</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../validation/">
+                                        Form Validation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../reactive-fields/">
+                                        Reactive Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../save-lifecycle/">
+                                        Save Lifecycle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Extending Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/">
+                                        Form Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Table</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/columns/">
+                                        Columns                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/filters/">
+                                        Filters                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/actions/">
+                                        Table Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/record-actions/">
+                                        Record Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/selection/">
+                                        Selecting Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/gestures/">
+                                        The Gesture Layer                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/exports/">
+                                        Table Exports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/imports/">
+                                        Table Imports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/summaries/">
+                                        Summaries                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/grouping/">
+                                        Row Grouping                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/sub-rows/">
+                                        Sub-Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/relation-managers/">
+                                        Relation Managers                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/notifications/">
+                                        Table Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/advanced/">
+                                        Advanced Features                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Row Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Column Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Advanced Usage                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        API Reference                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modals                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgets                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolists                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editable panels                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Plugins                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server &amp; Tools                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines &amp; Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Forms</span>
+                            </nav>
+                            <p class="eyebrow">Forms</p>
+                            <h1>Extending Forms</h1>
+                                                            <p class="lead">Wire Forms is built to be extended. Most apps never need to — the built-in field set covers the common cases — but when you need a field that does not ship with the package, you write a small PHP class plus a Blade view and use it exactly like a first-party field.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#quick-custom-view-viewfield">Quick Custom View (ViewField)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#how-a-field-is-put-together">How a Field Is Put Together</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#building-a-custom-field">Building a Custom Field</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#1-the-php-class">1. The PHP class</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#2-the-blade-view">2. The Blade view</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#3-use-it">3. Use it</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#display-only-components">Display-Only Components</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#reusable-presets">Reusable Presets</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#shaping-the-value-a-field-stores">Shaping the Value a Field Stores</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#hooking-into-the-save-lifecycle">Hooking Into the Save Lifecycle</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#packaging-fields-into-a-plugin">Packaging Fields Into a Plugin</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#what-registering-a-field-really-means">What &quot;registering a field&quot; really means</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#1-package-layout">1. Package layout</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#2-the-field-pointed-at-a-namespaced-view">2. The field, pointed at a namespaced view</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#3-register-the-view-namespace-in-the-service-provider">3. Register the view namespace in the service provider</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#4-the-plugin-presets-hooks-and-config">4. The plugin: presets, hooks, and config</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#5-consumers-install-it">5. Consumers install it</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#checklist">Checklist</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#js-backed-fields">JS-Backed Fields</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#testing-custom-fields">Testing Custom Fields</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#see-also">See Also</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Wire Forms is built to be extended. Most apps never need to — the built-in
+<a href="../fields/">field set</a> covers the common cases — but when you need a field
+that does not ship with the package, you write a small PHP class plus a Blade
+view and use it exactly like a first-party field.</p>
+<p>This page covers, from least to most involved:</p>
+<table>
+<thead>
+<tr>
+<th>You need…</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A one-off custom view inside a form</td>
+<td><a href="#quick-custom-view-viewfield"><code>ViewField</code></a></td>
+</tr>
+<tr>
+<td>A static display block (no input)</td>
+<td><a href="#display-only-components">Display component</a></td>
+</tr>
+<tr>
+<td>A reusable input with its own API</td>
+<td><a href="#building-a-custom-field">Custom field</a></td>
+</tr>
+<tr>
+<td>The same preset applied across many forms</td>
+<td><a href="#reusable-presets">Form macros</a></td>
+</tr>
+<tr>
+<td>A field that stores something other than what it shows</td>
+<td><a href="#shaping-the-value-a-field-stores">State transforms</a></td>
+</tr>
+<tr>
+<td>Logic around every save</td>
+<td><a href="#hooking-into-the-save-lifecycle">Save hooks</a></td>
+</tr>
+<tr>
+<td>A field shipped in a package</td>
+<td><a href="#packaging-fields-into-a-plugin">Packaging fields into a plugin</a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Prefer the fluent API first. Reach for a custom field only when the same
+behaviour should be reused, or when no built-in field can be configured to do
+the job.</p>
+</blockquote>
+<hr>
+<h2 id="quick-custom-view-viewfield">Quick Custom View (ViewField)</h2>
+<p>When you only need to drop custom markup into a form — without a reusable API —
+use <a href="../fields/view-field/"><code>ViewField</code></a>. It renders any Blade view and passes
+through the form state path, so you avoid writing a class at all.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Display\ViewField</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">ViewField</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;avatar_preview&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;forms.partials.avatar-preview&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">viewData</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; [</span><span style="color: #9ECBFF;">&#39;url&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">user</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">avatar_url]);</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">{{-- resources/views/forms/partials/avatar-preview.blade.php --}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">img</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">src</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $url </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;h-16 w-16 rounded-full&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">alt</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;&quot;</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p><code>viewData()</code> accepts an array or a closure (evaluated at render time). Use
+<code>ViewField</code> for previews, callouts, or bespoke widgets that do not need to be a
+shared, named component.</p>
+<hr>
+<h2 id="how-a-field-is-put-together">How a Field Is Put Together</h2>
+<p>Every form component extends
+<code>NyonCode\WireCore\Foundation\Components\Component</code>. That base class gives you,
+for free:</p>
+<ul>
+<li><code>make(string $name)</code> factory and a <code>$name</code>-only constructor</li>
+<li>label, hint, helper text, id, size, column span, visibility</li>
+<li><code>extraAttributes()</code>, <code>default()</code>, and closure evaluation via <code>evaluate()</code></li>
+<li><code>render()</code>, which calls your <code>viewName()</code> with the component available in the
+view as <code>$field</code></li>
+</ul>
+<p>Input fields extend <code>NyonCode\WireForms\Components\Field</code>, which adds the parts
+that make a field interactive:</p>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>What it adds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HasState</code></td>
+<td><code>getStatePath()</code>, <code>getWireModelAttribute()</code></td>
+</tr>
+<tr>
+<td><code>CanBeLive</code></td>
+<td><code>-&gt;live()</code>, <code>getWireModelModifier()</code></td>
+</tr>
+<tr>
+<td><code>HasDebounce</code></td>
+<td><code>-&gt;debounce()</code>, <code>getDebounceModifier()</code></td>
+</tr>
+<tr>
+<td><code>CanBeReadOnly</code></td>
+<td><code>-&gt;disabled()</code>, <code>isReadOnly()</code></td>
+</tr>
+<tr>
+<td><code>HasFormValidation</code></td>
+<td><code>-&gt;rules()</code>, <code>-&gt;required()</code>, rule collection</td>
+</tr>
+<tr>
+<td><code>HasPlaceholder</code>, <code>HasPrefixAndSuffix</code>, <code>HasTooltip</code>, <code>CanBeAutofocused</code></td>
+<td>optional affordances</td>
+</tr>
+</tbody>
+</table>
+<p>A field also declares its <strong>state type</strong> with <code>getStateType()</code> (default
+<code>'string'</code>). The state hydrator uses it to cast raw request values before they
+reach the form state — return <code>'int'</code>, <code>'float'</code>, <code>'bool'</code>, or <code>'array'</code> when
+your value is not a string.</p>
+<p><code>getStateType()</code> shapes the value on the way <em>in</em>. When your field also needs to
+shape it on the way <em>out</em> — to store something other than what the widget holds —
+implement <a href="#shaping-the-value-a-field-stores"><code>DehydratesState</code></a> rather than
+pushing the job onto every form that uses the field.</p>
+<p>The only abstract method you must implement is <code>viewName()</code>.</p>
+<hr>
+<h2 id="building-a-custom-field">Building a Custom Field</h2>
+<p>We will build a <code>MoneyInput</code> field that stores an integer number of cents and
+renders a currency-aware text input.</p>
+<h3 id="1-the-php-class">1. The PHP class</h3>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Field</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">MoneyInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Field</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;USD&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $decimals </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $currency;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">decimals</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $decimals)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">decimals </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $decimals;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getDecimals</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">int</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">decimals;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Value is stored as an integer (cents). </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getStateType</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;int&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    } </span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;forms.components.money-input&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    } </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Conventions worth following, because the built-in fields all do:</p>
+<ul>
+<li><strong>Fluent setters return <code>static</code></strong> so calls chain.</li>
+<li><strong>State is set through protected properties</strong> with matching getters; the Blade
+view reads getters, never properties.</li>
+<li><strong>Setters accept <code>Closure</code> where it makes sense</strong>, and getters resolve them
+with <code>$this-&gt;evaluate(...)</code>. That is what makes <code>-&gt;label(fn () =&gt; ...)</code> work.</li>
+</ul>
+<h3 id="2-the-blade-view">2. The Blade view</h3>
+<p>Wrap the input in the shared field-wrapper partials. They render the label,
+hint, required marker, helper text, and validation error for you — so a custom
+field looks identical to a built-in one and needs no extra markup for those.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">{{-- resources/views/forms/components/money-input.blade.php --}}</span></div><div class='line'><span style="color: #E1E4E8;">@php</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">assert</span><span style="color: #E1E4E8;">($field </span><span style="color: #F97583;">instanceof</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    $wireModifier   </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getWireModelModifier</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    $debounceModifier </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDebounceModifier</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    $wireAttr </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;wire:model&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> ($wireModifier ? </span><span style="color: #9ECBFF;">&quot;.{</span><span style="color: #E1E4E8;">$wireModifier</span><span style="color: #9ECBFF;">}&quot;</span><span style="color: #E1E4E8;"> : </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> $debounceModifier;</span></div><div class='line'><span style="color: #E1E4E8;">@endphp</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-forms::partials.field-wrapper-start&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;flex rounded-md shadow-sm&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">span</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;/</span><span style="color: #85E89D;">span</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">input</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #B392F0;">type</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;number&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #B392F0;">step</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">/</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">10</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">**</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDecimals</span><span style="color: #E1E4E8;">()) </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getId</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $wireAttr </span><span style="color: #79B8FF;">}}</span><span style="color: #FDAEB7;">=&quot;{{</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">$field-</span><span style="color: #E1E4E8;">&gt;getWireModelAttribute() }}&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isReadOnly</span><span style="color: #E1E4E8;">()) readonly </span><span style="color: #F97583;">@endif</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isRequired</span><span style="color: #E1E4E8;">()) required </span><span style="color: #F97583;">@endif</span></div><div class='line'><span style="color: #E1E4E8;">        class=&quot;block w-full rounded-r-md border-gray-300 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white&quot;</span></div><div class='line'><span style="color: #E1E4E8;">    /&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-forms::partials.field-wrapper-end&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>The key wiring is the <code>wire:model</code> attribute. <code>getWireModelAttribute()</code> returns
+the correct dotted state path (for example <code>data.price</code>), and the modifier
+helpers add <code>.live</code> / <code>.debounce.Nms</code> when the field opts into them. This is the
+same pattern every built-in field uses — see
+<code>packages/forms/resources/views/components/text-input.blade.php</code> for the full
+reference.</p>
+<h3 id="3-use-it">3. Use it</h3>
+<p>A custom field is a normal component. Add it to any schema:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">decimals</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">helperText</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Stored in cents.&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p>No registration step is required for use in your own app: the field resolves its
+own view, so listing it in a schema is enough.</p>
+<hr>
+<h2 id="display-only-components">Display-Only Components</h2>
+<p>For output that has no input value — callouts, summaries, computed previews —
+extend <code>NyonCode\WireCore\Foundation\Components\ViewComponent</code> instead of
+<code>Field</code>. It is the same base, minus the input/validation concerns, and is what
+<code>Placeholder</code>, <code>Alert</code>, and <code>Html</code> use.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Components\ViewComponent</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">StatBlock</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">ViewComponent</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">value</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $value)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">value </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $value;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getValue</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">) </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">evaluate</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">value);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;forms.components.stat-block&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<hr>
+<h2 id="reusable-presets">Reusable Presets</h2>
+<p>When you do not need a new component, only a <strong>preset</strong> of existing fluent calls,
+you have two accurate options. (Form fields are not <code>Macroable</code> — unlike <code>Table</code>
+and <code>Action</code>, which support <code>::macro()</code>; see
+<a href="../../core/plugins/#adding-buttons-and-actions">Core Plugins → Adding Buttons And Actions</a>
+for table/action macros.)</p>
+<p><strong>A static factory</strong> keeps the preset in one place and reads cleanly at the call
+site:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\TextInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Fields</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">slug</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $name)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">TextInput</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">($name)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">helperText</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Lowercase, dash-separated.&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;regex:/^[a-z0-9-]+$/&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">live</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Fields</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Fields</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">slug</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;slug&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p><strong>A subclass that pre-configures <code>make()</code></strong> is the right choice when you also
+want a distinct type you can reference elsewhere:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\TextInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">SlugInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">TextInput</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $name)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">parent::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">($name)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;regex:/^[a-z0-9-]+$/&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">live</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Use a <strong>factory or subclass</strong> when you are composing existing field methods, and
+a full <a href="#building-a-custom-field">custom field</a> when you need new state, a new
+view, or new markup.</p>
+<hr>
+<h2 id="shaping-the-value-a-field-stores">Shaping the Value a Field Stores</h2>
+<p>A field's state is whatever its widget produced. Usually that is exactly what
+should be persisted — but not always. A date picker's input parses only its own
+format while the column wants another; an upload holds a temporary path while the
+column wants the stored one; a money field shows <code>1 234,50</code> and stores cents.</p>
+<p>Two contracts in <code>NyonCode\WireCore\Foundation\Contracts</code> cover the two
+directions. They are independent — implement only the one you need:</p>
+<table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>Method</th>
+<th>Runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HydratesState</code></td>
+<td><code>hydrateState($value, ?Model $record)</code></td>
+<td>model value → state, after the <code>getStateType()</code> cast</td>
+</tr>
+<tr>
+<td><code>DehydratesState</code></td>
+<td><code>dehydrateState($state, ?Model $record)</code></td>
+<td>state → stored value, during save</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the <a href="#building-a-custom-field"><code>MoneyInput</code></a> above needs <em>neither</em>: its
+state is already the integer it stores, which <code>getStateType(): 'int'</code> is enough to
+express. The contracts earn their keep only when state and stored value genuinely
+differ — as here, where the input shows plaintext and the column holds ciphertext:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Database\Eloquent\Model</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Contracts\DehydratesState</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Contracts\HydratesState</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Field</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">EncryptedInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Field</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">implements</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">DehydratesState</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">HydratesState</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Stored → shown. </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">hydrateState</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $value, </span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">Model</span><span style="color: #E1E4E8;"> $record </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">mixed</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">||</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">decrypt</span><span style="color: #E1E4E8;">($value);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Shown → stored.</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">dehydrateState</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $state, </span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">Model</span><span style="color: #E1E4E8;"> $record </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">mixed</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $state </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">||</span><span style="color: #E1E4E8;"> $state </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?</span><span style="color: #E1E4E8;"> $state </span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">encrypt</span><span style="color: #E1E4E8;">($state);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    } </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;forms.components.encrypted-input&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>The same two contracts drive <a href="../../table/columns/editing/">editable table columns</a> —
+<code>TextInputColumn</code> uses them for its trim/case/number pipeline — so a component
+that implements them behaves the same in a form and in an inline-edited cell.</p>
+<blockquote>
+<p><strong>Both directions, or neither.</strong> If a transform moves the value (a timezone
+conversion, a unit change), implementing only <code>hydrateState()</code> means the shifted
+state gets written straight back on save, moving the value a little further on
+every round trip. A one-sided transform is worse than none.</p>
+</blockquote>
+<p><strong><code>dehydrateState()</code> must be a pure function of its arguments.</strong> A host may call
+it more than once per save — the table dehydrates once without a record to
+validate before opening its transaction, then again with the locked record. Hosts
+always pass the original state, never the result of an earlier call, so a
+transform that would break if applied twice is still safe. The <code>$record</code> is
+<code>null</code> when the host has none (a create form); a table cell always has one.</p>
+<hr>
+<h2 id="hooking-into-the-save-lifecycle">Hooking Into the Save Lifecycle</h2>
+<p>The contracts above belong to a <em>field</em> — they travel with it into every form.
+The two layers here belong to a <strong>form</strong> or to the <strong>app</strong>. Reach for them when
+the knowledge is not the field's: use <code>DehydratesState</code> for "this field always
+stores cents", a hook for "every form stamps a tenant".</p>
+<p>Two layers exist, and they compose:</p>
+<p><strong>Per-form callbacks</strong> — for logic local to one form. Defined on the <code>Form</code>
+instance and documented in <a href="../save-lifecycle/">Save Lifecycle</a>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">mutateDataBeforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; [</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">$data, </span><span style="color: #9ECBFF;">&#39;updated_by&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">()])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">beforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; </span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">afterSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">notifySubscribers</span><span style="color: #E1E4E8;">());</span></div></code></pre>
+<p><strong>Plugin hooks</strong> — for logic that should run for <em>every</em> form across the app,
+without touching each component. The runtime emits <code>form.saving</code> (before
+persistence, can modify the data) and <code>form.saved</code> (after persistence,
+observational):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hook</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;form.saving&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $payload)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    $payload[</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">][</span><span style="color: #9ECBFF;">&#39;tenant_id&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">??=</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">user</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">tenant_id;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $payload;</span></div><div class='line'><span style="color: #E1E4E8;">}, </span><span style="color: #B392F0;">priority</span><span style="color: #E1E4E8;">: </span><span style="color: #F97583;">-</span><span style="color: #79B8FF;">100</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>See <a href="../../core/plugins/#hook-system">Core Plugins → Hook System</a> for priorities,
+typed hooks, and the full payload shape. Use a per-form callback for one form;
+use a hook for a cross-cutting rule.</p>
+<hr>
+<h2 id="packaging-fields-into-a-plugin">Packaging Fields Into a Plugin</h2>
+<p>The sections above build a field inside an app, where a class plus a Blade view
+is enough — the field resolves its own view, so no registration step is needed.
+This section covers the next step: shipping custom fields as a <strong>reusable,
+installable unit</strong> — a companion package others can <code>composer require</code>, or a
+shared module inside a larger app.</p>
+<h3 id="what-registering-a-field-really-means">What "registering a field" really means</h3>
+<p>There is <strong>no field type registry</strong>. Unlike table columns, filters, and actions
+— which have <code>addColumnType()</code> / <code>addFilterType()</code> / <code>addActionType()</code> metadata
+registries — form fields are never looked up by name. A field is just a class,
+and <code>render()</code> calls its <code>viewName()</code> directly through Laravel's <code>view()</code>
+helper. So making a packaged field usable comes down to exactly two things:</p>
+<ol>
+<li><strong>The field's class is autoloadable</strong> — handled by your package's Composer
+<code>autoload</code> block, like any PHP class.</li>
+<li><strong>The field's view resolves</strong> — its <code>viewName()</code> must point at a view Laravel
+can find. In a package that means registering a <strong>view namespace</strong>.</li>
+</ol>
+<p>The <a href="../../core/plugins/">core plugin</a> is the layer on top: it is where you
+install the cross-cutting extras — <strong>presets (macros), save hooks, and default
+configuration</strong> — so consumers get them by registering one class. The plugin is
+optional for a plain field, and required only once you ship macros or hooks.</p>
+<blockquote>
+<p>Do <strong>not</strong> register a field with <code>addColumnType()</code> (or the other type
+registries). Those are metadata registries for <em>table</em> columns/filters/actions
+and are never consulted to render a form field. Registering a field there does
+nothing useful and is misleading.</p>
+</blockquote>
+<h3 id="1-package-layout">1. Package layout</h3>
+<p>A minimal field package looks like this:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">acme/wire-money-fields/</span></div><div class='line'><span style="color: #e1e4e8;">├── composer.json</span></div><div class='line'><span style="color: #e1e4e8;">├── src/</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── AcmeMoneyServiceProvider.php</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── AcmeMoneyPlugin.php</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Components/</span></div><div class='line'><span style="color: #e1e4e8;">│       └── MoneyInput.php</span></div><div class='line'><span style="color: #e1e4e8;">└── resources/</span></div><div class='line'><span style="color: #e1e4e8;">    └── views/</span></div><div class='line'><span style="color: #e1e4e8;">        └── components/</span></div><div class='line'><span style="color: #e1e4e8;">            └── money-input.blade.php</span></div></code></pre>
+<p><code>composer.json</code> autoloads the namespace and registers the service provider so
+the package boots automatically:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-json"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;name&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;acme/wire-money-fields&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;require&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">&quot;nyoncode/wire-forms&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;^0.1&quot;</span></div><div class='line'><span style="color: #E1E4E8;">    },</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;autoload&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">&quot;psr-4&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">&quot;Acme\\WireMoney\\&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;src/&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        }</span></div><div class='line'><span style="color: #E1E4E8;">    },</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;extra&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">&quot;laravel&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">&quot;providers&quot;</span><span style="color: #E1E4E8;">: [</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #9ECBFF;">&quot;Acme</span><span style="color: #79B8FF;">\\</span><span style="color: #9ECBFF;">WireMoney</span><span style="color: #79B8FF;">\\</span><span style="color: #9ECBFF;">AcmeMoneyServiceProvider&quot;</span></div><div class='line'><span style="color: #E1E4E8;">            ]</span></div><div class='line'><span style="color: #E1E4E8;">        }</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h3 id="2-the-field-pointed-at-a-namespaced-view">2. The field, pointed at a namespaced view</h3>
+<p>The field class is identical to the app version, except <code>viewName()</code> returns a
+<strong>namespaced</strong> view (<code>namespace::path</code>) so it resolves no matter where the
+package is installed:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Acme\WireMoney\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Field</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">MoneyInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Field</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;USD&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $currency;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getStateType</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;int&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// &quot;acme-money&quot; is the namespace registered by the service provider.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;acme-money::components.money-input&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h3 id="3-register-the-view-namespace-in-the-service-provider">3. Register the view namespace in the service provider</h3>
+<p>The service provider's one required job is to make <code>acme-money::</code> resolvable.
+You can register it manually with <code>loadViewsFrom()</code>, and <code>publishes()</code> the views
+so consumers can override your markup:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Acme\WireMoney</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Support\ServiceProvider</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\PluginManager</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">final</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">AcmeMoneyServiceProvider</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">ServiceProvider</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Register the plugin (macros, hooks, config) once the manager resolves.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">resolving</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #E1E4E8;"> $manager) {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> $manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">has</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;acme-money&#39;</span><span style="color: #E1E4E8;">)) {</span></div><div class='line'><span style="color: #E1E4E8;">                $manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">AcmeMoneyPlugin</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">));</span></div><div class='line'><span style="color: #E1E4E8;">            }</span></div><div class='line'><span style="color: #E1E4E8;">        });</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">boot</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Makes acme-money::components.money-input resolvable.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">loadViewsFrom</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">__DIR__</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;/../resources/views&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;acme-money&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Let consumers override the markup with vendor:publish.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">publishes</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">__DIR__</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;/../resources/views&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">resource_path</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;views/vendor/acme-money&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">        ], </span><span style="color: #9ECBFF;">&#39;acme-money::views&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<blockquote>
+<p>If your package is built on <code>spatie/laravel-package-toolkit</code> (the same toolkit
+Wire packages use), calling <code>-&gt;hasViews()</code> in your package configuration
+registers the namespace and the publish tag for you, derived from the package
+short name — exactly how <code>wire-forms::partials.field-wrapper-start</code> is exposed.</p>
+</blockquote>
+<p>Once the namespace is registered, the field is fully usable — <code>MoneyInput::make('price')</code>
+works in any schema with no further setup.</p>
+<h3 id="4-the-plugin-presets-hooks-and-config">4. The plugin: presets, hooks, and config</h3>
+<p>Add a plugin when you want to ship more than the field class — for example a
+reusable <strong>preset macro</strong>, a <strong>save hook</strong>, or <strong>default configuration</strong>. Form
+fields are not <code>Macroable</code>, so field presets ship as a static factory or a
+subclass (see <a href="#reusable-presets">Reusable Presets</a>); the plugin is where you
+register <code>Table</code>/<code>Action</code> macros, hooks, and config.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Acme\WireMoney</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\Contracts\HasConfiguration</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\Contracts\Plugin</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\PluginManager</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">final</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">AcmeMoneyPlugin</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">implements</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">HasConfiguration</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">Plugin</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getId</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;acme-money&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">defaultConfig</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;default_currency&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;USD&#39;</span><span style="color: #E1E4E8;">];</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #E1E4E8;"> $manager)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// A cross-cutting save hook: round any money field to whole cents.</span></div><div class='line'><span style="color: #E1E4E8;">        $manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hook</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;form.saving&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $payload)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">foreach</span><span style="color: #E1E4E8;"> ($payload[</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> $key </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $value) {</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #B392F0;">str_ends_with</span><span style="color: #E1E4E8;">($key, </span><span style="color: #9ECBFF;">&#39;_cents&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #F97583;">&amp;&amp;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">is_numeric</span><span style="color: #E1E4E8;">($value)) {</span></div><div class='line'><span style="color: #E1E4E8;">                    $payload[</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">][$key] </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;">) </span><span style="color: #79B8FF;">round</span><span style="color: #E1E4E8;">($value);</span></div><div class='line'><span style="color: #E1E4E8;">                }</span></div><div class='line'><span style="color: #E1E4E8;">            }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $payload;</span></div><div class='line'><span style="color: #E1E4E8;">        });</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">boot</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #E1E4E8;"> $manager)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Config-driven defaults are available here if you need them:</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// $manager-&gt;getPluginConfig($this-&gt;getId())[&#39;default_currency&#39;]</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>The plugin is wired up automatically by the service provider's <code>resolving()</code>
+callback in step 3, so consumers get the field, its views, and its hooks just by
+installing the package. See
+<a href="../../core/plugins/#register-plugins-from-a-package">Core Plugins → Register Plugins From A Package</a>
+for the registration pattern and the <code>has()</code> guard.</p>
+<h3 id="5-consumers-install-it">5. Consumers install it</h3>
+<p>From the consuming app, installation is just Composer plus optional view
+overrides:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">acme/wire-money-fields</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;"># Optional: override the field markup</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=acme-money::views</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Acme\WireMoney\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price_cents&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<blockquote>
+<p><strong>Plugin config tags use <code>::</code></strong> — <code>acme-money::views</code>, <code>acme-money::config</code> —
+not a dash. A dashed tag like <code>acme-money-views</code> resolves to nothing.</p>
+</blockquote>
+<h3 id="checklist">Checklist</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Required for</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autoload field class</td>
+<td>Always</td>
+<td>Composer <code>psr-4</code></td>
+</tr>
+<tr>
+<td>Register view namespace</td>
+<td>Always (in a package)</td>
+<td><code>loadViewsFrom()</code> / <code>-&gt;hasViews()</code></td>
+</tr>
+<tr>
+<td><code>viewName()</code> returns <code>namespace::path</code></td>
+<td>Always (in a package)</td>
+<td>Field class</td>
+</tr>
+<tr>
+<td>Publish views</td>
+<td>Optional (override support)</td>
+<td><code>publishes(..., 'tag::views')</code></td>
+</tr>
+<tr>
+<td>Register the plugin</td>
+<td>Only for macros/hooks/config</td>
+<td><code>resolving(PluginManager::class)</code></td>
+</tr>
+<tr>
+<td>Default config</td>
+<td>Only for configurable plugins</td>
+<td><code>HasConfiguration</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="js-backed-fields">JS-Backed Fields</h2>
+<p>There are two levels of client-side behaviour in the built-in fields:</p>
+<ul>
+<li>
+<p><strong>Inline Alpine.</strong> Lightweight interactivity needs no separate bundle. <code>Slider</code>
+and <code>Rating</code>, for example, drive everything from an <code>x-data</code> block and
+<code>@entangle</code> the field's state path, with any CSS inlined once via <code>@once</code>. For
+most custom fields this is all you need — see
+<code>packages/forms/resources/views/components/slider.blade.php</code>.</p>
+</li>
+<li>
+<p><strong>Pre-bundled script via <code>@assets</code>.</strong> Heavier fields (like <code>TiptapEditor</code>) ship
+a pre-built JS bundle that the provider serves from a route
+(<code>/wire-forms/assets/{asset}.js</code>). The field view injects it with Livewire's
+<code>@assets</code> directive so the script runs even when the field is opened inside a
+modal — where a plain <code>&lt;script&gt;</code> tag injected through DOM morphing would never
+execute. See <code>packages/forms/resources/views/components/tiptap-editor.blade.php</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">@assets</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">script</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">src</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-forms.asset&#39;</span><span style="color: #E1E4E8;">, [</span><span style="color: #9ECBFF;">&#39;asset&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;tiptap&#39;</span><span style="color: #E1E4E8;">]) </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #E1E4E8;">&gt;&lt;/</span><span style="color: #85E89D;">script</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #B392F0;">@endassets</span></div></code></pre>
+</li>
+</ul>
+<p>If you build a heavier JS-backed field in your own package, follow the same
+pattern: bundle the script, expose it on a route, and inject it with <code>@assets</code>
+from the field view so it is present whenever the field renders.</p>
+<p><strong>Register your Alpine component unconditionally.</strong> <code>alpine:init</code> fires exactly
+once per document, so a bundle that arrives later — after a <code>wire:navigate</code>, with
+a lazily rendered surface, inside an AJAX-loaded modal — would subscribe to an
+event that never fires again and register nothing, leaving <code>x-data="myField(…)"</code>
+to throw <code>myField is not defined</code>. Every bundle in Wire uses this idiom:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">let</span><span style="color: #E1E4E8;"> registered </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span></div><div class='line'><span style="color: #F97583;">const</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> () </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (registered </span><span style="color: #F97583;">||</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> window.Alpine) </span><span style="color: #F97583;">return</span></div><div class='line'><span style="color: #E1E4E8;">    registered </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span></div><div class='line'><span style="color: #E1E4E8;">    window.Alpine.</span><span style="color: #B392F0;">data</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;myField&#39;</span><span style="color: #E1E4E8;">, myField)</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div><div class='line'><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (window.Alpine) </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #F97583;">else</span><span style="color: #E1E4E8;"> document.</span><span style="color: #B392F0;">addEventListener</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;alpine:init&#39;</span><span style="color: #E1E4E8;">, register)</span></div></code></pre>
+<p>The <code>registered</code> guard is not defensive detail: a bundle can legitimately be
+emitted twice on one page (a per-surface include plus
+<a href="../../getting-started/#javascript-assets"><code>@wireStackScripts</code></a>), and the browser
+will execute it both times.</p>
+<p>If your package ships more than an occasional heavy field, declare the bundle in
+your own package's <code>configure()</code> instead of only including it per surface, and
+<code>@wireStackScripts</code> will emit it alongside Wire's own:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Assets\Bundle</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$packager</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasAssets</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;dist&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">entries</span><span style="color: #E1E4E8;">: [</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Bundle</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;my-field.js&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    ])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasAssetFallback</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Bundle</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">servedByRoute</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;my-package&#39;</span><span style="color: #E1E4E8;">));</span></div></code></pre>
+<p>Entries are keyed by the <strong>shipped filename</strong>, relative to the asset directory.
+<code>Bundle::make()</code> declares what every Wire bundle is — a classic (non-module)
+script, because an ES module's top-level declarations never reach <code>window</code> and
+your registration would silently do nothing. <code>hasAssetFallback()</code> keeps the tag
+alive where <code>public/</code> cannot be written, by pointing at your package's own
+<code>{package}.asset</code> route.</p>
+<p>Keep heavy bodies off pages that do not need them by leaving them out of
+<code>entries:</code> and having the field deliver them per surface — but never the small
+controller that registers the component.</p>
+<hr>
+<h2 id="testing-custom-fields">Testing Custom Fields</h2>
+<p>Fields render to HTML, so the fastest tests assert on output and configuration.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #B392F0;">it</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;renders the currency symbol&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> () {</span></div><div class='line'><span style="color: #E1E4E8;">    $field </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">expect</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">())</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toBe</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">and</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getStateType</span><span style="color: #E1E4E8;">())</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toBe</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;int&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">and</span><span style="color: #E1E4E8;">((</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">) $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toHtml</span><span style="color: #E1E4E8;">())</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toContain</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>For end-to-end behaviour (state binding, validation, save), exercise the field
+inside a Livewire form component with Livewire's testing helpers, the same way the
+package tests the built-in fields. Run them with <code>composer test:forms</code>.</p>
+<hr>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="../fields/">Form Fields reference</a> — every built-in field</li>
+<li><a href="../save-lifecycle/">Save Lifecycle</a> — per-form save callbacks</li>
+<li><a href="../validation/">Validation</a> — rule collection and messages</li>
+<li><a href="../../core/plugins/">Core Plugins</a> — hooks, macros, type registries, packaging</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../save-lifecycle/">
+                                        <span>← Previous</span>
+                                        <strong>Save Lifecycle</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../fields/">
+                                        <span>Next →</span>
+                                        <strong>Form Fields</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#quick-custom-view-viewfield">
+                                            Quick Custom View (ViewField)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#how-a-field-is-put-together">
+                                            How a Field Is Put Together                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#building-a-custom-field">
+                                            Building a Custom Field                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#1-the-php-class">
+                                            1. The PHP class                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#2-the-blade-view">
+                                            2. The Blade view                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#3-use-it">
+                                            3. Use it                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#display-only-components">
+                                            Display-Only Components                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#reusable-presets">
+                                            Reusable Presets                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#shaping-the-value-a-field-stores">
+                                            Shaping the Value a Field Stores                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#hooking-into-the-save-lifecycle">
+                                            Hooking Into the Save Lifecycle                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#packaging-fields-into-a-plugin">
+                                            Packaging Fields Into a Plugin                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#what-registering-a-field-really-means">
+                                            What &quot;registering a field&quot; really means                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#1-package-layout">
+                                            1. Package layout                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#2-the-field-pointed-at-a-namespaced-view">
+                                            2. The field, pointed at a namespaced view                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#3-register-the-view-namespace-in-the-service-provider">
+                                            3. Register the view namespace in the service provider                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#4-the-plugin-presets-hooks-and-config">
+                                            4. The plugin: presets, hooks, and config                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#5-consumers-install-it">
+                                            5. Consumers install it                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#checklist">
+                                            Checklist                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#js-backed-fields">
+                                            JS-Backed Fields                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#testing-custom-fields">
+                                            Testing Custom Fields                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#see-also">
+                                            See Also                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

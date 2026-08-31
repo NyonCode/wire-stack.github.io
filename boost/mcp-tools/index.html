@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MCP Server &amp; Tools | Wire Docs</title>
+    <meta name="description" content="The wire-boost MCP server and the tools it exposes to AI agents.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/boost/mcp-tools/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/boost/mcp-tools/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/boost/mcp-tools/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/boost/mcp-tools/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="MCP Server &amp; Tools | Wire Docs">
+    <meta property="og:description" content="The wire-boost MCP server and the tools it exposes to AI agents.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/boost/mcp-tools/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="MCP Server &amp; Tools | Wire Docs">
+    <meta name="twitter:description" content="The wire-boost MCP server and the tools it exposes to AI agents.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../boost/mcp-tools/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../cs/boost/mcp-tools/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Start Here</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Wire Documentation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Getting Started                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Project Map                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Configuration                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Authorization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Error Handling                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Theming &amp; Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testing                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Cookbook                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Troubleshooting                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Upgrade Guide                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Forms</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/validation/">
+                                        Form Validation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/reactive-fields/">
+                                        Reactive Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/save-lifecycle/">
+                                        Save Lifecycle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/custom-fields/">
+                                        Extending Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/">
+                                        Form Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Table</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/columns/">
+                                        Columns                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/filters/">
+                                        Filters                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/actions/">
+                                        Table Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/record-actions/">
+                                        Record Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/selection/">
+                                        Selecting Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/gestures/">
+                                        The Gesture Layer                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/exports/">
+                                        Table Exports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/imports/">
+                                        Table Imports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/summaries/">
+                                        Summaries                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/grouping/">
+                                        Row Grouping                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/sub-rows/">
+                                        Sub-Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/relation-managers/">
+                                        Relation Managers                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/notifications/">
+                                        Table Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/advanced/">
+                                        Advanced Features                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Row Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Column Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Advanced Usage                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        API Reference                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modals                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgets                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolists                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editable panels                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Plugins                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        MCP Server &amp; Tools                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../guidelines-and-skills/">
+                                        Guidelines &amp; Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Boost</span>
+                            </nav>
+                            <p class="eyebrow">Boost</p>
+                            <h1>MCP Server &amp; Tools</h1>
+                                                            <p class="lead">The wire-boost MCP server and the tools it exposes to AI agents.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#wirestack-tools">WireStack tools</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#example">Example</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#documentation-search">Documentation search</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#validation">Validation</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#general-tools-laravel-boost-parity">General tools (Laravel Boost parity)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#safety">Safety</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Wire Boost provides an <a href="https://modelcontextprotocol.io/" target="_blank" rel="noreferrer">MCP</a> server built on
+<a href="https://github.com/laravel/mcp" target="_blank" rel="noreferrer">Laravel MCP</a>. It is registered under the local handle <code>wire-boost</code>
+and started with:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-boost:mcp</span></div></code></pre>
+<p>Agents normally start it for you from the configuration written by <a href="../installation/"><code>wire-boost:install</code></a>.</p>
+<h2 id="wirestack-tools">WireStack tools</h2>
+<p>These are the reason to use Wire Boost — they let an agent inspect your actual wire components and the
+component vocabulary.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application-info</code></td>
+<td>PHP / Laravel / Livewire versions, installed wire package versions, and key effective config.</td>
+</tr>
+<tr>
+<td><code>list-wire-components</code></td>
+<td>Discover the app Livewire components that build a wire table, form, or infolist.</td>
+</tr>
+<tr>
+<td><code>describe-table</code></td>
+<td>Resolve a table's columns, filters, header/row/bulk actions, default sort, and searchability.</td>
+</tr>
+<tr>
+<td><code>describe-form</code></td>
+<td>Resolve a form's flattened field schema (name, label, type, wrapping layout).</td>
+</tr>
+<tr>
+<td><code>describe-infolist</code></td>
+<td>Resolve an infolist's entry schema.</td>
+</tr>
+<tr>
+<td><code>validate-wire-component</code></td>
+<td>Build a component and report unknown colors, unregistered icons, and names the model cannot resolve.</td>
+</tr>
+<tr>
+<td><code>list-component-types</code></td>
+<td>List the built-in types for a category: <code>columns</code>, <code>filters</code>, <code>fields</code>, <code>actions</code>, <code>infolist-entries</code>, <code>panel-entries</code>, <code>widgets</code>, <code>modals</code>, <code>layouts</code>.</td>
+</tr>
+<tr>
+<td><code>describe-component-api</code></td>
+<td>List the public fluent API of a component type — signatures, defaults, and the values each parameter accepts (an FQCN or a short name like <code>badge-column</code>).</td>
+</tr>
+<tr>
+<td><code>list-icons</code></td>
+<td>Icon names registered with the wire <code>IconManager</code> (for <code>-&gt;icon()</code>).</td>
+</tr>
+<tr>
+<td><code>wire-config</code></td>
+<td>The effective <code>wire-*</code> configuration, or a single dotted key.</td>
+</tr>
+<tr>
+<td><code>search-wire-docs</code></td>
+<td>Search the full wireStack documentation and return the most relevant <strong>sections</strong>.</td>
+</tr>
+<tr>
+<td><code>fetch-wire-doc</code></td>
+<td>Read a documentation section (or a document outline) in full, by id.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example">Example</h3>
+<p>Asking an agent to add a status column to a table typically goes:</p>
+<ol>
+<li><code>list-component-types</code> with <code>category: columns</code> → sees <code>badge-column</code> exists.</li>
+<li><code>describe-component-api</code> with <code>class: badge-column</code> → learns <code>-&gt;color()</code> and the colors it accepts.</li>
+<li><code>describe-table</code> on your component → matches the existing column conventions.</li>
+<li>Writes <code>BadgeColumn::make('status')-&gt;color(...)</code>.</li>
+<li><code>validate-wire-component</code> on your component → confirms the color, icon and attribute all resolve.</li>
+</ol>
+<h2 id="documentation-search">Documentation search</h2>
+<p>The <strong>entire English documentation</strong> ships inside the package — not a summary of it — so the tools work
+in your app without network access or a checkout of the wire repo.</p>
+<p><code>search-wire-docs</code> indexes it by <strong>section</strong>, not by file, and ranks with BM25 plus a bonus for terms that
+match a section's heading or its document title. A result carries an <code>id</code>, a <code>breadcrumb</code>
+(<code>BadgeColumn &gt; Badge Colors</code>), the owning <code>package</code> and a snippet:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-json"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;id&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;docs/table/columns/badge.md#badge-colors&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;breadcrumb&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;BadgeColumn &gt; Badge Colors&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;package&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;wire-table&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;score&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">25.13</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;snippet&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;Set the pill colour with the color helper.&quot;</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Pass that <code>id</code> to <code>fetch-wire-doc</code> to read the section in full. Passing a document id
+(<code>docs/table/columns/badge.md</code>) returns its outline instead — whole pages run to tens of kilobytes, so an
+outline plus targeted section fetches is cheaper and more accurate. Add <code>full: true</code> for the entire page.</p>
+<p>Filter by package with <code>package: wire-table</code> (the <code>wire-</code> prefix is optional). Add your own Markdown to the
+index with <code>wire-boost.docs.paths</code>; see <a href="../../configuration/">Configuration</a>.</p>
+<h2 id="validation">Validation</h2>
+<p><code>validate-wire-component</code> exists because the three most common faults in generated wire code <strong>do not
+throw</strong>, so a test that asserts the component renders stays green:</p>
+<table>
+<thead>
+<tr>
+<th>Fault</th>
+<th>What actually happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-&gt;color('bleu')</code></td>
+<td><code>Color::resolve()</code> falls back to gray — the badge just renders gray.</td>
+</tr>
+<tr>
+<td><code>-&gt;icon('heroicon-nope')</code></td>
+<td>Nothing renders where the icon should be.</td>
+</tr>
+<tr>
+<td><code>TextColumn::make('titel')</code></td>
+<td>The cell renders blank.</td>
+</tr>
+</tbody>
+</table>
+<p>The tool builds the component, then checks it against the canonical vocabularies — the <code>Color</code> enum, the
+registered <code>IconManager</code> names, and the model's real attributes (columns, casts, <code>$appends</code>, accessors and
+relation paths). Each finding names the target and suggests the near miss:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-json"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;severity&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;warning&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;rule&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;unknown-attribute&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;target&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;columns.titel&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;message&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;[posts] has no attribute [titel]; it will render blank.&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">  </span><span style="color: #79B8FF;">&quot;suggestions&quot;</span><span style="color: #E1E4E8;">: [</span><span style="color: #9ECBFF;">&quot;title&quot;</span><span style="color: #E1E4E8;">]</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Attribute checks need a reachable database table; without one they are skipped (reported as such) rather
+than guessed at. Columns that compute their own value via <code>-&gt;state()</code> are never flagged.</p>
+<h2 id="general-tools-laravel-boost-parity">General tools (Laravel Boost parity)</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>database-schema</code></td>
+<td>Tables and columns, optionally for one table or connection.</td>
+</tr>
+<tr>
+<td><code>database-connections</code></td>
+<td>Configured connections and the default.</td>
+</tr>
+<tr>
+<td><code>database-query</code></td>
+<td>Execute a read-only <code>SELECT</code> (disabled by default).</td>
+</tr>
+<tr>
+<td><code>last-error</code></td>
+<td>The most recent error from the log file.</td>
+</tr>
+<tr>
+<td><code>read-log-entries</code></td>
+<td>The last N log lines.</td>
+</tr>
+<tr>
+<td><code>get-absolute-url</code></td>
+<td>Convert a relative path to an absolute URL.</td>
+</tr>
+<tr>
+<td><code>list-artisan-commands</code></td>
+<td>Available Artisan commands and descriptions.</td>
+</tr>
+<tr>
+<td><code>list-routes</code></td>
+<td>Application routes with methods, URI, name, and action.</td>
+</tr>
+<tr>
+<td><code>tinker</code></td>
+<td>Evaluate PHP in the app context (disabled by default).</td>
+</tr>
+<tr>
+<td><code>browser-logs</code></td>
+<td>Recent browser console entries from the configured log file.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="safety">Safety</h2>
+<p><code>database-query</code> and <code>tinker</code> execute code or read arbitrary data, so they are <strong>off by default</strong>.
+Enable them explicitly:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-dotenv"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">WIRE_BOOST_DATABASE_QUERY=true</span></div><div class='line'><span style="color: #e1e4e8;">WIRE_BOOST_TINKER=true</span></div></code></pre>
+<p>See <a href="../../configuration/">Configuration</a> for the full <code>wire-boost</code> config reference.</p>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../installation/">
+                                        <span>← Previous</span>
+                                        <strong>Installation</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../guidelines-and-skills/">
+                                        <span>Next →</span>
+                                        <strong>Guidelines &amp; Skills</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#wirestack-tools">
+                                            WireStack tools                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#example">
+                                            Example                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#documentation-search">
+                                            Documentation search                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#validation">
+                                            Validation                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#general-tools-laravel-boost-parity">
+                                            General tools (Laravel Boost parity)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#safety">
+                                            Safety                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

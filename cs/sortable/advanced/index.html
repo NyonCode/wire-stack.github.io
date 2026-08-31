@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pokročilé použití | Wire Docs</title>
+    <meta name="description" content="Žádné toggle tlačítko se neobjeví. Hlavičky sloupců jsou vždy táhnutelné.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/sortable/advanced/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/sortable/advanced/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/sortable/advanced/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/sortable/advanced/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Pokročilé použití | Wire Docs">
+    <meta property="og:description" content="Žádné toggle tlačítko se neobjeví. Hlavičky sloupců jsou vždy táhnutelné.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/sortable/advanced/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Pokročilé použití | Wire Docs">
+    <meta name="twitter:description" content="Žádné toggle tlačítko se neobjeví. Hlavičky sloupců jsou vždy táhnutelné.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../sortable/advanced/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/sortable/advanced/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Začínáme</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Dokumentace Wire                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Začínáme                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Mapa projektu                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Konfigurace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Autorizace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Ošetření chyb                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Vzhled a přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testování                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Kuchařka                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Řešení potíží                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Návod k upgradu                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Formuláře</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/validation/">
+                                        Validace formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/reactive-fields/">
+                                        Reaktivní pole                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/save-lifecycle/">
+                                        Životní cyklus ukládání                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/custom-fields/">
+                                        Rozšíření formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/">
+                                        Pole formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Tabulka</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/columns/">
+                                        Sloupce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/filters/">
+                                        Filtry                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/actions/">
+                                        Akce tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/record-actions/">
+                                        Celořádkové akce (Record Actions)                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/selection/">
+                                        Výběr řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/gestures/">
+                                        Vrstva gest                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/exports/">
+                                        Exporty tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/imports/">
+                                        Importy tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/summaries/">
+                                        Souhrny                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/grouping/">
+                                        Seskupení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/sub-rows/">
+                                        Podřádky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/relation-managers/">
+                                        Správci relací                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/notifications/">
+                                        Notifikace tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/advanced/">
+                                        Pokročilé funkce                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../row-sorting/">
+                                        Řazení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../column-sorting/">
+                                        Řazení sloupců                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../customization/">
+                                        Přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Pokročilé použití                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../api-reference/">
+                                        Reference API                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Akce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifikace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modaly                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgety                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolisty                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editovatelné panely                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Pluginy                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server a nástroje                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines a Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Sortable</span>
+                            </nav>
+                            <p class="eyebrow">Sortable</p>
+                            <h1>Pokročilé použití</h1>
+                                                            <p class="lead">Žádné toggle tlačítko se neobjeví. Hlavičky sloupců jsou vždy táhnutelné.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#kompletni-priklad">Kompletní příklad</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#jen-razeni-radku">Jen řazení řádků</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#jen-razeni-sloupcu">Jen řazení sloupců</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#multi-guard-autentizace">Multi-guard autentizace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#poradi-sloupcu-per-komponenta">Pořadí sloupců per komponenta</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#programove-reorder-operace">Programové reorder operace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#razeni-behem-reorder-rezimu">Řazení během reorder režimu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#migrace-z-v0x">Migrace z v0.x</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#kroky-migrace">Kroky migrace</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<h2 id="kompletni-priklad">Kompletní příklad</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// app/Livewire/TaskTable.php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Livewire\Component</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Table</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Concerns\WithTable</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Columns\TextColumn</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Columns\BadgeColumn</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireSortable\Concerns\WithSortable</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">TaskTable</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WithTable</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">WithSortable</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">table</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Table</span><span style="color: #E1E4E8;"> $table)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Table</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $table</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">reorderable</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;position&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnReorderable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">selectable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">defaultSort</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;position&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;Task&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">searchable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sortable</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">BadgeColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;Status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sortable</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;priority&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;Priority&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sortable</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">            ]);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">beforeReorder</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $items)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorize</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;reorder&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">afterReorder</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $items)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #B392F0;">cache</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">forget</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;tasks.ordered&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">dispatch</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;tasks-reordered&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">render</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;livewire.task-table&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">{{-- resources/views/livewire/task-table.blade.php --}}</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;mb-4 flex gap-2&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">        &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;resetColumnOrder&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;btn btn-secondary&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">            Reset Columns</span></div><div class='line'><span style="color: #E1E4E8;">        &lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{!!</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">table </span><span style="color: #79B8FF;">!!}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<blockquote>
+<p><strong>Poznámka:</strong> Toggle tlačítko „Reorder" / „Done reordering" se vykreslí automaticky sortable pohledem. Nemusíte ho přidávat manuálně.</p>
+</blockquote>
+<h2 id="jen-razeni-radku">Jen řazení řádků</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $table</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">reorderable</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;sort_order&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<h2 id="jen-razeni-sloupcu">Jen řazení sloupců</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $table</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnReorderable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p>Žádné toggle tlačítko se neobjeví. Hlavičky sloupců jsou vždy táhnutelné.</p>
+<h2 id="multi-guard-autentizace">Multi-guard autentizace</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">AdminTaskTable</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WithTable</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">WithSortable</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getReorderableUserId</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?int</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// ...</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Aktualizujte <code>config/wire-sortable.php</code>, aby odpovídal:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #9ECBFF;">&#39;user_model&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;App</span><span style="color: #79B8FF;">\\</span><span style="color: #9ECBFF;">Models</span><span style="color: #79B8FF;">\\</span><span style="color: #9ECBFF;">Admin&#39;</span><span style="color: #E1E4E8;">,</span></div></code></pre>
+<h2 id="poradi-sloupcu-per-komponenta">Pořadí sloupců per komponenta</h2>
+<p>Ve výchozím stavu je pořadí sloupců klíčované třídou Eloquent modelu. Pokud máte více komponent zobrazujících stejný model, ale chcete nezávislá pořadí sloupců:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getReorderableModelType</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static::class</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Nyní mohou <code>TaskTable</code> a <code>TaskKanban</code> mít různá uspořádání sloupců, i když obě zobrazují <code>Task</code> záznamy.</p>
+<h2 id="programove-reorder-operace">Programové reorder operace</h2>
+<p>Model <code>ReorderableColumnOrder</code> můžete použít přímo:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireSortable\Models\ReorderableColumnOrder</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Získat pořadí sloupců uživatele pro model + tabulku</span></div><div class='line'><span style="color: #E1E4E8;">$order </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">ReorderableColumnOrder</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">getOrder</span><span style="color: #E1E4E8;">(</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">userId</span><span style="color: #E1E4E8;">: $user</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">modelType</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">tableIdentifier</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">TaskTable</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #6A737D;">// Vrací: [&#39;status&#39;, &#39;name&#39;, &#39;priority&#39;] nebo null</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Uložit pořadí sloupců</span></div><div class='line'><span style="color: #79B8FF;">ReorderableColumnOrder</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">saveOrder</span><span style="color: #E1E4E8;">(</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">userId</span><span style="color: #E1E4E8;">: $user</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">modelType</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">tableIdentifier</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">TaskTable</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">columnOrder</span><span style="color: #E1E4E8;">: [</span><span style="color: #9ECBFF;">&#39;priority&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">],</span></div><div class='line'><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Smazat pořadí sloupců (reset na výchozí)</span></div><div class='line'><span style="color: #79B8FF;">ReorderableColumnOrder</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">deleteOrder</span><span style="color: #E1E4E8;">(</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">userId</span><span style="color: #E1E4E8;">: $user</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">modelType</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">tableIdentifier</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">TaskTable</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">);</span></div></code></pre>
+<h2 id="razeni-behem-reorder-rezimu">Řazení během reorder režimu</h2>
+<p>Když je zapnutý reorder režim řádků, tabulka je seřazená podle nakonfigurovaného sloupce pořadí, aby uživatelé mohli předvídatelně přesouvat záznamy. Když je reorder režim vypnutý, tabulka se vrátí k normálnímu chování hledání, filtrů a řazení.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">SortableTable</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Task</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">reorderable</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;sort_order&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>Použijte viditelný sortable handle nebo reorder tlačítko ve svém UI tabulky, aby uživatelé věděli, kdy mění trvalé pořadí, spíš než řadí aktuální pohled.</p>
+<h2 id="migrace-z-v0x">Migrace z v0.x</h2>
+<p>Pokud upgradujete z předchozí verze wire-sortable:</p>
+<table>
+<thead>
+<tr>
+<th>Před</th>
+<th>Po</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vlastnost <code>$sortableEnabled</code></td>
+<td>Vlastnost <code>$isReordering</code></td>
+</tr>
+<tr>
+<td><code>toggleSortable()</code></td>
+<td><code>toggleReordering()</code></td>
+</tr>
+<tr>
+<td><code>$sortableColumnOrder</code></td>
+<td><code>$reorderableColumnOrder</code></td>
+</tr>
+<tr>
+<td><code>getSortableColumns()</code></td>
+<td><code>getReorderableColumns()</code></td>
+</tr>
+<tr>
+<td><code>dragHandleColumn()</code></td>
+<td>Odstraněno (handly jsou v reorder režimu automatické)</td>
+</tr>
+<tr>
+<td><code>dragHandleBeforeSelect()</code></td>
+<td>Odstraněno</td>
+</tr>
+<tr>
+<td>Session-based perzistence sloupců</td>
+<td>DB-based přes tabulku <code>reorderable_column_orders</code></td>
+</tr>
+<tr>
+<td>Vždy zapnuté drag handly</td>
+<td>Toggle režim (klik „Reorder" pro vstup)</td>
+</tr>
+<tr>
+<td>Vždy vynucuje pořadí řazení</td>
+<td>Vynucuje řazení jen v reorder režimu</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kroky-migrace">Kroky migrace</h3>
+<ol>
+<li>Spusťte <code>php artisan wire-sortable:install</code> pro publikování nové migrace</li>
+<li>Spusťte <code>php artisan migrate</code> pro vytvoření tabulky <code>reorderable_column_orders</code></li>
+<li>Aktualizujte své Livewire komponenty:
+<ul>
+<li>Nahraďte <code>use WithTable, WithSortable { ... insteadof ... }</code> za <code>use WithTable, WithSortable;</code></li>
+<li>Nahraďte volání <code>toggleSortable()</code> za <code>toggleReordering()</code></li>
+<li>Nahraďte volání <code>getSortableColumns()</code> za <code>getReorderableColumns()</code></li>
+<li>Odstraňte volání <code>dragHandleColumn()</code> a <code>dragHandleBeforeSelect()</code></li>
+</ul>
+</li>
+<li>Odstraňte jakákoli manuální toggle tlačítka -- balíček teď jedno vykresluje automaticky</li>
+</ol>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../customization/">
+                                        <span>← Předchozí</span>
+                                        <strong>Přizpůsobení</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../api-reference/">
+                                        <span>Další →</span>
+                                        <strong>Reference API</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#kompletni-priklad">
+                                            Kompletní příklad                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#jen-razeni-radku">
+                                            Jen řazení řádků                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#jen-razeni-sloupcu">
+                                            Jen řazení sloupců                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#multi-guard-autentizace">
+                                            Multi-guard autentizace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#poradi-sloupcu-per-komponenta">
+                                            Pořadí sloupců per komponenta                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#programove-reorder-operace">
+                                            Programové reorder operace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#razeni-behem-reorder-rezimu">
+                                            Řazení během reorder režimu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#migrace-z-v0x">
+                                            Migrace z v0.x                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#kroky-migrace">
+                                            Kroky migrace                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

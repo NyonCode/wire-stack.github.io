@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Řešení potíží | Wire Docs</title>
+    <meta name="description" content="Běžné problémy a jejich nápravy. Většina jsou nesoulady konfigurace v hostitelské Laravel aplikaci, ne bugy ve Wire.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/troubleshooting/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/troubleshooting/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/troubleshooting/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/troubleshooting/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Řešení potíží | Wire Docs">
+    <meta property="og:description" content="Běžné problémy a jejich nápravy. Většina jsou nesoulady konfigurace v hostitelské Laravel aplikaci, ne bugy ve Wire.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/troubleshooting/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Řešení potíží | Wire Docs">
+    <meta name="twitter:description" content="Běžné problémy a jejich nápravy. Většina jsou nesoulady konfigurace v hostitelské Laravel aplikaci, ne bugy ve Wire.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../assets/gsap.min.js"></script>
+    <script defer src="../assets/scrolltrigger.min.js"></script>
+    <script defer src="../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../troubleshooting/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../cs/troubleshooting/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Začínáme</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../documentation/">
+                                        Dokumentace Wire                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../getting-started/">
+                                        Začínáme                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../project-map/">
+                                        Mapa projektu                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../configuration/">
+                                        Konfigurace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../authorization/">
+                                        Autorizace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../error-handling/">
+                                        Ošetření chyb                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../theming/">
+                                        Vzhled a přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../testing/">
+                                        Testování                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../cookbook/">
+                                        Kuchařka                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Řešení potíží                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../upgrade/">
+                                        Návod k upgradu                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Formuláře</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/validation/">
+                                        Validace formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/reactive-fields/">
+                                        Reaktivní pole                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/save-lifecycle/">
+                                        Životní cyklus ukládání                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/custom-fields/">
+                                        Rozšíření formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/">
+                                        Pole formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Tabulka</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/columns/">
+                                        Sloupce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/filters/">
+                                        Filtry                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/actions/">
+                                        Akce tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/record-actions/">
+                                        Celořádkové akce (Record Actions)                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/selection/">
+                                        Výběr řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/gestures/">
+                                        Vrstva gest                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/exports/">
+                                        Exporty tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/imports/">
+                                        Importy tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/summaries/">
+                                        Souhrny                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/grouping/">
+                                        Seskupení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/sub-rows/">
+                                        Podřádky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/relation-managers/">
+                                        Správci relací                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/notifications/">
+                                        Notifikace tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/advanced/">
+                                        Pokročilé funkce                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../sortable/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/row-sorting/">
+                                        Řazení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/column-sorting/">
+                                        Řazení sloupců                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/customization/">
+                                        Přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/advanced/">
+                                        Pokročilé použití                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/api-reference/">
+                                        Reference API                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../core/actions/">
+                                        Akce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/notifications/">
+                                        Notifikace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/modals/">
+                                        Modaly                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/widgets/">
+                                        Widgety                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/infolists/">
+                                        Infolisty                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/panels/">
+                                        Editovatelné panely                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/plugins/">
+                                        Core Pluginy                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../boost/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../boost/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../boost/mcp-tools/">
+                                        MCP Server a nástroje                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../boost/guidelines-and-skills/">
+                                        Guidelines a Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Začínáme</span>
+                            </nav>
+                            <p class="eyebrow">Začínáme</p>
+                            <h1>Řešení potíží</h1>
+                                                            <p class="lead">Běžné problémy a jejich nápravy. Většina jsou nesoulady konfigurace v hostitelské Laravel aplikaci, ne bugy ve Wire.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#tlacitka-a-inputy-jsou-neviditelne">Tlačítka a inputy jsou neviditelné</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#komponenty-se-vykresluji-bez-stylu">Komponenty se vykreslují bez stylů</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#slide-over-je-ukotveny-vlevo-preteka-nebo-nejde-scrollovat">Slide-over je ukotvený vlevo, přetéká nebo nejde scrollovat</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#no-publishable-resources-for-tag">„No publishable resources for tag&quot;</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#chyby-alpine-nebo-komponenty-reagujici-dvakrat">Chyby Alpine nebo komponenty reagující dvakrát</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#wirex-is-not-defined-po-navsteve-pres-wirenavigate">wireX is not defined po návštěvě přes wire:navigate</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#javascriptove-404-a-wirex-is-not-defined">JavaScriptové 404 a wireX is not defined</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#razeni-prestalo-fungovat-nebo-muj-kod-prisel-o-windowsortable">Řazení přestalo fungovat, nebo můj kód přišel o window.Sortable</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#javascript-pole-nebezi-uvnitr-modalu">JavaScript pole neběží uvnitř modalu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#save-vyhodi-chybu-bez-modelu">save() vyhodí chybu bez modelu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#notifikace-toasty-se-neobjevuji">Notifikace / toasty se neobjevují</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#validacni-chyby-se-nezobrazuji">Validační chyby se nezobrazují</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#porad-zaseknuti">Pořád zaseknutí?</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Běžné problémy a jejich nápravy. Většina jsou nesoulady konfigurace v hostitelské
+Laravel aplikaci, ne bugy ve Wire.</p>
+<hr>
+<h2 id="tlacitka-a-inputy-jsou-neviditelne">Tlačítka a inputy jsou neviditelné</h2>
+<p><strong>Příznak:</strong> Tlačítka, badge a focus ringy se vykreslí jako bílé-na-průhledném nebo
+zmizí úplně.</p>
+<p><strong>Příčina:</strong> Tailwind barva <code>primary</code> není definovaná. Wire používá <code>primary</code> pro
+každý akcent, takže bez ní tyto prvky nemají barvu.</p>
+<p><strong>Náprava:</strong> Definujte <code>primary</code> v konfiguraci Tailwindu — viz
+<a href="../getting-started/#barva-primary">Začínáme → Barva primary</a> a
+<a href="../theming/#barvy">Vzhled → Barvy</a>.</p>
+<hr>
+<p><a id="components-render-unstyled"></a></p>
+<h2 id="komponenty-se-vykresluji-bez-stylu">Komponenty se vykreslují bez stylů</h2>
+<p><strong>Příznak:</strong> Markup se objeví, ale bez Tailwind stylování.</p>
+<p><strong>Příčina:</strong> Tailwind neskenuje vendor pohledy Wire, takže se jejich třídy
+odstraní z buildu.</p>
+<p><strong>Náprava:</strong> Přidejte cesty k pohledům Wire do pole <code>content</code> v Tailwindu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">content</span><span style="color: #E1E4E8;">: [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-core/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-core/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-forms/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-forms/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-table/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-table/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-sortable/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-sortable/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<p>Cesty <code>src/**/*.php</code> jsou důležité: některé komponenty skládají své utility třídy
+v PHP (pozicování, šířka, výška), takže skenování jen Blade pohledů nechá tyto
+třídy odstraněné. Na Tailwindu 4 přidejte odpovídající <code>@source</code> řádky pro
+<code>resources/views</code> <strong>i</strong> <code>src</code> (viz průvodce začínáme).</p>
+<p>Poté přebuildujte assety (<code>npm run build</code> nebo <code>npm run dev</code>).</p>
+<hr>
+<h2 id="slide-over-je-ukotveny-vlevo-preteka-nebo-nejde-scrollovat">Slide-over je ukotvený vlevo, přetéká nebo nejde scrollovat</h2>
+<p><strong>Příznak:</strong> Slide-over akce (<code>-&gt;slideOver()</code>) se objeví přišpendlený <strong>vlevo</strong>
+se ztmavenou stránkou vpravo, jeho obsah <strong>přetéká</strong> za viewport, patička sedí
+<strong>mimo obrazovku dole</strong> a tělo nejde scrollovat.</p>
+<p><strong>Příčina:</strong> Slide-over skládá své utility pro pozicování, šířku a výšku v PHP
+(<code>SlideOverComponent</code>), ne v Blade souboru — třídy jako <code>sm:right-0</code>,
+<code>sm:pl-10</code>, <code>sm:h-full</code>, <code>max-h-[85vh]</code> a <code>sm:max-w-2xl</code>. Pokud Tailwind skenuje
+jen <code>resources/views</code> a ne <code>src</code> balíčku, tyto třídy se odstraní: bez <code>sm:right-0</code>
+panel spadne vlevo a bez výškových utilit není nikdy omezený na výšku, takže
+přetéká místo scrollování těla.</p>
+<p><strong>Náprava:</strong> Přidejte cesty <code>src/**/*.php</code> (Tailwind 3) nebo odpovídající <code>@source</code>
+řádky (Tailwind 4) podle <a href="#komponenty-se-vykresluji-bez-stylu">Komponenty se vykreslují bez stylů</a>,
+pak přebuildujte. Viz také průvodce začínáme.</p>
+<hr>
+<h2 id="no-publishable-resources-for-tag">„No publishable resources for tag"</h2>
+<p><strong>Příznak:</strong> <code>vendor:publish</code> hlásí žádné zdroje pro tag jako
+<code>wire-forms-config</code>.</p>
+<p><strong>Příčina:</strong> Publish tagy Wire používají oddělovač <code>::</code>, ne pomlčku.</p>
+<p><strong>Náprava:</strong> Použijte správný formát tagu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-forms::config</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;"># ✅</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-forms::views</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-forms::translations</span></div></code></pre>
+<p>Skupiny jsou <code>config</code>, <code>views</code>, <code>translations</code> a (kde je to relevantní)
+<code>migrations</code> — každá s prefixem krátkého názvu balíčku a <code>::</code>.</p>
+<hr>
+<h2 id="chyby-alpine-nebo-komponenty-reagujici-dvakrat">Chyby Alpine nebo komponenty reagující dvakrát</h2>
+<p><strong>Příznak:</strong> Chyby v konzoli o dvojité inicializaci Alpine, nebo direktivy
+spouštějící se dvakrát.</p>
+<p><strong>Příčina:</strong> Alpine byl nainstalován a nastartován samostatně. Livewire 3 už
+Alpine dodává a startuje.</p>
+<p><strong>Náprava:</strong> Odstraňte jakoukoli samostatnou instalaci Alpine a volání
+<code>Alpine.start()</code>. Nechte ho poskytnout Livewire.</p>
+<hr>
+<p><a id="wirex-is-not-defined-after-a-wire-navigate-visit"></a></p>
+<h2 id="wirex-is-not-defined-po-navsteve-pres-wirenavigate"><code>wireX is not defined</code> po návštěvě přes <code>wire:navigate</code></h2>
+<p><strong>Příznak:</strong> Stránka funguje, když se načte přímo, ale při příchodu přes
+<code>wire:navigate</code> — nebo tlačítky Zpět/Vpřed v prohlížeči — je tabulka či formulář
+mrtvý. V konzoli je <code>ReferenceError</code> se jménem Wire komponenty
+(<code>wireRecordSelection</code>, <code>wireDropdown</code>, <code>wireSortable</code>, …). Nejhlasitější varianta
+je šedý scrim přes celou stránku nad mrtvou tabulkou: každý backdrop mobilního
+sheetu je navázaný na stav, který nikdy nevznikl.</p>
+<p><strong>Příčina:</strong> Bundle definující komponentu dorazil <em>spolu</em> s novou stránkou a cesta
+cachovaného Zpět/Vpřed v Livewire nečeká na nově injektované <code>&lt;head&gt;</code> skripty, než
+na prohozeném markupu inicializuje Alpine.</p>
+<p><strong>Náprava:</strong> Dejte direktivu do <code>&lt;head&gt;</code> layoutu, ať jsou controllery v dokumentu
+už od prvního načtení stránky, kde je nemá co předběhnout:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">head</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">@wireStackScripts</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">head</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Viz <a href="../getting-started/#javascriptove-assety">Začínáme → JavaScriptové assety</a>.</p>
+<hr>
+<h2 id="javascriptove-404-a-wirex-is-not-defined">JavaScriptové 404 a <code>wireX is not defined</code></h2>
+<p><strong>Příznak:</strong> Tentýž <code>ReferenceError</code> jako v předchozí sekci, ale na <em>každé</em> stránce
+a bez ohledu na to, jak jste se na ni dostali — objeví se i po tvrdém reloadu.
+V network tabu jsou 404 na
+<code>/wire-core/assets/dropdown.js</code>, <code>/wire-table/assets/records.js</code> nebo sourozence
+pod <code>/wire-forms/…</code> či <code>/wire-sortable/…</code>.</p>
+<p><strong>Příčina:</strong> Sešly se dvě věci. Balíčky si normálně bundly zkopírují do
+<code>public/vendor/&lt;balíček&gt;</code> a emitují <em>tyhle</em> cesty, takže PHP nic neřeší — URL
+<code>/wire-core/assets/…</code> ve vašem markupu znamená, že se kopie nepovedla a zaskakuje
+za ni routa balíčku. A váš webserver na tu routu odpovídá sám, místo aby ji předal
+PHP. Standardní nginx konfigurace Laravelu posílá cokoliv, co není na disku, do
+<code>index.php</code>, konfigurace s blokem pro statické assety už ne:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-nginx"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">location</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">~*</span><span style="color: #E1E4E8;"> </span><span style="color: #DBEDFF;">\.(js|css)$ </span><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">   </span><span style="color: #F97583;"> try_files </span><span style="color: #E1E4E8;">$uri </span><span style="color: #79B8FF;">=404</span><span style="color: #E1E4E8;">;      </span><span style="color: #6A737D;"># routa není soubor na disku → 404, PHP to nikdy neuvidí</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Nic z toho není specifické pro tyhle balíčky: tentýž blok vrací 404 i na Livewire
+vlastní <code>/livewire/livewire.js</code>.</p>
+<p><strong>Řešení — zapisovatelné <code>public/</code>, nebo kopie při buildu.</strong> Obvyklou příčinou je
+<code>public/</code>, do kterého webový uživatel nesmí zapisovat, nebo read-only kontejner.
+Buď zápis povolte, nebo kopii udělejte, dokud je filesystém ještě zapisovatelný:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=laravel-assets</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--force</span></div></code></pre>
+<p><strong>Nebo zpřístupněte routu</strong> tím, že necháte blok propadnout do front controlleru —
+správná odpověď tam, kde zapisovatelné <code>public/</code> opravdu není ve hře:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-nginx"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">location</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">~*</span><span style="color: #E1E4E8;"> </span><span style="color: #DBEDFF;">\.(js|css)$ </span><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">   </span><span style="color: #F97583;"> try_files </span><span style="color: #E1E4E8;">$uri /index.php?$query_string;   // [tl! focus]</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Příbuzné varování, když kopie existují, ale po upgradu je nešlo obnovit:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">wireStack: the published copies of wire-core/dropdown are older than the bundles</span></div><div class='line'><span style="color: #e1e4e8;">the packages ship, and are what this page just loaded.</span></div></code></pre>
+<p>Stránka funguje dál — starý bundle je lepší než žádný — ale stojí za tím tentýž
+problém se zápisem. Viz
+<a href="../getting-started/#javascriptove-assety">Začínáme → JavaScriptové assety</a>.</p>
+<hr>
+<p><a id="reordering-stops-working-or-my-own-code-loses-window-sortable"></a></p>
+<h2 id="razeni-prestalo-fungovat-nebo-muj-kod-prisel-o-windowsortable">Řazení přestalo fungovat, nebo můj kód přišel o <code>window.Sortable</code></h2>
+<p><strong>Příznak:</strong> Po upgradu vyhazuje vlastní JavaScript vaší aplikace
+<code>Sortable is not defined</code>.</p>
+<p><strong>Příčina:</strong> SortableJS je nově zkompilovaný do bundlu <code>wire-sortable</code> a
+<code>config('wire-sortable.sortablejs_cdn')</code> je ve výchozím stavu <code>null</code> — CDN skript,
+který po sobě nechával globál, se tedy už nenačítá. Vlastního řazení Wire se to
+netýká; drag controller používá zabundlovanou kopii.</p>
+<p><strong>Náprava:</strong> Pokud váš kód globál potřebuje, řekněte si o něj — buď nastavte
+konfigurační klíč zpět na CDN URL, nebo si dejte <code>npm install sortablejs</code> a
+<code>window.Sortable</code> přiřaďte sami. Viz
+<a href="../sortable/installation/#sortablejs">Instalace Sortable → SortableJS</a>.</p>
+<hr>
+<h2 id="javascript-pole-nebezi-uvnitr-modalu">JavaScript pole neběží uvnitř modalu</h2>
+<p><strong>Příznak:</strong> JS-based pole funguje na normální stránce, ale je mrtvé při otevření
+v modalu nebo po Livewire updatu.</p>
+<p><strong>Příčina:</strong> Prostý <code>&lt;script&gt;</code> tag injektovaný přes DOM morphing Livewire se nikdy
+nespustí.</p>
+<p><strong>Náprava:</strong> Načtěte skript pomocí direktivy <code>@assets</code> Livewire (vestavěný
+<code>TiptapEditor</code> to dělá). Pokud stavíte vlastní JS pole, následujte stejný
+vzor — viz
+<a href="../forms/custom-fields/#js-based-pole">Rozšíření formulářů → JS-based pole</a>.</p>
+<hr>
+<h2 id="save-vyhodi-chybu-bez-modelu"><code>save()</code> vyhodí chybu bez modelu</h2>
+<p><strong>Příznak:</strong> Volání <code>$form-&gt;save()</code> vyhodí chybu.</p>
+<p><strong>Příčina:</strong> Formulář nemá model (<code>model(null)</code> nebo žádný nastavený), takže není
+co uložit.</p>
+<p><strong>Náprava:</strong> Buď nastavte model (<code>-&gt;model(User::class)</code> pro create,
+<code>-&gt;model($user)</code> pro update), poskytněte vlastní perzistenci pomocí
+<code>-&gt;using(...)</code>, nebo místo toho zavolejte <code>-&gt;validate()</code>, když potřebujete jen
+data. Viz <a href="../forms/overview/#rezimy-modelu">Režimy modelu</a>.</p>
+<hr>
+<h2 id="notifikace-toasty-se-neobjevuji">Notifikace / toasty se neobjevují</h2>
+<p><strong>Příznak:</strong> Akce uspějí, ale žádný toast ani notifikace se nezobrazí.</p>
+<p><strong>Příčina:</strong> V layoutu chybí kontejner notifikací.</p>
+<p><strong>Náprava:</strong> Přidejte ho jednou blízko konce <code>&lt;body&gt;</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">x-wire-notifications::toast-container</span><span style="color: #E1E4E8;"> /&gt;</span></div></code></pre>
+<p>Layout viz <a href="../getting-started/#sablona-layoutu">Začínáme</a> a
+<a href="../core/notifications/">Core → Notifikace</a>.</p>
+<hr>
+<h2 id="validacni-chyby-se-nezobrazuji">Validační chyby se nezobrazují</h2>
+<p><strong>Příznak:</strong> Validace selže (uložení je zablokováno), ale pod polem se nevykreslí
+žádná zpráva.</p>
+<p><strong>Příčina:</strong> <code>statePath</code> formuláře neodpovídá vlastnosti komponenty držící stav,
+takže se klíče chyb a cesty polí rozcházejí.</p>
+<p><strong>Náprava:</strong> Ujistěte se, že <code>-&gt;statePath('data')</code> odpovídá veřejné vlastnosti
+(<code>public array $data = []</code>) a že formulář vykreslujete pomocí <code>{{ $this-&gt;form }}</code>.
+Chyby polí jsou klíčované plnou state cestou (například <code>data.email</code>) — na tuto
+cestu asertujte v testech.</p>
+<hr>
+<h2 id="porad-zaseknuti">Pořád zaseknutí?</h2>
+<ul>
+<li>Znovu si přečtěte dokumentaci konkrétního balíčku pro danou funkci (Forms, Table, Sortable, Core).</li>
+<li>U problémů s runtime/stavem spusťte Integration sadu, zda se chování reprodukuje:
+<code>vendor/bin/pest --configuration phpunit.xml --testsuite "Integration"</code>.</li>
+<li>Zkontrolujte <a href="../upgrade/">Návod k upgradu</a>, pokud problém začal po aktualizaci.</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../cookbook/">
+                                        <span>← Předchozí</span>
+                                        <strong>Kuchařka</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../upgrade/">
+                                        <span>Další →</span>
+                                        <strong>Návod k upgradu</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#tlacitka-a-inputy-jsou-neviditelne">
+                                            Tlačítka a inputy jsou neviditelné                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#komponenty-se-vykresluji-bez-stylu">
+                                            Komponenty se vykreslují bez stylů                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#slide-over-je-ukotveny-vlevo-preteka-nebo-nejde-scrollovat">
+                                            Slide-over je ukotvený vlevo, přetéká nebo nejde scrollovat                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#no-publishable-resources-for-tag">
+                                            „No publishable resources for tag&quot;                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#chyby-alpine-nebo-komponenty-reagujici-dvakrat">
+                                            Chyby Alpine nebo komponenty reagující dvakrát                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#wirex-is-not-defined-po-navsteve-pres-wirenavigate">
+                                            wireX is not defined po návštěvě přes wire:navigate                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#javascriptove-404-a-wirex-is-not-defined">
+                                            JavaScriptové 404 a wireX is not defined                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#razeni-prestalo-fungovat-nebo-muj-kod-prisel-o-windowsortable">
+                                            Řazení přestalo fungovat, nebo můj kód přišel o window.Sortable                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#javascript-pole-nebezi-uvnitr-modalu">
+                                            JavaScript pole neběží uvnitř modalu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#save-vyhodi-chybu-bez-modelu">
+                                            save() vyhodí chybu bez modelu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#notifikace-toasty-se-neobjevuji">
+                                            Notifikace / toasty se neobjevují                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#validacni-chyby-se-nezobrazuji">
+                                            Validační chyby se nezobrazují                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#porad-zaseknuti">
+                                            Pořád zaseknutí?                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

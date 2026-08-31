@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editovatelné panely | Wire Docs</title>
+    <meta name="description" content="Panel je editovatelný „panel záznamu&quot;: vypadá jako infolist — stejné deklarativní schéma sekcí, gridů a entry — ale vedle read-only entry umí hostit editovatelné entry (switch, checkbox, select, textové pole), které zapisují rovnou do záznamu. Každá změna se odešle samostatně s optimistickým UI a optimistickým zámkem, stejnou cestou jako editovatelné sloupce tabulky — žádné tlačítko Uložit, žádný buffer formuláře.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/core/panels/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/core/panels/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/core/panels/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/core/panels/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Editovatelné panely | Wire Docs">
+    <meta property="og:description" content="Panel je editovatelný „panel záznamu&quot;: vypadá jako infolist — stejné deklarativní schéma sekcí, gridů a entry — ale vedle read-only entry umí hostit editovatelné entry (switch, checkbox, select, textové pole), které zapisují rovnou do záznamu. Každá změna se odešle samostatně s optimistickým UI a optimistickým zámkem, stejnou cestou jako editovatelné sloupce tabulky — žádné tlačítko Uložit, žádný buffer formuláře.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/core/panels/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Editovatelné panely | Wire Docs">
+    <meta name="twitter:description" content="Panel je editovatelný „panel záznamu&quot;: vypadá jako infolist — stejné deklarativní schéma sekcí, gridů a entry — ale vedle read-only entry umí hostit editovatelné entry (switch, checkbox, select, textové pole), které zapisují rovnou do záznamu. Každá změna se odešle samostatně s optimistickým UI a optimistickým zámkem, stejnou cestou jako editovatelné sloupce tabulky — žádné tlačítko Uložit, žádný buffer formuláře.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../core/panels/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/core/panels/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Začínáme</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Dokumentace Wire                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Začínáme                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Mapa projektu                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Konfigurace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Autorizace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Ošetření chyb                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Vzhled a přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testování                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Kuchařka                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Řešení potíží                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Návod k upgradu                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Formuláře</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/validation/">
+                                        Validace formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/reactive-fields/">
+                                        Reaktivní pole                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/save-lifecycle/">
+                                        Životní cyklus ukládání                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/custom-fields/">
+                                        Rozšíření formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/">
+                                        Pole formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Tabulka</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/columns/">
+                                        Sloupce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/filters/">
+                                        Filtry                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/actions/">
+                                        Akce tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/record-actions/">
+                                        Celořádkové akce (Record Actions)                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/selection/">
+                                        Výběr řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/gestures/">
+                                        Vrstva gest                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/exports/">
+                                        Exporty tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/imports/">
+                                        Importy tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/summaries/">
+                                        Souhrny                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/grouping/">
+                                        Seskupení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/sub-rows/">
+                                        Podřádky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/relation-managers/">
+                                        Správci relací                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/notifications/">
+                                        Notifikace tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/advanced/">
+                                        Pokročilé funkce                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Řazení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Řazení sloupců                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Pokročilé použití                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        Reference API                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../actions/">
+                                        Akce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../notifications/">
+                                        Notifikace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../modals/">
+                                        Modaly                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../widgets/">
+                                        Widgety                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../infolists/">
+                                        Infolisty                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Editovatelné panely                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../plugins/">
+                                        Core Pluginy                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server a nástroje                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines a Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Core</span>
+                            </nav>
+                            <p class="eyebrow">Core</p>
+                            <h1>Editovatelné panely</h1>
+                                                            <p class="lead">Panel je editovatelný „panel záznamu&quot;: vypadá jako infolist — stejné deklarativní schéma sekcí, gridů a entry — ale vedle read-only entry umí hostit editovatelné entry (switch, checkbox, select, textové pole), které zapisují rovnou do záznamu. Každá změna se odešle samostatně s optimistickým UI a optimistickým zámkem, stejnou cestou jako editovatelné sloupce tabulky — žádné tlačítko Uložit, žádný buffer formuláře.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#instalace">Instalace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#rychly-start">Rychlý start</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#editovatelne-entry">Editovatelné entry</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#toggleentry-checkboxentry">ToggleEntry &amp; CheckboxEntry</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#selectentry">SelectEntry</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#textinputentry">TextInputEntry</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#validace">Validace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#hlidani-editaci">Hlídání editací</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#vlastni-ukladani-vedlejsi-efekty">Vlastní ukládání &amp; vedlejší efekty</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#optimisticke-ui-zamek">Optimistické UI &amp; zámek</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#prime-pouziti-traitu">Přímé použití traitu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#panely-vs-infolisty-vs-formulare">Panely vs. infolisty vs. formuláře</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p><strong>Panel</strong> je editovatelný „panel záznamu": vypadá jako <a href="../infolists/">infolist</a> — stejné deklarativní schéma sekcí, gridů a entry — ale vedle read-only entry umí hostit <strong>editovatelné</strong> entry (switch, checkbox, select, textové pole), které zapisují <strong>rovnou do záznamu</strong>. Každá změna se odešle samostatně s optimistickým UI a optimistickým zámkem, stejnou cestou jako <a href="../../table/columns/editing/">editovatelné sloupce tabulky</a> — žádné tlačítko Uložit, žádný buffer formuláře.</p>
+<p>Infolisty zůstávají kontraktem read-only; panel je plocha pro „přečti <em>a</em> uprav tento jeden záznam na místě".</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Panel</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\ToggleEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\SelectEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\TextInputEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Infolists\Components\TextEntry</span><span style="color: #E1E4E8;">; </span><span style="color: #6A737D;">// read-only entry se volně mísí</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Schema\Section</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">Panel</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">($user)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Účet&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;user&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">TextInputEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;required&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;min:2&#39;</span><span style="color: #E1E4E8;">]),</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">SelectEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #9ECBFF;">&#39;viewer&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Divák&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;">  </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Admin&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">            ]),</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">ToggleEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_active&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Aktivní&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onColor</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;success&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;envelope&#39;</span><span style="color: #E1E4E8;">), </span><span style="color: #6A737D;">// read-only</span></div><div class='line'><span style="color: #E1E4E8;">        ]),</span></div><div class='line'><span style="color: #E1E4E8;">    ]);</span></div></code></pre>
+<blockquote>
+<p><strong>Nováček?</strong> Panel je infolist, který jde editovat. Sestavíš ho v PHP, předáš mu záznam a každý switch/select/pole se odešle ve chvíli, kdy ho změníš.</p>
+</blockquote>
+<h2 id="instalace">Instalace</h2>
+<p>Panely jsou součástí <code>wire-core</code> — nic dalšího se neinstaluje. Zajisti, aby views balíčku byly v Tailwind content cestách, aby se vygenerovaly styly (i inline-edit ovládací prvky):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">export</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">default</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    content: [</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// ...cesty tvé aplikace</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-core/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    ],</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Editovatelné entry odesílají přes sdílený Alpine engine <code>wireEditableCell</code>, který dodává předkompilovaný JS bundle <code>wire-core</code> a injektuje se automaticky přes Livewire <code>@assets</code> — žádný JavaScript nezapojuješ ručně.</p>
+<h2 id="rychly-start">Rychlý start</h2>
+<p>Panel potřebuje Livewire hostitele, aby jeho editace měly kam odeslat. Nejrychlejší cesta je rozšířit <code>PanelComponent</code>: podrž si záznam, vrať schéma z <code>panel()</code> a hotovo — základní komponenta ho vykreslí a poskytne zapisovací endpoint.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Panel</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\PanelComponent</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\ToggleEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\SelectEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\TextInputEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">EditOrderPanel</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">PanelComponent</span><span style="color: #E1E4E8;"> </span></div><div class='line line-focus'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Order</span><span style="color: #E1E4E8;"> $order;                    </span><span style="color: #6A737D;">// Livewire ho každý request znovu načte z DB</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">panel</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Panel</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Panel</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">order)          </span><span style="color: #6A737D;">// 1. záznam, který každé entry čte i zapisuje</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([                       </span><span style="color: #6A737D;">// 2. co zobrazit / editovat</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInputEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;reference&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;required&#39;</span><span style="color: #E1E4E8;">]),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">SelectEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">OrderStatus</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">ToggleEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_paid&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Zaplaceno&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            ]);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }</span></div><div class='line line-focus'><span style="color: #E1E4E8;">} </span></div></code></pre>
+<p>Umísti ho na stránku jako každou Livewire komponentu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">livewire:edit-order-panel</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:order</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;$order&quot;</span><span style="color: #E1E4E8;"> /&gt;</span></div></code></pre>
+<p>To je celé. Přepni switch <code>is_paid</code> a sloupec <code>orders.is_paid</code> se okamžitě aktualizuje; žádný formulář, žádné odeslání.</p>
+<blockquote>
+<p><strong>Proč komponenta, ne jen <code>{{ $panel }}</code>?</strong> Read-only infolisty jsou bezstavové, takže je můžeš vypsat kdekoliv. Panel zapisuje, a proto potřebuje Livewire hostitele, který commit přijme. <code>PanelComponent</code> je tím hostitelem; pokud už komponentu máš, použij místo dědění trait <a href="#prime-pouziti-traitu"><code>WithEditablePanel</code></a>.</p>
+</blockquote>
+<h2 id="editovatelne-entry">Editovatelné entry</h2>
+<p>Každé editovatelné entry je navázané na atribut záznamu podle svého názvu (<code>ToggleEntry::make('is_active')</code> čte i zapisuje <code>is_active</code>). Sdílejí fluent Foundation slovník (label, ikona, barva, column span, viditelnost) s infolist entry a poli formulářů.</p>
+<table>
+<thead>
+<tr>
+<th>Entry</th>
+<th>Ovládací prvek</th>
+<th>Zapisuje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ToggleEntry</code></td>
+<td>Switch</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td><code>CheckboxEntry</code></td>
+<td>Checkbox</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td><code>SelectEntry</code></td>
+<td>Rozbalovací seznam</td>
+<td>zvolenou hodnotu</td>
+</tr>
+<tr>
+<td><code>TextInputEntry</code></td>
+<td>Textové pole (uložení při blur / Enter)</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<h3 id="toggleentry-checkboxentry">ToggleEntry &amp; CheckboxEntry</h3>
+<p>Dvě vykreslení téhož booleovského zápisu. Toggly berou barvy on/off dráhy z kanonické palety; obě před uložením převedou hodnotu na boolean.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\ToggleEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\CheckboxEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">ToggleEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_active&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Aktivní&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onColor</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;success&#39;</span><span style="color: #E1E4E8;">)     </span><span style="color: #6A737D;">// kanonická paleta HasColor</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">offColor</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;gray&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">CheckboxEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;accepts_marketing&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Marketingové e-maily&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">color</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;primary&#39;</span><span style="color: #E1E4E8;">);      </span><span style="color: #6A737D;">// barva zaškrtnutí</span></div></code></pre>
+<h3 id="selectentry">SelectEntry</h3>
+<p>Options přijímají prostou mapu <code>hodnota =&gt; popisek</code> nebo název backed-enum třídy (přeložený stejným <code>EnumResolver</code> jako <code>Select</code> pole a <code>SelectColumn</code>):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\SelectEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">SelectEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">OrderStatus</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)   </span><span style="color: #6A737D;">// nebo [&#39;open&#39; =&gt; &#39;Otevřeno&#39;, &#39;closed&#39; =&gt; &#39;Zavřeno&#39;]</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">placeholder</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Vyber stav&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<h3 id="textinputentry">TextInputEntry</h3>
+<p>Inline textové pole, které se uloží při blur a Enter, s návratem přes Escape. Typ HTML inputu zvolíš přes <code>type()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Components\TextInputEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">TextInputEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;required&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;min:2&#39;</span><span style="color: #E1E4E8;">]);</span></div><div class='line'><span style="color: #79B8FF;">TextInputEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">type</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;number&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;numeric&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;min:0&#39;</span><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<h2 id="validace">Validace</h2>
+<p>Pravidla běží na serveru <strong>před</strong> zápisem; neplatná hodnota je odmítnuta a ovládací prvek zobrazí chybu inline bez uložení.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">TextInputEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;required&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<h2 id="hlidani-editaci">Hlídání editací</h2>
+<p><code>disabled()</code> vykreslí prvek neinteraktivní <strong>a</strong> odmítne zápis na serveru (klientský stav je jen kosmetika — podvržený požadavek je stejně zablokován). Přijímá closure, která dostane záznam:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">ToggleEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_published&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">disabled</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">Post</span><span style="color: #E1E4E8;"> $record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">is_locked);</span></div></code></pre>
+<p>Pro autorizaci <code>permission()</code> odmítne zápis, pokud aktuální uživatel neprojde <code>hasPermissionTo()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">SelectEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Role</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;assign-roles&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>Zapsat lze jedině entry, které ve schématu deklaruješ jako editovatelné — název read-only <code>TextEntry</code>, ani žádný atribut mimo schéma, hostitel neuloží. To je zapisovací whitelist.</p>
+<h2 id="vlastni-ukladani-vedlejsi-efekty">Vlastní ukládání &amp; vedlejší efekty</h2>
+<p>Ve výchozím stavu entry zapíše vlastní atribut. Přepiš to přes <code>saveUsing()</code> a spusť vedlejší efekt po úspěšném zápisu přes <code>afterStateUpdated()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">ToggleEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_active&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">saveUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $record, $value) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">forceFill</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;is_active&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $value])</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">())</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">afterStateUpdated</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $record, $value) =&gt; </span><span style="color: #B392F0;">activity</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">log</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&quot;toggled {</span><span style="color: #E1E4E8;">$record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id</span><span style="color: #9ECBFF;">}&quot;</span><span style="color: #E1E4E8;">));</span></div></code></pre>
+<h2 id="optimisticke-ui-zamek">Optimistické UI &amp; zámek</h2>
+<p>Každý commit prvek okamžitě aktualizuje, pak se srovná se serverem:</p>
+<ul>
+<li><strong>Úspěch</strong> — hodnota zůstane a verze <code>updated_at</code> záznamu se posune.</li>
+<li><strong>Selhání</strong> — prvek se vrátí na poslední potvrzenou hodnotu a zobrazí zprávu inline.</li>
+<li><strong>Konflikt</strong> — pokud se záznam od načtení panelu změnil jinde (jeho <code>updated_at</code> už nesedí), zápis je odmítnut, prvek převezme aktuální serverovou hodnotu a uživatel vidí poznámku „změněno jinde". Žádné ztracené aktualizace.</li>
+</ul>
+<p>Záznam se vždy dohledá na serveru z vlastního navázaného záznamu komponenty uvnitř zamčené transakce — klient nikdy nevolí, který řádek ani sloupec se zapíše.</p>
+<h2 id="prime-pouziti-traitu">Přímé použití traitu</h2>
+<p>Pokud už Livewire komponentu máš, místo dědění <code>PanelComponent</code> použij trait <code>WithEditablePanel</code>. Implementuj <code>panel()</code>, vykresli panel ve svém view a přidej partial se sdílenými assety:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Livewire\Component</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Concerns\WithEditablePanel</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Panels\Panel</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Dashboard</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WithEditablePanel</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Account</span><span style="color: #E1E4E8;"> $account;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">panel</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Panel</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Panel</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">account)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">ToggleEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;two_factor_enabled&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Dvoufaktorové ověření&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">        ]);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::partials.floating-assets&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #6A737D;">{{-- načte engine wireEditableCell --}}</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">panel</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<h2 id="panely-vs-infolisty-vs-formulare">Panely vs. infolisty vs. formuláře</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Infolist</th>
+<th>Panel</th>
+<th>Formulář</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Účel</td>
+<td>Zobrazit jeden záznam</td>
+<td>Editovat jeden záznam na místě</td>
+<td>Editovat s krokem odeslání</td>
+</tr>
+<tr>
+<td>Zapisuje</td>
+<td>Nikdy</td>
+<td>Po každé změně, přímo do záznamu</td>
+<td>Při uložení, ze stavového bufferu</td>
+</tr>
+<tr>
+<td>Hostitel</td>
+<td>Jakýkoliv (bezstavový)</td>
+<td>Livewire (<code>PanelComponent</code> / trait)</td>
+<td>Livewire</td>
+</tr>
+<tr>
+<td>Použij když</td>
+<td>Read-only detail</td>
+<td>Rychlé inline editace, obrazovky nastavení</td>
+<td>Vícepolní formuláře, průvodci, náročná validace</td>
+</tr>
+</tbody>
+</table>
+<p>Sáhni po panelu, když má editace jednoho záznamu působit jako přepínání switchů na stránce nastavení; sáhni po <a href="../../forms/overview/">formuláři</a>, když chceš vědomé odeslání.</p>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../infolists/">
+                                        <span>← Předchozí</span>
+                                        <strong>Infolisty</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../plugins/">
+                                        <span>Další →</span>
+                                        <strong>Core Pluginy</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#instalace">
+                                            Instalace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#rychly-start">
+                                            Rychlý start                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#editovatelne-entry">
+                                            Editovatelné entry                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#toggleentry-checkboxentry">
+                                            ToggleEntry &amp; CheckboxEntry                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#selectentry">
+                                            SelectEntry                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#textinputentry">
+                                            TextInputEntry                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#validace">
+                                            Validace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#hlidani-editaci">
+                                            Hlídání editací                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#vlastni-ukladani-vedlejsi-efekty">
+                                            Vlastní ukládání &amp; vedlejší efekty                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#optimisticke-ui-zamek">
+                                            Optimistické UI &amp; zámek                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#prime-pouziti-traitu">
+                                            Přímé použití traitu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#panely-vs-infolisty-vs-formulare">
+                                            Panely vs. infolisty vs. formuláře                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

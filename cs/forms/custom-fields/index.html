@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rozšíření formulářů | Wire Docs</title>
+    <meta name="description" content="Wire Forms je stavěné k rozšiřování. Většina aplikací to nikdy nepotřebuje — vestavěná sada polí pokrývá běžné případy — ale když potřebujete pole, které se s balíčkem nedodává, napíšete malou PHP třídu plus Blade pohled a použijete ho přesně jako first-party pole.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/forms/custom-fields/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/forms/custom-fields/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/forms/custom-fields/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/forms/custom-fields/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Rozšíření formulářů | Wire Docs">
+    <meta property="og:description" content="Wire Forms je stavěné k rozšiřování. Většina aplikací to nikdy nepotřebuje — vestavěná sada polí pokrývá běžné případy — ale když potřebujete pole, které se s balíčkem nedodává, napíšete malou PHP třídu plus Blade pohled a použijete ho přesně jako first-party pole.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/forms/custom-fields/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Rozšíření formulářů | Wire Docs">
+    <meta name="twitter:description" content="Wire Forms je stavěné k rozšiřování. Většina aplikací to nikdy nepotřebuje — vestavěná sada polí pokrývá běžné případy — ale když potřebujete pole, které se s balíčkem nedodává, napíšete malou PHP třídu plus Blade pohled a použijete ho přesně jako first-party pole.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../forms/custom-fields/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/forms/custom-fields/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Začínáme</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Dokumentace Wire                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Začínáme                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Mapa projektu                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Konfigurace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Autorizace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Ošetření chyb                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Vzhled a přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testování                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Kuchařka                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Řešení potíží                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Návod k upgradu                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Formuláře</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../validation/">
+                                        Validace formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../reactive-fields/">
+                                        Reaktivní pole                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../save-lifecycle/">
+                                        Životní cyklus ukládání                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Rozšíření formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/">
+                                        Pole formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Tabulka</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/columns/">
+                                        Sloupce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/filters/">
+                                        Filtry                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/actions/">
+                                        Akce tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/record-actions/">
+                                        Celořádkové akce (Record Actions)                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/selection/">
+                                        Výběr řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/gestures/">
+                                        Vrstva gest                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/exports/">
+                                        Exporty tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/imports/">
+                                        Importy tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/summaries/">
+                                        Souhrny                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/grouping/">
+                                        Seskupení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/sub-rows/">
+                                        Podřádky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/relation-managers/">
+                                        Správci relací                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/notifications/">
+                                        Notifikace tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/advanced/">
+                                        Pokročilé funkce                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Řazení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Řazení sloupců                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Pokročilé použití                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        Reference API                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Akce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifikace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modaly                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgety                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolisty                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editovatelné panely                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Pluginy                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server a nástroje                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines a Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Formuláře</span>
+                            </nav>
+                            <p class="eyebrow">Formuláře</p>
+                            <h1>Rozšíření formulářů</h1>
+                                                            <p class="lead">Wire Forms je stavěné k rozšiřování. Většina aplikací to nikdy nepotřebuje — vestavěná sada polí pokrývá běžné případy — ale když potřebujete pole, které se s balíčkem nedodává, napíšete malou PHP třídu plus Blade pohled a použijete ho přesně jako first-party pole.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#rychly-vlastni-pohled-viewfield">Rychlý vlastní pohled (ViewField)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#jak-je-pole-poskladane">Jak je pole poskládané</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#stavba-vlastniho-pole">Stavba vlastního pole</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#1-php-trida">1. PHP třída</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#2-blade-pohled">2. Blade pohled</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#3-pouziti">3. Použití</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#pouze-zobrazovaci-komponenty">Pouze zobrazovací komponenty</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#znovupouzitelne-presety">Znovupoužitelné presety</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#transformace-stavu-pole">Transformace stavu pole</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#zapojeni-do-zivotniho-cyklu-ukladani">Zapojení do životního cyklu ukládání</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#balickovani-poli-do-pluginu">Balíčkování polí do pluginu</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#co-registrace-pole-doopravdy-znamena">Co „registrace pole&quot; doopravdy znamená</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#1-rozlozeni-balicku">1. Rozložení balíčku</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#2-pole-namirene-na-namespaced-pohled">2. Pole namířené na namespaced pohled</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#3-registrace-view-namespace-v-service-provideru">3. Registrace view namespace v service provideru</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#4-plugin-presety-hooky-a-config">4. Plugin: presety, hooky a config</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#5-konzumenti-ho-instaluji">5. Konzumenti ho instalují</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#checklist">Checklist</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#js-based-pole">JS-based pole</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#testovani-vlastnich-poli">Testování vlastních polí</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#viz-take">Viz také</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Wire Forms je stavěné k rozšiřování. Většina aplikací to nikdy nepotřebuje —
+vestavěná <a href="../fields/">sada polí</a> pokrývá běžné případy — ale když potřebujete
+pole, které se s balíčkem nedodává, napíšete malou PHP třídu plus Blade
+pohled a použijete ho přesně jako first-party pole.</p>
+<p>Tato stránka pokrývá, od nejméně po nejvíce náročné:</p>
+<table>
+<thead>
+<tr>
+<th>Potřebujete…</th>
+<th>Použijte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jednorázový vlastní pohled uvnitř formuláře</td>
+<td><a href="#rychly-vlastni-pohled-viewfield"><code>ViewField</code></a></td>
+</tr>
+<tr>
+<td>Statický zobrazovací blok (bez inputu)</td>
+<td><a href="#pouze-zobrazovaci-komponenty">Zobrazovací komponentu</a></td>
+</tr>
+<tr>
+<td>Znovupoužitelný input s vlastním API</td>
+<td><a href="#stavba-vlastniho-pole">Vlastní pole</a></td>
+</tr>
+<tr>
+<td>Stejný preset aplikovaný napříč mnoha formuláři</td>
+<td><a href="#znovupouzitelne-presety">Form makra</a></td>
+</tr>
+<tr>
+<td>Pole, které ukládá něco jiného, než zobrazuje</td>
+<td><a href="#transformace-stavu-pole">Transformace stavu</a></td>
+</tr>
+<tr>
+<td>Logiku kolem každého uložení</td>
+<td><a href="#zapojeni-do-zivotniho-cyklu-ukladani">Save hooky</a></td>
+</tr>
+<tr>
+<td>Pole dodané v balíčku</td>
+<td><a href="#balickovani-poli-do-pluginu">Balíčkování polí do pluginu</a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Nejdřív preferujte fluent API. Po vlastním poli sáhněte jen když se má stejné
+chování znovupoužít, nebo když žádné vestavěné pole nelze nakonfigurovat, aby
+tu práci udělalo.</p>
+</blockquote>
+<hr>
+<p><a id="quick-custom-view-viewfield"></a></p>
+<h2 id="rychly-vlastni-pohled-viewfield">Rychlý vlastní pohled (ViewField)</h2>
+<p>Když potřebujete jen vhodit vlastní markup do formuláře — bez znovupoužitelného API —
+použijte <a href="../fields/view-field/"><code>ViewField</code></a>. Vykreslí libovolný Blade pohled a předá
+skrz state path formuláře, takže se úplně vyhnete psaní třídy.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Display\ViewField</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">ViewField</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;avatar_preview&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;forms.partials.avatar-preview&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">viewData</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; [</span><span style="color: #9ECBFF;">&#39;url&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">user</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">avatar_url]);</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">{{-- resources/views/forms/partials/avatar-preview.blade.php --}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">img</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">src</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $url </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;h-16 w-16 rounded-full&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">alt</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;&quot;</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p><code>viewData()</code> přijímá pole nebo closuru (vyhodnocenou v čase renderu). <code>ViewField</code>
+použijte pro náhledy, callouty nebo na míru šité widgety, které nemusí být
+sdílenou pojmenovanou komponentou.</p>
+<hr>
+<h2 id="jak-je-pole-poskladane">Jak je pole poskládané</h2>
+<p>Každá form komponenta rozšiřuje
+<code>NyonCode\WireCore\Foundation\Components\Component</code>. Ta základní třída vám zdarma dává:</p>
+<ul>
+<li>factory <code>make(string $name)</code> a konstruktor jen s <code>$name</code></li>
+<li>label, hint, helper text, id, size, column span, viditelnost</li>
+<li><code>extraAttributes()</code>, <code>default()</code> a vyhodnocování closur přes <code>evaluate()</code></li>
+<li><code>render()</code>, který volá váš <code>viewName()</code> s komponentou dostupnou v pohledu jako <code>$field</code></li>
+</ul>
+<p>Vstupní pole rozšiřují <code>NyonCode\WireForms\Components\Field</code>, který přidává části,
+jež dělají pole interaktivním:</p>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Co přidává</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HasState</code></td>
+<td><code>getStatePath()</code>, <code>getWireModelAttribute()</code></td>
+</tr>
+<tr>
+<td><code>CanBeLive</code></td>
+<td><code>-&gt;live()</code>, <code>getWireModelModifier()</code></td>
+</tr>
+<tr>
+<td><code>HasDebounce</code></td>
+<td><code>-&gt;debounce()</code>, <code>getDebounceModifier()</code></td>
+</tr>
+<tr>
+<td><code>CanBeReadOnly</code></td>
+<td><code>-&gt;disabled()</code>, <code>isReadOnly()</code></td>
+</tr>
+<tr>
+<td><code>HasFormValidation</code></td>
+<td><code>-&gt;rules()</code>, <code>-&gt;required()</code>, sběr pravidel</td>
+</tr>
+<tr>
+<td><code>HasPlaceholder</code>, <code>HasPrefixAndSuffix</code>, <code>HasTooltip</code>, <code>CanBeAutofocused</code></td>
+<td>volitelné prvky</td>
+</tr>
+</tbody>
+</table>
+<p>Pole také deklaruje svůj <strong>typ stavu</strong> pomocí <code>getStateType()</code> (výchozí
+<code>'string'</code>). State hydrator ho používá k přetypování surových request hodnot, než
+dorazí do stavu formuláře — vraťte <code>'int'</code>, <code>'float'</code>, <code>'bool'</code> nebo <code>'array'</code>, když
+vaše hodnota není řetězec.</p>
+<p><code>getStateType()</code> tvaruje hodnotu na cestě <em>dovnitř</em>. Když ji vaše pole potřebuje
+tvarovat i na cestě <em>ven</em> — tedy uložit něco jiného, než drží widget —
+implementujte <a href="#transformace-stavu-pole"><code>DehydratesState</code></a>, místo abyste
+tu práci přehazovali na každý formulář, který pole použije.</p>
+<p>Jediná abstraktní metoda, kterou musíte implementovat, je <code>viewName()</code>.</p>
+<hr>
+<p><a id="building-a-custom-field"></a></p>
+<h2 id="stavba-vlastniho-pole">Stavba vlastního pole</h2>
+<p>Postavíme pole <code>MoneyInput</code>, které ukládá celočíselný počet centů a
+vykresluje textový input vědomý si měny.</p>
+<h3 id="1-php-trida">1. PHP třída</h3>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Field</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">MoneyInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Field</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;USD&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $decimals </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $currency;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">decimals</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $decimals)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">decimals </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $decimals;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getDecimals</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">int</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">decimals;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Hodnota je uložena jako integer (centy). </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getStateType</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;int&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    } </span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;forms.components.money-input&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    } </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Konvence, které stojí za dodržení, protože je vestavěná pole všechna dodržují:</p>
+<ul>
+<li><strong>Fluent settery vrací <code>static</code></strong>, aby se volání řetězila.</li>
+<li><strong>Stav se nastavuje přes protected vlastnosti</strong> s odpovídajícími gettery; Blade
+pohled čte gettery, nikdy vlastnosti.</li>
+<li><strong>Settery přijímají <code>Closure</code>, kde to dává smysl</strong>, a gettery je resolvují
+pomocí <code>$this-&gt;evaluate(...)</code>. To je to, co rozchodí <code>-&gt;label(fn () =&gt; ...)</code>.</li>
+</ul>
+<h3 id="2-blade-pohled">2. Blade pohled</h3>
+<p>Obalte input do sdílených field-wrapper partialů. Vykreslí za vás label,
+hint, marker povinnosti, helper text a validační chybu — takže vlastní
+pole vypadá stejně jako vestavěné a nepotřebuje pro ně žádný extra markup.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">{{-- resources/views/forms/components/money-input.blade.php --}}</span></div><div class='line'><span style="color: #E1E4E8;">@php</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">assert</span><span style="color: #E1E4E8;">($field </span><span style="color: #F97583;">instanceof</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    $wireModifier   </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getWireModelModifier</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    $debounceModifier </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDebounceModifier</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    $wireAttr </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;wire:model&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> ($wireModifier ? </span><span style="color: #9ECBFF;">&quot;.{</span><span style="color: #E1E4E8;">$wireModifier</span><span style="color: #9ECBFF;">}&quot;</span><span style="color: #E1E4E8;"> : </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> $debounceModifier;</span></div><div class='line'><span style="color: #E1E4E8;">@endphp</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-forms::partials.field-wrapper-start&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;flex rounded-md shadow-sm&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">span</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;/</span><span style="color: #85E89D;">span</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">input</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #B392F0;">type</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;number&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #B392F0;">step</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">/</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">10</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">**</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDecimals</span><span style="color: #E1E4E8;">()) </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getId</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $wireAttr </span><span style="color: #79B8FF;">}}</span><span style="color: #FDAEB7;">=&quot;{{</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">$field-</span><span style="color: #E1E4E8;">&gt;getWireModelAttribute() }}&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isReadOnly</span><span style="color: #E1E4E8;">()) readonly </span><span style="color: #F97583;">@endif</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isRequired</span><span style="color: #E1E4E8;">()) required </span><span style="color: #F97583;">@endif</span></div><div class='line'><span style="color: #E1E4E8;">        class=&quot;block w-full rounded-r-md border-gray-300 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white&quot;</span></div><div class='line'><span style="color: #E1E4E8;">    /&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-forms::partials.field-wrapper-end&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Klíčové zapojení je atribut <code>wire:model</code>. <code>getWireModelAttribute()</code> vrací
+správnou tečkovou state path (například <code>data.price</code>) a modifikátorové
+helpery přidávají <code>.live</code> / <code>.debounce.Nms</code>, když se do nich pole přihlásí. To je
+stejný vzor, jaký používá každé vestavěné pole — kompletní referenci viz
+<code>packages/forms/resources/views/components/text-input.blade.php</code>.</p>
+<h3 id="3-pouziti">3. Použití</h3>
+<p>Vlastní pole je normální komponenta. Přidejte ji do jakéhokoli schématu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">decimals</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">helperText</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Stored in cents.&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p>Pro použití ve vlastní aplikaci není potřeba žádný registrační krok: pole si resolvuje
+vlastní pohled, takže stačí ho uvést ve schématu.</p>
+<hr>
+<p><a id="display-only-components"></a></p>
+<h2 id="pouze-zobrazovaci-komponenty">Pouze zobrazovací komponenty</h2>
+<p>Pro výstup, který nemá vstupní hodnotu — callouty, souhrny, počítané náhledy —
+rozšiřte <code>NyonCode\WireCore\Foundation\Components\ViewComponent</code> místo
+<code>Field</code>. Je to stejný základ, minus input/validační concerny, a je to to, co
+používá <code>Placeholder</code>, <code>Alert</code> a <code>Html</code>.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Components\ViewComponent</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">StatBlock</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">ViewComponent</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">value</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $value)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">value </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $value;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getValue</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">) </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">evaluate</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">value);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;forms.components.stat-block&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<hr>
+<p><a id="reusable-presets"></a>
+<a id="reusable-presets-with-macros"></a></p>
+<h2 id="znovupouzitelne-presety">Znovupoužitelné presety</h2>
+<p>Když nepotřebujete novou komponentu, jen <strong>preset</strong> existujících fluent volání,
+máte dvě přesné možnosti. (Form pole nejsou <code>Macroable</code> — na rozdíl od <code>Table</code>
+a <code>Action</code>, které podporují <code>::macro()</code>; table/action makra viz
+<a href="../../core/plugins/#pridavani-tlacitek-a-akci">Core Pluginy → Přidávání tlačítek a akcí</a>.)</p>
+<p><strong>Statická factory</strong> drží preset na jednom místě a čte se čistě na místě volání:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\TextInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Fields</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">slug</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $name)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">TextInput</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">($name)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">helperText</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Lowercase, dash-separated.&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;regex:/^[a-z0-9-]+$/&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">live</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Fields</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Fields</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">slug</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;slug&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p><strong>Podtřída, která předkonfiguruje <code>make()</code></strong>, je správná volba, když také
+chcete odlišný typ, na který lze odkázat jinde:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\TextInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">SlugInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">TextInput</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $name)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">parent::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">($name)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rules</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;regex:/^[a-z0-9-]+$/&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">live</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Použijte <strong>factory nebo podtřídu</strong>, když skládáte existující metody polí, a
+plné <a href="#stavba-vlastniho-pole">vlastní pole</a>, když potřebujete nový stav, nový
+pohled nebo nový markup.</p>
+<hr>
+<p><a id="shaping-the-value-a-field-stores"></a></p>
+<h2 id="transformace-stavu-pole">Transformace stavu pole</h2>
+<p>Stav pole je to, co vyrobil jeho widget. Obvykle je to přesně to, co se má uložit —
+ale ne vždy. Input date pickeru umí parsovat jen svůj vlastní formát, zatímco
+sloupec chce jiný; upload drží dočasnou cestu, zatímco sloupec chce tu uloženou;
+peněžní pole zobrazuje <code>1 234,50</code> a ukládá centy.</p>
+<p>Dva kontrakty v <code>NyonCode\WireCore\Foundation\Contracts</code> pokrývají oba směry. Jsou
+nezávislé — implementujte jen ten, který potřebujete:</p>
+<table>
+<thead>
+<tr>
+<th>Kontrakt</th>
+<th>Metoda</th>
+<th>Kdy běží</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HydratesState</code></td>
+<td><code>hydrateState($value, ?Model $record)</code></td>
+<td>hodnota z modelu → stav, po přetypování dle <code>getStateType()</code></td>
+</tr>
+<tr>
+<td><code>DehydratesState</code></td>
+<td><code>dehydrateState($state, ?Model $record)</code></td>
+<td>stav → ukládaná hodnota, při ukládání</td>
+</tr>
+</tbody>
+</table>
+<p>Všimněte si, že <a href="#stavba-vlastniho-pole"><code>MoneyInput</code></a> výše nepotřebuje <em>ani jeden</em>:
+jeho stav už je ten integer, který ukládá, což plně vyjádří <code>getStateType(): 'int'</code>.
+Kontrakty se vyplatí až tam, kde se stav a ukládaná hodnota opravdu liší — jako
+zde, kde input zobrazuje plaintext a sloupec drží šifrovanou hodnotu:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Forms\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Database\Eloquent\Model</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Contracts\DehydratesState</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Contracts\HydratesState</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Field</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">EncryptedInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Field</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">implements</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">DehydratesState</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">HydratesState</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Uložené → zobrazené. </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">hydrateState</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $value, </span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">Model</span><span style="color: #E1E4E8;"> $record </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">mixed</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">||</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?</span><span style="color: #E1E4E8;"> $value </span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">decrypt</span><span style="color: #E1E4E8;">($value);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Zobrazené → uložené.</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">dehydrateState</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $state, </span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">Model</span><span style="color: #E1E4E8;"> $record </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">mixed</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $state </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">||</span><span style="color: #E1E4E8;"> $state </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?</span><span style="color: #E1E4E8;"> $state </span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">encrypt</span><span style="color: #E1E4E8;">($state);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    } </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;forms.components.encrypted-input&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Stejné dva kontrakty pohánějí i <a href="../../table/columns/editing/">editovatelné sloupce tabulky</a> —
+<code>TextInputColumn</code> je používá pro svůj trim/velikost písmen/čísla pipeline — takže
+komponenta, která je implementuje, se chová stejně ve formuláři i v inline
+editované buňce.</p>
+<blockquote>
+<p><strong>Oba směry, nebo žádný.</strong> Pokud transformace hodnotu posouvá (převod timezone,
+změna jednotek), implementovat jen <code>hydrateState()</code> znamená, že se posunutý stav
+při uložení zapíše rovnou zpátky — a hodnota se s každým round tripem posune zas
+o kus dál. Jednostranná transformace je horší než žádná.</p>
+</blockquote>
+<p><strong><code>dehydrateState()</code> musí být čistá funkce svých argumentů.</strong> Hostitel ji smí
+zavolat víc než jednou za uložení — tabulka dehydratuje jednou bez záznamu, aby
+mohla validovat před otevřením transakce, a pak znovu se zamčeným záznamem.
+Hostitelé vždy předávají původní stav, nikdy výsledek dřívějšího volání, takže
+i transformace, která by se dvojím uplatněním rozbila, je v bezpečí. <code>$record</code> je
+<code>null</code>, když hostitel žádný nemá (create formulář); buňka tabulky ho má vždy.</p>
+<hr>
+<p><a id="hooking-into-the-save-lifecycle"></a></p>
+<h2 id="zapojeni-do-zivotniho-cyklu-ukladani">Zapojení do životního cyklu ukládání</h2>
+<p>Kontrakty výše patří <em>poli</em> — cestují s ním do každého formuláře. Dvě vrstvy níže
+patří <strong>formuláři</strong> nebo <strong>aplikaci</strong>. Sáhněte po nich, když ta znalost není
+polem: <code>DehydratesState</code> na „tohle pole vždycky ukládá centy", hook na „každý
+formulář razítkuje tenanta".</p>
+<p>Existují dvě vrstvy a skládají se:</p>
+<p><strong>Per-form callbacky</strong> — pro logiku lokální jednomu formuláři. Definované na instanci
+<code>Form</code> a dokumentované v <a href="../save-lifecycle/">Životní cyklus ukládání</a>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">mutateDataBeforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; [</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">$data, </span><span style="color: #9ECBFF;">&#39;updated_by&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">()])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">beforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; </span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">afterSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">notifySubscribers</span><span style="color: #E1E4E8;">());</span></div></code></pre>
+<p><strong>Plugin hooky</strong> — pro logiku, která by měla běžet pro <em>každý</em> formulář napříč aplikací,
+bez zásahu do každé komponenty. Runtime emituje <code>form.saving</code> (před
+perzistencí, může upravit data) a <code>form.saved</code> (po perzistenci,
+observační):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hook</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;form.saving&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $payload)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    $payload[</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">][</span><span style="color: #9ECBFF;">&#39;tenant_id&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">??=</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">user</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">tenant_id;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $payload;</span></div><div class='line'><span style="color: #E1E4E8;">}, </span><span style="color: #B392F0;">priority</span><span style="color: #E1E4E8;">: </span><span style="color: #F97583;">-</span><span style="color: #79B8FF;">100</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>Priority, typované hooky a plný tvar payloadu viz <a href="../../core/plugins/#hook-system">Core Pluginy → Hook systém</a>.
+Per-form callback použijte pro jeden formulář; hook pro průřezové pravidlo.</p>
+<hr>
+<p><a id="packaging-fields-into-a-plugin"></a></p>
+<h2 id="balickovani-poli-do-pluginu">Balíčkování polí do pluginu</h2>
+<p>Sekce výše staví pole uvnitř aplikace, kde třída plus Blade pohled
+stačí — pole si resolvuje vlastní pohled, takže žádný registrační krok není potřeba.
+Tato sekce pokrývá další krok: dodávat vlastní pole jako <strong>znovupoužitelnou,
+instalovatelnou jednotku</strong> — doprovodný balíček, který si ostatní mohou <code>composer require</code>,
+nebo sdílený modul uvnitř větší aplikace.</p>
+<h3 id="co-registrace-pole-doopravdy-znamena">Co „registrace pole" doopravdy znamená</h3>
+<p><strong>Neexistuje žádný registr typů polí.</strong> Na rozdíl od sloupců tabulky, filtrů a akcí
+— které mají metadatové registry <code>addColumnType()</code> / <code>addFilterType()</code> / <code>addActionType()</code>
+— form pole se nikdy nehledají podle názvu. Pole je jen třída
+a <code>render()</code> volá její <code>viewName()</code> přímo přes Laravel helper <code>view()</code>.
+Takže zprovoznění balíčkovaného pole se scvrkává přesně na dvě věci:</p>
+<ol>
+<li><strong>Třída pole je autoloadovatelná</strong> — řeší to <code>autoload</code> blok Composeru
+vašeho balíčku, jako u jakékoli PHP třídy.</li>
+<li><strong>Pohled pole se resolvuje</strong> — jeho <code>viewName()</code> musí mířit na pohled, který Laravel
+najde. V balíčku to znamená zaregistrovat <strong>view namespace</strong>.</li>
+</ol>
+<p><a href="../../core/plugins/">Core plugin</a> je vrstva navrch: je to místo, kde
+nainstalujete průřezové extra — <strong>presety (makra), save hooky a výchozí
+konfiguraci</strong> — takže je konzumenti dostanou registrací jedné třídy. Plugin je
+pro prosté pole volitelný a povinný až když dodáváte makra nebo hooky.</p>
+<blockquote>
+<p><strong>Neregistrujte</strong> pole pomocí <code>addColumnType()</code> (ani ostatních registrů typů).
+To jsou metadatové registry pro <em>tabulkové</em> sloupce/filtry/akce
+a při vykreslení form pole se nikdy nekonzultují. Registrace pole tam nedělá
+nic užitečného a je zavádějící.</p>
+</blockquote>
+<h3 id="1-rozlozeni-balicku">1. Rozložení balíčku</h3>
+<p>Minimální balíček s polem vypadá takto:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">acme/wire-money-fields/</span></div><div class='line'><span style="color: #e1e4e8;">├── composer.json</span></div><div class='line'><span style="color: #e1e4e8;">├── src/</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── AcmeMoneyServiceProvider.php</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── AcmeMoneyPlugin.php</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Components/</span></div><div class='line'><span style="color: #e1e4e8;">│       └── MoneyInput.php</span></div><div class='line'><span style="color: #e1e4e8;">└── resources/</span></div><div class='line'><span style="color: #e1e4e8;">    └── views/</span></div><div class='line'><span style="color: #e1e4e8;">        └── components/</span></div><div class='line'><span style="color: #e1e4e8;">            └── money-input.blade.php</span></div></code></pre>
+<p><code>composer.json</code> autoloaduje namespace a registruje service provider, aby se
+balíček bootoval automaticky:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-json"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;name&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;acme/wire-money-fields&quot;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;require&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">&quot;nyoncode/wire-forms&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;^0.1&quot;</span></div><div class='line'><span style="color: #E1E4E8;">    },</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;autoload&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">&quot;psr-4&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">&quot;Acme\\WireMoney\\&quot;</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&quot;src/&quot;</span></div><div class='line'><span style="color: #E1E4E8;">        }</span></div><div class='line'><span style="color: #E1E4E8;">    },</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">&quot;extra&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">&quot;laravel&quot;</span><span style="color: #E1E4E8;">: {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">&quot;providers&quot;</span><span style="color: #E1E4E8;">: [</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #9ECBFF;">&quot;Acme</span><span style="color: #79B8FF;">\\</span><span style="color: #9ECBFF;">WireMoney</span><span style="color: #79B8FF;">\\</span><span style="color: #9ECBFF;">AcmeMoneyServiceProvider&quot;</span></div><div class='line'><span style="color: #E1E4E8;">            ]</span></div><div class='line'><span style="color: #E1E4E8;">        }</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h3 id="2-pole-namirene-na-namespaced-pohled">2. Pole namířené na namespaced pohled</h3>
+<p>Třída pole je identická s app verzí, kromě toho, že <code>viewName()</code> vrací
+<strong>namespaced</strong> pohled (<code>namespace::path</code>), aby se resolvoval bez ohledu na to, kde
+je balíček nainstalován:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Acme\WireMoney\Components</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Field</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">MoneyInput</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Field</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;USD&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $currency)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $currency;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">currency;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getStateType</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;int&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// &quot;acme-money&quot; je namespace registrovaný service providerem.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;acme-money::components.money-input&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h3 id="3-registrace-view-namespace-v-service-provideru">3. Registrace view namespace v service provideru</h3>
+<p>Jediný povinný úkol service provideru je udělat <code>acme-money::</code> resolvovatelným.
+Můžete ho zaregistrovat ručně pomocí <code>loadViewsFrom()</code> a <code>publishes()</code> pohledy,
+aby konzumenti mohli přepsat váš markup:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Acme\WireMoney</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Support\ServiceProvider</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\PluginManager</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">final</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">AcmeMoneyServiceProvider</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">ServiceProvider</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Zaregistrovat plugin (makra, hooky, config), jakmile se manager resolvuje.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">resolving</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #E1E4E8;"> $manager) {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> $manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">has</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;acme-money&#39;</span><span style="color: #E1E4E8;">)) {</span></div><div class='line'><span style="color: #E1E4E8;">                $manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">AcmeMoneyPlugin</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">));</span></div><div class='line'><span style="color: #E1E4E8;">            }</span></div><div class='line'><span style="color: #E1E4E8;">        });</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">boot</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Udělá acme-money::components.money-input resolvovatelným.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">loadViewsFrom</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">__DIR__</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;/../resources/views&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;acme-money&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Nechat konzumenty přepsat markup přes vendor:publish.</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">publishes</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">__DIR__</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;/../resources/views&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">resource_path</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;views/vendor/acme-money&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">        ], </span><span style="color: #9ECBFF;">&#39;acme-money::views&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<blockquote>
+<p>Pokud je váš balíček postaven na <code>spatie/laravel-package-toolkit</code> (stejný toolkit,
+jaký používají Wire balíčky), volání <code>-&gt;hasViews()</code> ve vaší package konfiguraci
+zaregistruje namespace a publish tag za vás, odvozený z krátkého názvu
+balíčku — přesně jak je vystaveno <code>wire-forms::partials.field-wrapper-start</code>.</p>
+</blockquote>
+<p>Jakmile je namespace registrovaný, pole je plně použitelné — <code>MoneyInput::make('price')</code>
+funguje v jakémkoli schématu bez dalšího nastavení.</p>
+<h3 id="4-plugin-presety-hooky-a-config">4. Plugin: presety, hooky a config</h3>
+<p>Plugin přidejte, když chcete dodat víc než třídu pole — například
+znovupoužitelné <strong>preset makro</strong>, <strong>save hook</strong> nebo <strong>výchozí konfiguraci</strong>. Form
+pole nejsou <code>Macroable</code>, takže field presety se dodávají jako statická factory nebo
+podtřída (viz <a href="#znovupouzitelne-presety">Znovupoužitelné presety</a>); plugin je místo, kde
+registrujete <code>Table</code>/<code>Action</code> makra, hooky a config.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Acme\WireMoney</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\Contracts\HasConfiguration</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\Contracts\Plugin</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Plugin\PluginManager</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">final</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">AcmeMoneyPlugin</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">implements</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">HasConfiguration</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">Plugin</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getId</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;acme-money&#39;</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">defaultConfig</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;default_currency&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;USD&#39;</span><span style="color: #E1E4E8;">];</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #E1E4E8;"> $manager)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Průřezový save hook: zaokrouhlit každé money pole na celé centy.</span></div><div class='line'><span style="color: #E1E4E8;">        $manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hook</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;form.saving&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $payload)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">foreach</span><span style="color: #E1E4E8;"> ($payload[</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> $key </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $value) {</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #B392F0;">str_ends_with</span><span style="color: #E1E4E8;">($key, </span><span style="color: #9ECBFF;">&#39;_cents&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #F97583;">&amp;&amp;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">is_numeric</span><span style="color: #E1E4E8;">($value)) {</span></div><div class='line'><span style="color: #E1E4E8;">                    $payload[</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">][$key] </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;">) </span><span style="color: #79B8FF;">round</span><span style="color: #E1E4E8;">($value);</span></div><div class='line'><span style="color: #E1E4E8;">                }</span></div><div class='line'><span style="color: #E1E4E8;">            }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $payload;</span></div><div class='line'><span style="color: #E1E4E8;">        });</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">boot</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PluginManager</span><span style="color: #E1E4E8;"> $manager)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// Config-driven výchozí hodnoty jsou zde dostupné, pokud je potřebujete:</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// $manager-&gt;getPluginConfig($this-&gt;getId())[&#39;default_currency&#39;]</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Plugin je automaticky zapojen callbackem <code>resolving()</code> service provideru v kroku 3,
+takže konzumenti dostanou pole, jeho pohledy a jeho hooky jen instalací
+balíčku. Registrační vzor a <code>has()</code> guard viz
+<a href="../../core/plugins/#registrace-pluginu-z-balicku">Core Pluginy → Registrace pluginů z balíčku</a>.</p>
+<h3 id="5-konzumenti-ho-instaluji">5. Konzumenti ho instalují</h3>
+<p>Z konzumující aplikace je instalace jen Composer plus volitelné přepisy
+pohledů:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">acme/wire-money-fields</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;"># Volitelné: přepsat markup pole</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=acme-money::views</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Acme\WireMoney\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price_cents&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<blockquote>
+<p><strong>Plugin config tagy používají <code>::</code></strong> — <code>acme-money::views</code>, <code>acme-money::config</code> —
+ne pomlčku. Pomlčkový tag jako <code>acme-money-views</code> se neresolvuje na nic.</p>
+</blockquote>
+<h3 id="checklist">Checklist</h3>
+<table>
+<thead>
+<tr>
+<th>Krok</th>
+<th>Povinné pro</th>
+<th>Mechanismus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autoload třídy pole</td>
+<td>Vždy</td>
+<td>Composer <code>psr-4</code></td>
+</tr>
+<tr>
+<td>Registrace view namespace</td>
+<td>Vždy (v balíčku)</td>
+<td><code>loadViewsFrom()</code> / <code>-&gt;hasViews()</code></td>
+</tr>
+<tr>
+<td><code>viewName()</code> vrací <code>namespace::path</code></td>
+<td>Vždy (v balíčku)</td>
+<td>Třída pole</td>
+</tr>
+<tr>
+<td>Publikování pohledů</td>
+<td>Volitelné (podpora přepisu)</td>
+<td><code>publishes(..., 'tag::views')</code></td>
+</tr>
+<tr>
+<td>Registrace pluginu</td>
+<td>Jen pro makra/hooky/config</td>
+<td><code>resolving(PluginManager::class)</code></td>
+</tr>
+<tr>
+<td>Výchozí config</td>
+<td>Jen pro konfigurovatelné pluginy</td>
+<td><code>HasConfiguration</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="js-backed-fields"></a></p>
+<h2 id="js-based-pole">JS-based pole</h2>
+<p>Ve vestavěných polích existují dvě úrovně chování na straně klienta:</p>
+<ul>
+<li>
+<p><strong>Inline Alpine.</strong> Lehká interaktivita nepotřebuje samostatný bundle. <code>Slider</code>
+a <code>Rating</code> například řídí vše z <code>x-data</code> bloku a <code>@entangle</code>ují state path
+pole, s případným CSS inlinovaným jednou přes <code>@once</code>. Pro
+většinu vlastních polí je to vše, co potřebujete — viz
+<code>packages/forms/resources/views/components/slider.blade.php</code>.</p>
+</li>
+<li>
+<p><strong>Předbundlovaný skript přes <code>@assets</code>.</strong> Těžší pole (jako <code>TiptapEditor</code>) dodávají
+předsestavený JS bundle, který provider servíruje z routy
+(<code>/wire-forms/assets/{asset}.js</code>). Pohled pole ho injektuje Livewire
+direktivou <code>@assets</code>, takže skript běží i když se pole otevře uvnitř
+modalu — kde by prostý <code>&lt;script&gt;</code> tag injektovaný přes DOM morphing nikdy
+neběžel. Viz <code>packages/forms/resources/views/components/tiptap-editor.blade.php</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">@assets</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">script</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">src</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-forms.asset&#39;</span><span style="color: #E1E4E8;">, [</span><span style="color: #9ECBFF;">&#39;asset&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;tiptap&#39;</span><span style="color: #E1E4E8;">]) </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #E1E4E8;">&gt;&lt;/</span><span style="color: #85E89D;">script</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #B392F0;">@endassets</span></div></code></pre>
+</li>
+</ul>
+<p>Pokud stavíte těžší JS-based pole ve vlastním balíčku, následujte stejný
+vzor: zabundlujte skript, vystavte ho na routě a injektujte ho přes <code>@assets</code>
+z pohledu pole, aby byl přítomný kdykoli se pole vykresluje.</p>
+<p><strong>Alpine komponentu registrujte bezpodmínečně.</strong> <code>alpine:init</code> proběhne přesně
+jednou za dokument, takže bundle, který dorazí později — po <code>wire:navigate</code>,
+s lazy vykresleným povrchem, uvnitř AJAXem načteného modalu — by se přihlásil
+k eventu, jenž už nikdy nenastane, a nezaregistroval by nic; <code>x-data="myField(…)"</code>
+pak spadne na <code>myField is not defined</code>. Každý bundle ve Wire používá tenhle idiom:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">let</span><span style="color: #E1E4E8;"> registered </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span></div><div class='line'><span style="color: #F97583;">const</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> () </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (registered </span><span style="color: #F97583;">||</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> window.Alpine) </span><span style="color: #F97583;">return</span></div><div class='line'><span style="color: #E1E4E8;">    registered </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span></div><div class='line'><span style="color: #E1E4E8;">    window.Alpine.</span><span style="color: #B392F0;">data</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;myField&#39;</span><span style="color: #E1E4E8;">, myField)</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div><div class='line'><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (window.Alpine) </span><span style="color: #B392F0;">register</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #F97583;">else</span><span style="color: #E1E4E8;"> document.</span><span style="color: #B392F0;">addEventListener</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;alpine:init&#39;</span><span style="color: #E1E4E8;">, register)</span></div></code></pre>
+<p>Guard <code>registered</code> není obranný detail: bundle se legitimně může na jedné stránce
+vypsat dvakrát (per-surface include plus
+<a href="../../getting-started/#javascriptove-assety"><code>@wireStackScripts</code></a>) a prohlížeč ho
+oba dva krát spustí.</p>
+<p>Pokud váš balíček dodává víc než občasné těžké pole, deklarujte bundle v
+<code>configure()</code> vlastního balíčku místo pouhého per-surface includu —
+<code>@wireStackScripts</code> ho pak vypíše vedle vlastních bundlů Wire:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Assets\Bundle</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$packager</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasAssets</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;dist&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">entries</span><span style="color: #E1E4E8;">: [</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Bundle</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;my-field.js&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    ])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasAssetFallback</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Bundle</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">servedByRoute</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;my-package&#39;</span><span style="color: #E1E4E8;">));</span></div></code></pre>
+<p>Entries se klíčují <strong>jménem dodávaného souboru</strong> relativně k adresáři assetů.
+<code>Bundle::make()</code> deklaruje to, čím každý bundle Wire je — klasický (nemodulový)
+skript, protože top-level deklarace ES modulu se nikdy nedostanou na <code>window</code> a
+vaše registrace by tiše neudělala nic. <code>hasAssetFallback()</code> udrží tag naživu tam,
+kde do <code>public/</code> nejde zapisovat, tím že ukáže na vlastní routu
+<code>{package}.asset</code> vašeho balíčku.</p>
+<p>Těžká těla držte mimo stránky, které je nepotřebují, tak že je vynecháte z
+<code>entries:</code> a necháte je dodat pole per-surface — ale nikdy ne malý controller,
+který komponentu registruje.</p>
+<hr>
+<h2 id="testovani-vlastnich-poli">Testování vlastních polí</h2>
+<p>Pole se vykreslují do HTML, takže nejrychlejší testy asertují na výstup a konfiguraci.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Forms\Components\MoneyInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #B392F0;">it</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;renders the currency symbol&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> () {</span></div><div class='line'><span style="color: #E1E4E8;">    $field </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">MoneyInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">currency</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">expect</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getCurrency</span><span style="color: #E1E4E8;">())</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toBe</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">and</span><span style="color: #E1E4E8;">($field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getStateType</span><span style="color: #E1E4E8;">())</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toBe</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;int&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">and</span><span style="color: #E1E4E8;">((</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">) $field</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toHtml</span><span style="color: #E1E4E8;">())</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toContain</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;EUR&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>Pro end-to-end chování (vazba stavu, validace, uložení) protáhněte pole
+uvnitř Livewire form komponenty s testovacími helpery Livewire, stejně jako
+balíček testuje vestavěná pole. Spusťte je pomocí <code>composer test:forms</code>.</p>
+<hr>
+<h2 id="viz-take">Viz také</h2>
+<ul>
+<li><a href="../fields/">Reference Form Fields</a> — každé vestavěné pole</li>
+<li><a href="../save-lifecycle/">Životní cyklus ukládání</a> — per-form save callbacky</li>
+<li><a href="../validation/">Validace</a> — sběr pravidel a zprávy</li>
+<li><a href="../../core/plugins/">Core Pluginy</a> — hooky, makra, registry typů, balíčkování</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../save-lifecycle/">
+                                        <span>← Předchozí</span>
+                                        <strong>Životní cyklus ukládání</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../fields/">
+                                        <span>Další →</span>
+                                        <strong>Pole formulářů</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#rychly-vlastni-pohled-viewfield">
+                                            Rychlý vlastní pohled (ViewField)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#jak-je-pole-poskladane">
+                                            Jak je pole poskládané                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#stavba-vlastniho-pole">
+                                            Stavba vlastního pole                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#1-php-trida">
+                                            1. PHP třída                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#2-blade-pohled">
+                                            2. Blade pohled                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#3-pouziti">
+                                            3. Použití                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#pouze-zobrazovaci-komponenty">
+                                            Pouze zobrazovací komponenty                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#znovupouzitelne-presety">
+                                            Znovupoužitelné presety                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#transformace-stavu-pole">
+                                            Transformace stavu pole                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#zapojeni-do-zivotniho-cyklu-ukladani">
+                                            Zapojení do životního cyklu ukládání                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#balickovani-poli-do-pluginu">
+                                            Balíčkování polí do pluginu                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#co-registrace-pole-doopravdy-znamena">
+                                            Co „registrace pole&quot; doopravdy znamená                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#1-rozlozeni-balicku">
+                                            1. Rozložení balíčku                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#2-pole-namirene-na-namespaced-pohled">
+                                            2. Pole namířené na namespaced pohled                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#3-registrace-view-namespace-v-service-provideru">
+                                            3. Registrace view namespace v service provideru                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#4-plugin-presety-hooky-a-config">
+                                            4. Plugin: presety, hooky a config                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#5-konzumenti-ho-instaluji">
+                                            5. Konzumenti ho instalují                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#checklist">
+                                            Checklist                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#js-based-pole">
+                                            JS-based pole                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#testovani-vlastnich-poli">
+                                            Testování vlastních polí                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#viz-take">
+                                            Viz také                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

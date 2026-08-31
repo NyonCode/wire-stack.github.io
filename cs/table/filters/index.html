@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Filtry | Wire Docs</title>
+    <meta name="description" content="Wire Table poskytuje 6 vestavěných typů filtrů plus možnost postavit vlastní filtry. Filtry žijí v liště filtrů nad tabulkou a přetrvávají ve stavu Livewire přes $tableFilters. Tato stránka pokrývá tok a sdílené API; každý typ má svou vlastní stránku.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/table/filters/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/table/filters/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/table/filters/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/table/filters/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Filtry | Wire Docs">
+    <meta property="og:description" content="Wire Table poskytuje 6 vestavěných typů filtrů plus možnost postavit vlastní filtry. Filtry žijí v liště filtrů nad tabulkou a přetrvávají ve stavu Livewire přes $tableFilters. Tato stránka pokrývá tok a sdílené API; každý typ má svou vlastní stránku.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/table/filters/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Filtry | Wire Docs">
+    <meta name="twitter:description" content="Wire Table poskytuje 6 vestavěných typů filtrů plus možnost postavit vlastní filtry. Filtry žijí v liště filtrů nad tabulkou a přetrvávají ve stavu Livewire přes $tableFilters. Tato stránka pokrývá tok a sdílené API; každý typ má svou vlastní stránku.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../table/filters/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/table/filters/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Začínáme</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Dokumentace Wire                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Začínáme                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Mapa projektu                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Konfigurace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Autorizace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Ošetření chyb                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Vzhled a přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testování                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Kuchařka                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Řešení potíží                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Návod k upgradu                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Formuláře</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/validation/">
+                                        Validace formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/reactive-fields/">
+                                        Reaktivní pole                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/save-lifecycle/">
+                                        Životní cyklus ukládání                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/custom-fields/">
+                                        Rozšíření formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/">
+                                        Pole formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Tabulka</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../columns/">
+                                        Sloupce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Filtry                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../actions/">
+                                        Akce tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../record-actions/">
+                                        Celořádkové akce (Record Actions)                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../selection/">
+                                        Výběr řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../gestures/">
+                                        Vrstva gest                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../exports/">
+                                        Exporty tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../imports/">
+                                        Importy tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../summaries/">
+                                        Souhrny                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../grouping/">
+                                        Seskupení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sub-rows/">
+                                        Podřádky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../relation-managers/">
+                                        Správci relací                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../notifications/">
+                                        Notifikace tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../advanced/">
+                                        Pokročilé funkce                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Řazení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Řazení sloupců                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Pokročilé použití                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        Reference API                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Akce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifikace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modaly                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgety                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolisty                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editovatelné panely                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Pluginy                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server a nástroje                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines a Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Tabulka</span>
+                            </nav>
+                            <p class="eyebrow">Tabulka</p>
+                            <h1>Filtry</h1>
+                                                            <p class="lead">Wire Table poskytuje 6 vestavěných typů filtrů plus možnost postavit vlastní filtry. Filtry žijí v liště filtrů nad tabulkou a přetrvávají ve stavu Livewire přes $tableFilters. Tato stránka pokrývá tok a sdílené API; každý typ má svou vlastní stránku.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#typy-filtru">Typy filtrů</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#vice">Více</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#tok-filtru">Tok filtru</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#sdilene-api-filtru">Sdílené API filtru</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#factory-a-identita">Factory a identita</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#vazba-na-sloupec">Vazba na sloupec</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#vlastni-logika-dotazu">Vlastní logika dotazu</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#viditelnost-a-opravneni">Viditelnost a oprávnění</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#vychozi-hodnota">Výchozí hodnota</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#vicenasobny-vyber">Vícenásobný výběr</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#prizpusobeni-pohledu">Přizpůsobení pohledu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#indikatory-filtru">Indikátory filtrů</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#prizpusobeni-chipu">Přizpůsobení chipu</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#api-komponenty">API komponenty</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#mobil">Mobil</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Wire Table poskytuje <strong>6 vestavěných typů filtrů</strong> plus možnost postavit vlastní
+filtry. Filtry žijí v liště filtrů nad tabulkou a přetrvávají ve stavu Livewire
+přes <code>$tableFilters</code>. Tato stránka pokrývá tok a sdílené API; každý typ má svou
+vlastní stránku.</p>
+<h2 id="typy-filtru">Typy filtrů</h2>
+<table>
+<thead>
+<tr>
+<th>Filtr</th>
+<th>Použití pro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="text/">TextFilter</a></td>
+<td>Textová shoda s operátorem (<code>like</code>, <code>starts_with</code>, …)</td>
+</tr>
+<tr>
+<td><a href="select/">SelectFilter</a></td>
+<td>Jednoduchý/vícenásobný výběr z options, relací nebo enumů</td>
+</tr>
+<tr>
+<td><a href="date/">DateFilter</a></td>
+<td>Jedno datum, rozsah dat nebo měsíc + rok</td>
+</tr>
+<tr>
+<td><a href="number-range/">NumberRangeFilter</a></td>
+<td>Min/max číselný rozsah</td>
+</tr>
+<tr>
+<td><a href="ternary/">TernaryFilter</a></td>
+<td>Trojstavový boolean (vše / true / false)</td>
+</tr>
+<tr>
+<td><a href="trashed/">TrashedFilter</a></td>
+<td>Měkké mazání: živé / smazané / všechny záznamy</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vice">Více</h2>
+<ul>
+<li><a href="relationships/">Filtry relací a podřádků</a> — filtrovat podle souvisejících modelů a hodnot podřádků</li>
+<li><a href="column-level/">Filtry na úrovni sloupce</a> — inline inputy filtru v hlavičce sloupce</li>
+<li><a href="custom/">Vlastní třída filtru</a> — postavit vlastní komponentu filtru</li>
+<li><a href="patterns/">Vzory a recepty</a> — kompletní příkladové lišty filtrů</li>
+</ul>
+<h2 id="tok-filtru">Tok filtru</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">Table::filters([...])</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── Render: Komponenty filtrů v sidebar/header liště</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Každý filtr vykreslí svůj vlastní Blade pohled</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── Stav: pole $tableFilters [&#39;name&#39; =&gt; &#39;value&#39;, ...]</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Perzistováno ve stavu Livewire komponenty</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">└── Apply: Když se stav změní</span></div><div class='line'><span style="color: #e1e4e8;">    ├── Zavolá se callback apply() nebo query() každého filtru</span></div><div class='line'><span style="color: #e1e4e8;">    ├── Podmínky přidány do Eloquent Builderu</span></div><div class='line'><span style="color: #e1e4e8;">    └── Tabulka se znovu dotáže s aplikovanými filtry</span></div></code></pre>
+<p>Aplikace filtrů teče přes Core pipe <code>ApplyFilters</code> v pipeline QueryExecutoru.</p>
+<hr>
+<h2 id="sdilene-api-filtru">Sdílené API filtru</h2>
+<p>Každý filtr dědí ze základní třídy <code>Filter</code>.</p>
+<h3 id="factory-a-identita">Factory a identita</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Filter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $name)           </span><span style="color: #6A737D;">// statická factory</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $label)               </span><span style="color: #6A737D;">// zobrazovací popisek (auto-generovaný z názvu)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getLabel</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">string</span></div></code></pre>
+<h3 id="vazba-na-sloupec">Vazba na sloupec</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">column</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $column)             </span><span style="color: #6A737D;">// DB sloupec, na kterém filtrovat (výchozí $name)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getColumn</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">string</span></div></code></pre>
+<p>Když <code>column()</code> není zavoláno, filtr použije svůj <code>$name</code> jako databázový sloupec.</p>
+<h3 id="vlastni-logika-dotazu">Vlastní logika dotazu</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">query</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $fn)                 </span><span style="color: #6A737D;">// vlastní callback dotazu</span></div></code></pre>
+<p>Signatura callbacku je <code>function (Builder $query, mixed $value): Builder</code> — <strong>musí vrátit query builder</strong> (runtime přiřadí <code>$query</code> návratové hodnotě callbacku).</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">SelectFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;activity_level&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">query</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">Builder</span><span style="color: #E1E4E8;"> $query, </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $value) =&gt; </span><span style="color: #F97583;">match</span><span style="color: #E1E4E8;"> ($value) {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;active&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $query</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">where</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;last_active_at&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;&gt;=&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">now</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">subDays</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">7</span><span style="color: #E1E4E8;">)),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;inactive&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $query</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">where</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;last_active_at&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;&lt;&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">now</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">subDays</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">30</span><span style="color: #E1E4E8;">)),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;new&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $query</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">where</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;&gt;=&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">now</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">subDays</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">7</span><span style="color: #E1E4E8;">)),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">default</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $query,</span></div><div class='line'><span style="color: #E1E4E8;">    })</span></div></code></pre>
+<h4>Co obsahuje <code>$value</code></h4>
+<p>Tvar závisí na typu filtru — rozsahový filtr předá pole, ternary předá skutečný
+boolean:</p>
+<table>
+<thead>
+<tr>
+<th>Filtr</th>
+<th><code>$value</code></th>
+<th>Příklad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TextFilter</code></td>
+<td><code>string</code> — co uživatel napsal</td>
+<td><code>'faktura'</code></td>
+</tr>
+<tr>
+<td><code>SelectFilter</code></td>
+<td>klíč option <code>string|int</code></td>
+<td><code>'active'</code></td>
+</tr>
+<tr>
+<td><code>SelectFilter</code> + <code>-&gt;multiple()</code></td>
+<td><code>array</code> klíčů options</td>
+<td><code>['active', 'pending']</code></td>
+</tr>
+<tr>
+<td><code>TernaryFilter</code></td>
+<td><code>bool</code> — <code>true</code> pro Ano, <code>false</code> pro Ne</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>NumberRangeFilter</code></td>
+<td><code>array{min, max}</code> — kterákoli strana může být <code>''</code></td>
+<td><code>['min' =&gt; '10', 'max' =&gt; '']</code></td>
+</tr>
+<tr>
+<td><code>DateFilter</code></td>
+<td>datum jako <code>string</code></td>
+<td><code>'2026-07-23'</code></td>
+</tr>
+<tr>
+<td><code>DateFilter</code> + <code>-&gt;range()</code></td>
+<td><code>array{from, to}</code></td>
+<td><code>['from' =&gt; '2026-01-01', 'to' =&gt; '']</code></td>
+</tr>
+<tr>
+<td><code>DateFilter</code> + <code>-&gt;month()</code></td>
+<td><code>string</code> <code>'YYYY-MM'</code></td>
+<td><code>'2026-07'</code></td>
+</tr>
+</tbody>
+</table>
+<p>Callback se volá jen když je filtr <strong>aktivní</strong> — prázdný stav (<code>null</code>, <code>''</code>,
+<code>[]</code> nebo „Vše" u ternary) filtr vypne a do closure se vůbec nedostane, takže se
+proti němu nemusíte bránit. Výjimkou jsou v jednom směru vícepolní filtry:
+rozsah zůstává aktivní, dokud je vyplněná <em>kterákoli</em> strana, takže si každou
+mez ověřte zvlášť.</p>
+<p>Třetí argument nese syrový odeslaný stav před normalizací — pro vzácné případy,
+kdy callback potřebuje transportní podobu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">query</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">Builder</span><span style="color: #E1E4E8;"> $query, </span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $value, </span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $raw) { </span><span style="color: #79B8FF;">…</span><span style="color: #E1E4E8;"> })</span></div></code></pre>
+<h3 id="viditelnost-a-opravneni">Viditelnost a oprávnění</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hidden</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $hidden </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $visible </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isHidden</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $permission)     </span><span style="color: #6A737D;">// viditelné jen když má uživatel oprávnění</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">DateFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;deleted_at&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">range</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view-deleted-records&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">SelectFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;internal_status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">user</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">is_admin)</span></div></code></pre>
+<h3 id="vychozi-hodnota">Výchozí hodnota</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">default</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $value)              </span><span style="color: #6A737D;">// předvybráno při prvním načtení</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDefault</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">mixed</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">SelectFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">default</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;active&#39;</span><span style="color: #E1E4E8;">)              </span><span style="color: #6A737D;">// &quot;active&quot; předvybráno</span></div></code></pre>
+<h3 id="vicenasobny-vyber">Vícenásobný výběr</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">multiple</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $multiple </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Když je zapnuto, filtr přijímá pole hodnot a aplikuje <code>whereIn()</code>.</p>
+<h3 id="prizpusobeni-pohledu">Přizpůsobení pohledu</h3>
+<p>Neexistuje fluent setter <code>-&gt;view()</code>. UI filtru přizpůsobte jedním ze dvou způsobů:</p>
+<ul>
+<li><strong>Per typ filtru</strong> — přepište <code>render()</code> ve vlastní podtřídě <code>Filter</code> a nasměrujte ji na svůj Blade pohled (viz <a href="custom/">Vlastní třída filtru</a>).</li>
+<li><strong>Pro celý projekt</strong> — publikujte pohledy balíčku a upravte partialy pod <code>resources/views/vendor/wire-table/tables/filters/</code> (<code>select</code>, <code>date</code>, <code>number-range</code>, <code>ternary</code>, <code>form-field</code>).</li>
+</ul>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-table::views</span></div></code></pre>
+<hr>
+<h2 id="indikatory-filtru">Indikátory filtrů</h2>
+<p>Aktivní filtry se vykreslí jako odstranitelné chipy pod toolbarem tabulky — každý
+chip ukazuje čitelný popisek a tlačítko ×, které vyčistí jen daný filtr.
+S více než jedním aktivním filtrem se vedle chipů objeví odkaz „Reset filters".</p>
+<p>Výchozí popisky se generují per typ filtru:</p>
+<table>
+<thead>
+<tr>
+<th>Filtr</th>
+<th>Příklad chipu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SelectFilter</code></td>
+<td><code>Status: Active</code> (popisek option, ne surová hodnota)</td>
+</tr>
+<tr>
+<td><code>SelectFilter</code> + <code>multiple()</code></td>
+<td><code>Status: Active, Trial</code></td>
+</tr>
+<tr>
+<td><code>TernaryFilter</code></td>
+<td><code>Verified: Yes</code> (labely true/false)</td>
+</tr>
+<tr>
+<td><code>NumberRangeFilter</code></td>
+<td><code>Price: 10 – 100</code>, <code>Price: ≥ 10</code>, <code>Price: ≤ 100</code></td>
+</tr>
+<tr>
+<td><code>DateFilter</code></td>
+<td><code>Created: 2026-06-11</code></td>
+</tr>
+<tr>
+<td><code>DateFilter</code> + <code>range()</code></td>
+<td><code>Created: 2026-06-01 – 2026-06-30</code></td>
+</tr>
+<tr>
+<td><code>DateFilter</code> + <code>month()</code></td>
+<td><code>Billed: May 2026</code> (přeložený název měsíce)</td>
+</tr>
+<tr>
+<td>základní <code>Filter</code></td>
+<td><code>Label: value</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="prizpusobeni-chipu">Přizpůsobení chipu</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">SelectFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">indicator</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Only active customers&#39;</span><span style="color: #E1E4E8;">)              </span><span style="color: #6A737D;">// pevný popisek</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">DateFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">indicator</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($value) =&gt; </span><span style="color: #9ECBFF;">&#39;Since &#39;</span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;">$value)       </span><span style="color: #6A737D;">// closura: fn ($value, Filter $filter)</span></div></code></pre>
+<p>Vrácení <code>null</code> nebo prázdného řetězce z closury chip skryje, zatímco filtr zůstane
+aplikovaný. Skryté/neautorizované filtry nikdy nevytvoří chipy.</p>
+<h3 id="api-komponenty">API komponenty</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$component</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActiveFilterIndicators</span><span style="color: #E1E4E8;">();   </span><span style="color: #6A737D;">// [&#39;status&#39; =&gt; &#39;Status: Active&#39;, ...]</span></div><div class='line'><span style="color: #E1E4E8;">$component</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">removeTableFilter</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">);   </span><span style="color: #6A737D;">// vyčistit jeden filtr (× tlačítko chipu)</span></div><div class='line'><span style="color: #E1E4E8;">$component</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">resetTableFilters</span><span style="color: #E1E4E8;">();           </span><span style="color: #6A737D;">// vyčistit všechny filtry + hledání</span></div></code></pre>
+<p><a href="column-level/">Filtry hlavičky sloupce</a> tvoří stejné chipy vedle panelových
+filtrů (jsou to také kanonické objekty <code>Filter</code>), s vlastními handlery:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$component</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActiveColumnFilterIndicators</span><span style="color: #E1E4E8;">();  </span><span style="color: #6A737D;">// [&#39;name&#39; =&gt; &#39;Name: Widget&#39;, ...]</span></div><div class='line'><span style="color: #E1E4E8;">$component</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">removeColumnFilter</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">);         </span><span style="color: #6A737D;">// vyčistit jeden filtr sloupce</span></div></code></pre>
+<h2 id="mobil">Mobil</h2>
+<p>Lišta filtrů a menu přepínání sloupců se na telefonu otevřou jako bottom sheet.
+Konfigurujte globálně přes blok <code>wire-core.mobile</code>, nebo per komponenta pomocí
+<code>-&gt;sheetOnMobile()</code> / <code>-&gt;mobileBreakpoint()</code> — viz
+<a href="../../configuration/#mobil">mobilní prezentace</a>.</p>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../columns/">
+                                        <span>← Předchozí</span>
+                                        <strong>Sloupce</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../actions/">
+                                        <span>Další →</span>
+                                        <strong>Akce tabulky</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#typy-filtru">
+                                            Typy filtrů                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#vice">
+                                            Více                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#tok-filtru">
+                                            Tok filtru                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#sdilene-api-filtru">
+                                            Sdílené API filtru                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#factory-a-identita">
+                                            Factory a identita                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#vazba-na-sloupec">
+                                            Vazba na sloupec                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#vlastni-logika-dotazu">
+                                            Vlastní logika dotazu                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#viditelnost-a-opravneni">
+                                            Viditelnost a oprávnění                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#vychozi-hodnota">
+                                            Výchozí hodnota                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#vicenasobny-vyber">
+                                            Vícenásobný výběr                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#prizpusobeni-pohledu">
+                                            Přizpůsobení pohledu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#indikatory-filtru">
+                                            Indikátory filtrů                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#prizpusobeni-chipu">
+                                            Přizpůsobení chipu                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#api-komponenty">
+                                            API komponenty                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#mobil">
+                                            Mobil                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

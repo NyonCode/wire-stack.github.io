@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Getting Started | Wire Docs</title>
+    <meta name="description" content="This guide covers the production setup for Wire in a Laravel application.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/getting-started/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/getting-started/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/getting-started/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/getting-started/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Getting Started | Wire Docs">
+    <meta property="og:description" content="This guide covers the production setup for Wire in a Laravel application.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/getting-started/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Getting Started | Wire Docs">
+    <meta name="twitter:description" content="This guide covers the production setup for Wire in a Laravel application.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../assets/gsap.min.js"></script>
+    <script defer src="../assets/scrolltrigger.min.js"></script>
+    <script defer src="../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../getting-started/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../cs/getting-started/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Start Here</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../documentation/">
+                                        Wire Documentation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Getting Started                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../project-map/">
+                                        Project Map                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../configuration/">
+                                        Configuration                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../authorization/">
+                                        Authorization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../error-handling/">
+                                        Error Handling                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../theming/">
+                                        Theming &amp; Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../testing/">
+                                        Testing                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../cookbook/">
+                                        Cookbook                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../troubleshooting/">
+                                        Troubleshooting                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../upgrade/">
+                                        Upgrade Guide                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Forms</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/validation/">
+                                        Form Validation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/reactive-fields/">
+                                        Reactive Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/save-lifecycle/">
+                                        Save Lifecycle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/custom-fields/">
+                                        Extending Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/">
+                                        Form Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Table</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/columns/">
+                                        Columns                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/filters/">
+                                        Filters                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/actions/">
+                                        Table Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/record-actions/">
+                                        Record Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/selection/">
+                                        Selecting Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/gestures/">
+                                        The Gesture Layer                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/exports/">
+                                        Table Exports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/imports/">
+                                        Table Imports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/summaries/">
+                                        Summaries                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/grouping/">
+                                        Row Grouping                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/sub-rows/">
+                                        Sub-Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/relation-managers/">
+                                        Relation Managers                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/notifications/">
+                                        Table Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../table/advanced/">
+                                        Advanced Features                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../sortable/overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/row-sorting/">
+                                        Row Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/column-sorting/">
+                                        Column Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/customization/">
+                                        Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/advanced/">
+                                        Advanced Usage                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sortable/api-reference/">
+                                        API Reference                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../core/actions/">
+                                        Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/notifications/">
+                                        Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/modals/">
+                                        Modals                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/widgets/">
+                                        Widgets                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/infolists/">
+                                        Infolists                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/panels/">
+                                        Editable panels                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/plugins/">
+                                        Core Plugins                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../boost/overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../boost/installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../boost/mcp-tools/">
+                                        MCP Server &amp; Tools                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../boost/guidelines-and-skills/">
+                                        Guidelines &amp; Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Start Here</span>
+                            </nav>
+                            <p class="eyebrow">Start Here</p>
+                            <h1>Getting Started</h1>
+                                                            <p class="lead">This guide covers the production setup for Wire in a Laravel application.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#requirements">Requirements</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#installation">Installation</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#full-ecosystem-table-forms-core">Full ecosystem (table + forms + core)</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#only-forms-forms-core">Only forms (forms + core)</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#only-core">Only core</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#sortable-package-drag-and-drop-row-reordering">Sortable package (drag and drop row reordering)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#production-checklist">Production Checklist</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#tailwind-css-configuration">Tailwind CSS Configuration</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#primary-color">Primary Color</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#layout-template">Layout Template</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#javascript-assets">JavaScript Assets</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#why-an-spa-app-wants-it">Why an SPA app wants it</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#where-the-files-actually-come-from">Where the files actually come from</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#if-public-is-not-writable">If public/ is not writable</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#config-publishing-optional">Config Publishing (optional)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#view-publishing-optional">View Publishing (optional)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#quick-start-table">Quick Start: Table</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#quick-start-form">Quick Start: Form</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#troubleshooting">Troubleshooting</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#styles-are-missing">Styles are missing</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#components-render-without-javascript-behavior">Components render without JavaScript behavior</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#notifications-do-not-appear">Notifications do not appear</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#development-monorepo">Development (monorepo)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#next-steps">Next Steps</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>This guide covers the production setup for Wire in a Laravel application.</p>
+<h2 id="requirements">Requirements</h2>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHP</td>
+<td>^8.2</td>
+</tr>
+<tr>
+<td>Laravel</td>
+<td>12.61+ or 13.12+</td>
+</tr>
+<tr>
+<td>Livewire</td>
+<td>3.x</td>
+</tr>
+<tr>
+<td>Tailwind CSS</td>
+<td>3.x+</td>
+</tr>
+<tr>
+<td>Alpine.js</td>
+<td>3.x+ (included with Livewire)</td>
+</tr>
+<tr>
+<td><code>nyoncode/laravel-package-toolkit</code></td>
+<td>^2.4 (installed for you)</td>
+</tr>
+</tbody>
+</table>
+<p>The last row is not something you require yourself — Composer pulls it in with the
+Wire packages. It is listed because it decides the two rows above it. The toolkit
+owns the <code>public/vendor</code> mirror that puts the JavaScript bundles on disk (see
+<a href="#javascript-assets">JavaScript Assets</a>), and 2.4 requires
+<code>illuminate/support ^12.61.1|^13.12.0</code>, so that — not the <code>^12.0</code> the Wire packages
+declare — is the Laravel version an install actually resolves against. An app that
+pins the toolkit itself has to allow <code>^2.4</code> before <code>composer require nyoncode/wire-table</code>
+can resolve at all.</p>
+<h2 id="installation">Installation</h2>
+<h3 id="full-ecosystem-table-forms-core">Full ecosystem (table + forms + core)</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">nyoncode/wire-table</span></div></code></pre>
+<h3 id="only-forms-forms-core">Only forms (forms + core)</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">nyoncode/wire-forms</span></div></code></pre>
+<h3 id="only-core">Only core</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">nyoncode/wire-core</span></div></code></pre>
+<h3 id="sortable-package-drag-and-drop-row-reordering">Sortable package (drag and drop row reordering)</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">nyoncode/wire-sortable</span></div></code></pre>
+<p>Service providers register automatically via Laravel auto-discovery.</p>
+<h2 id="production-checklist">Production Checklist</h2>
+<p>Before you render the first component, make sure all of these are true:</p>
+<ul>
+<li>Livewire 3 is installed</li>
+<li>Tailwind scans the Wire vendor views</li>
+<li>your app defines a <code>primary</code> color</li>
+<li>the main layout includes <code>@vite</code>, <code>@livewireStyles</code>, and <code>@livewireScripts</code></li>
+<li>the layout has <code>@wireStackScripts</code> in its <code>&lt;head&gt;</code> — required in practice for any
+app that navigates with <code>wire:navigate</code> (see <a href="#javascript-assets">JavaScript Assets</a>)</li>
+<li>the layout renders <code>&lt;x-wire-notifications::toast-container /&gt;</code> if you want built-in toasts</li>
+</ul>
+<h2 id="tailwind-css-configuration">Tailwind CSS Configuration</h2>
+<p>Wire generates some utility classes from PHP (color/size resolvers, the mobile
+bottom-sheet classes, responsive grid columns, …), so Tailwind must scan both
+the package <strong>views and <code>src</code></strong> — scanning views alone will miss those classes.</p>
+<p><strong>Tailwind 3</strong> — add the paths to <code>tailwind.config.js</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">module</span><span style="color: #E1E4E8;">.</span><span style="color: #79B8FF;">exports</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    content: [</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// ...your paths</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-core/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-core/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-forms/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-forms/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-table/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-table/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-sortable/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-sortable/src/**/*.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    ],</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p><strong>Tailwind 4</strong> — add <code>@source</code> lines to your CSS entry (e.g. <code>app.css</code>):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-css"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-core/resources/views&quot;;</span></div><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-core/src&quot;;</span></div><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-forms/resources/views&quot;;</span></div><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-forms/src&quot;;</span></div><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-table/resources/views&quot;;</span></div><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-table/src&quot;;</span></div><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-sortable/resources/views&quot;;</span></div><div class='line'><span style="color: #F97583;">@source</span><span style="color: #E1E4E8;"> &quot;../../vendor/nyoncode/wire-sortable/src&quot;;</span></div></code></pre>
+<h3 id="primary-color">Primary Color</h3>
+<p>Wire components use <code>primary</code> as the default accent color (buttons, badges, focus rings, etc.). You must define it in your Tailwind config:</p>
+<p><strong>Tailwind 3</strong> (<code>tailwind.config.js</code>):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">const</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">colors</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">require</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;tailwindcss/colors&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">module</span><span style="color: #E1E4E8;">.</span><span style="color: #79B8FF;">exports</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    theme: {</span></div><div class='line'><span style="color: #E1E4E8;">        extend: {</span></div><div class='line'><span style="color: #E1E4E8;">            colors: {</span></div><div class='line'><span style="color: #E1E4E8;">                primary: colors.blue, </span><span style="color: #6A737D;">// or any color palette</span></div><div class='line'><span style="color: #E1E4E8;">            },</span></div><div class='line'><span style="color: #E1E4E8;">        },</span></div><div class='line'><span style="color: #E1E4E8;">    },</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p><strong>Tailwind 4</strong> (<code>app.css</code>):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-css"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">@theme</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-50: var(--color-blue-50);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-100: var(--color-blue-100);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-200: var(--color-blue-200);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-300: var(--color-blue-300);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-400: var(--color-blue-400);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-500: var(--color-blue-500);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-600: var(--color-blue-600);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-700: var(--color-blue-700);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-800: var(--color-blue-800);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-900: var(--color-blue-900);</span></div><div class='line'><span style="color: #E1E4E8;">    --color-primary-950: var(--color-blue-950);</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<blockquote>
+<p>Without a <code>primary</code> color defined, buttons and other interactive elements will be invisible (white text on a transparent background).</p>
+</blockquote>
+<h2 id="layout-template">Layout Template</h2>
+<p>Your main layout must include Vite assets and Livewire, plus one <code>@wireStackScripts</code>
+in the <code>&lt;head&gt;</code>. Add the notifications container if you use action feedback or toasts.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;!</span><span style="color: #85E89D;">DOCTYPE</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">html</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">html</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">lang</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">str_replace</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;_&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;-&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getLocale</span><span style="color: #E1E4E8;">()) </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">head</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">meta</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">charset</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;utf-8&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">meta</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">name</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;viewport&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">content</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;width=device-width, initial-scale=1&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">@vite</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;resources/css/app.css&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;resources/js/app.js&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">@livewireStyles</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">@wireStackScripts</span><span style="color: #E1E4E8;"> </span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">head</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">body</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $slot </span><span style="color: #79B8FF;">}}</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #FDAEB7;">x-wire-notifications::toast-container</span><span style="color: #E1E4E8;"> /&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">@livewireScripts</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">body</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">html</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Do not install Alpine separately. Livewire 3 already ships it.</p>
+<h2 id="javascript-assets">JavaScript Assets</h2>
+<p>Wire's interactive parts — dropdowns, the row context menu, tabs, wizards,
+inline-edit cells, the fill handle, row selection, record actions, drag &amp; drop
+reordering — are small Alpine components delivered as pre-built bundles from
+inside the packages. There is nothing to install, nothing to publish and no build
+step on your side: the packages copy their bundles into <code>public/vendor/</code> themselves
+and serve them as static files, cache-busted by the file's modification time.</p>
+<p><strong><code>@wireStackScripts</code> puts every installed package's bundles in the document.</strong>
+One line in the layout <code>&lt;head&gt;</code>, and every controller is present on every page:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">head</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">@wireStackScripts</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">head</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Narrow it to a single package if you want to:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">@wireStackScripts</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-table&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<h3 id="why-an-spa-app-wants-it">Why an SPA app wants it</h3>
+<p>Without the directive, each surface still loads its own bundle when it renders —
+so a table page loads the table bundles, a form page the form ones. That works,
+and an app that never adds the directive keeps working.</p>
+<p>It stops being enough as soon as you navigate with <code>wire:navigate</code>. Livewire's
+<strong>cached Back/Forward</strong> path does not wait for newly injected <code>&lt;head&gt;</code> scripts
+before it initialises Alpine on the swapped-in page. A bundle that arrives <em>with</em>
+the new page can therefore lose the race, and the markup is initialised against a
+registry that does not have the component yet:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">Uncaught ReferenceError: wireRecordSelection is not defined</span></div></code></pre>
+<p>which shows up as dead dropdowns, checkboxes that do nothing and — the loudest
+symptom — a full-page grey scrim over the table, because every mobile sheet
+backdrop is bound to state that no longer exists.</p>
+<p>A bundle that was already in the document when the visitor first arrived cannot
+lose that race. That is the whole job of <code>@wireStackScripts</code>: it is not a
+convenience, it is the only placement the cached back/forward path cannot beat.</p>
+<blockquote>
+<p>Heavy, optional assets — the TipTap rich editor, the Chart.js chart controller —
+are deliberately <em>not</em> in the always-loaded set. The surface that needs one fetches
+it when it renders. Charts additionally need Chart.js, which stays your app's own
+dependency.</p>
+</blockquote>
+<h3 id="where-the-files-actually-come-from">Where the files actually come from</h3>
+<p>They are <strong>real files under <code>public/vendor/&lt;package&gt;</code></strong>, and they get there on
+their own. The first page render after a deploy copies each package's bundles out
+of the installed package and into <code>public/</code>, then emits those paths:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-html"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">script</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">src</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;/vendor/wire-core/wire-core-dropdown.js?id=1786118403&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">...</span><span style="color: #E1E4E8;">&gt;&lt;/</span><span style="color: #85E89D;">script</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Nothing to run, nothing to configure. The copy is incremental — a file already
+present and current is left alone — so in steady state a request does a handful of
+<code>stat</code> calls and no writes at all. After an upgrade it is one copy per changed
+bundle, on one request. Copies land through a temporary file and an atomic rename,
+so a browser fetching a bundle mid-copy never receives a half-written one.</p>
+<p>This matters more than it sounds. Serving the bundles from a package <em>route</em> only
+works if the request reaches PHP, and a very common web-server layout answers <code>.js</code>
+itself:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-nginx"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">location</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">~*</span><span style="color: #E1E4E8;"> </span><span style="color: #DBEDFF;">\.(js|css)$ </span><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">   </span><span style="color: #F97583;"> try_files </span><span style="color: #E1E4E8;">$uri </span><span style="color: #79B8FF;">=404</span><span style="color: #E1E4E8;">;      </span><span style="color: #6A737D;"># a route is not a file on disk → 404</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>On shared hosting that block is frequently not yours to change — and it breaks
+Livewire's own <code>/livewire/livewire.js</code> in exactly the same way. A file that exists
+is served by every web server configuration there is, so that is what the packages
+ship you.</p>
+<p><strong>Publishing is still supported</strong> and does the same copy ahead of time, which moves
+it off the first request after a deploy:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=laravel-assets</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--force</span></div></code></pre>
+<p><code>laravel-assets</code> is the tag the Laravel skeleton already runs from its composer
+<code>post-update-cmd</code>, so <code>composer update</code> keeps the copies current on its own. Neither
+the command nor the hook is required.</p>
+<h3 id="if-public-is-not-writable">If <code>public/</code> is not writable</h3>
+<p>A read-only container, Vapor, a hardened deployment: nothing throws. The package
+route serves the bundles exactly as it did before, and you want either the publish
+command above (run at build time, when the filesystem still is writable) or the
+<code>try_files … /index.php?$query_string</code> fall-through so the route is reachable.</p>
+<p>If an <em>older</em> copy is already there, it keeps being served rather than falling back
+to a route that may be unreachable — and the console says so, on every page and
+regardless of <code>APP_DEBUG</code>, naming the bundles and the command that fixes them. See
+<a href="../troubleshooting/#javascript-404s-and-wirex-is-not-defined">Troubleshooting</a>.</p>
+<h2 id="config-publishing-optional">Config Publishing (optional)</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-core::config</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-forms::config</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-table::config</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-sortable::config</span></div></code></pre>
+<h2 id="view-publishing-optional">View Publishing (optional)</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-core::views</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-forms::views</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-table::views</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-sortable::views</span></div></code></pre>
+<hr>
+<h2 id="quick-start-table">Quick Start: Table</h2>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Livewire\Component</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Concerns\WithTable</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Table</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Columns\TextColumn</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Columns\BadgeColumn</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Filters\SelectFilter</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\Action</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\DeleteAction</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\DeleteBulkAction</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">UserTable</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WithTable</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">table</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Table</span><span style="color: #E1E4E8;"> $table)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Table</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $table </span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">User</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sortable</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">searchable</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">searchable</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">BadgeColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">colors</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;primary&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;success&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;viewer&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;gray&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    ]),</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">dateTime</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;d.m.Y&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sortable</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            ])</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filters</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">SelectFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Admin&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;viewer&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Viewer&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    ]),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            ])</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">actions</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;pencil&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $r) =&gt; </span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;users.edit&#39;</span><span style="color: #E1E4E8;">, $r)),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">DeleteAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            ])</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">bulkActions</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">DeleteBulkAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            ])</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">defaultSort</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">searchable</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">paginated</span><span style="color: #E1E4E8;">(); </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">table </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Next: <a href="../table/columns/">Columns</a>, <a href="../table/filters/">Filters</a>, <a href="../table/actions/">Actions</a></p>
+<hr>
+<h2 id="quick-start-form">Quick Start: Form</h2>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Livewire\Component</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Forms\Form</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Forms\WithForms</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\TextInput</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Select</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Components\Toggle</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">EditUser</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WithForms</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> [];</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">mount</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $user)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">($user)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">fill</span><span style="color: #E1E4E8;">($user</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toArray</span><span style="color: #E1E4E8;">());</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Form</span><span style="color: #E1E4E8;"> $form)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Form</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $form </span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">statePath</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">User</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">maxLength</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">255</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">email</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Select</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Admin&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;viewer&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Viewer&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Toggle</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;active&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            ])</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">successMessage</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;User saved.&#39;</span><span style="color: #E1E4E8;">); </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">form</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:submit</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;save&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">form </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">type</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;submit&quot;</span><span style="color: #E1E4E8;">&gt;Save&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">form</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Next: <a href="../forms/fields/">Field Reference</a>, <a href="../forms/validation/">Validation</a>, <a href="../forms/save-lifecycle/">Save Lifecycle</a></p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="styles-are-missing">Styles are missing</h3>
+<ul>
+<li>verify the Wire vendor paths are present in Tailwind content or <code>@source</code></li>
+<li>rebuild assets with <code>npm run build</code></li>
+<li>clear compiled views with <code>php artisan view:clear</code></li>
+</ul>
+<h3 id="components-render-without-javascript-behavior">Components render without JavaScript behavior</h3>
+<ul>
+<li>confirm the layout includes <code>@livewireScripts</code></li>
+<li>confirm the layout <code>&lt;head&gt;</code> includes <code>@wireStackScripts</code> — especially if the
+breakage only appears after a <code>wire:navigate</code> visit or on Back/Forward</li>
+<li>remove any standalone Alpine bootstrap from <code>resources/js/app.js</code></li>
+</ul>
+<h3 id="notifications-do-not-appear">Notifications do not appear</h3>
+<ul>
+<li>confirm the layout renders <code>&lt;x-wire-notifications::toast-container /&gt;</code></li>
+<li>verify your configured notification driver is valid</li>
+<li>check whether the action actually sends a success or failure notification</li>
+</ul>
+<hr>
+<h2 id="development-monorepo">Development (monorepo)</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">git</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">clone</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">...</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">install</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;"># Run all tests</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">test</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;"># Per-package</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">test:core</span><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;"># 793 tests</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">test:forms</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;"># 212 tests</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">test:table</span><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;"># 369 tests</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">test:sortable</span><span style="color: #E1E4E8;"> </span><span style="color: #6A737D;"># 10 tests</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;"># Code style</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">lint</span><span style="color: #E1E4E8;">          </span><span style="color: #6A737D;"># Pint (Laravel preset)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;"># Static analysis</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">analyse</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;"># PHPStan level 6</span></div></code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="../table/columns/">Table columns</a> — all 13 column types</li>
+<li><a href="../forms/overview/">Form fields</a> — all field types and Form API</li>
+<li><a href="../core/actions/">Actions</a> — row, bulk, header actions</li>
+<li><a href="../core/plugins/">Core plugins</a> — reusable app and package extensions</li>
+<li><a href="../configuration/">Configuration</a> — config files and environment variables</li>
+<li><a href="../authorization/">Authorization</a> — Gates, policies, permissions</li>
+<li><a href="../table/exports/">Table exports</a> — CSV, Excel, PDF downloads</li>
+<li><a href="../core/audit/">Audit log</a> — model change history</li>
+<li><a href="../sortable/overview/">Sortable rows</a> — drag &amp; drop row reordering</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../documentation/">
+                                        <span>← Previous</span>
+                                        <strong>Wire Documentation</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../project-map/">
+                                        <span>Next →</span>
+                                        <strong>Project Map</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#requirements">
+                                            Requirements                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#installation">
+                                            Installation                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#full-ecosystem-table-forms-core">
+                                            Full ecosystem (table + forms + core)                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#only-forms-forms-core">
+                                            Only forms (forms + core)                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#only-core">
+                                            Only core                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#sortable-package-drag-and-drop-row-reordering">
+                                            Sortable package (drag and drop row reordering)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#production-checklist">
+                                            Production Checklist                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#tailwind-css-configuration">
+                                            Tailwind CSS Configuration                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#primary-color">
+                                            Primary Color                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#layout-template">
+                                            Layout Template                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#javascript-assets">
+                                            JavaScript Assets                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#why-an-spa-app-wants-it">
+                                            Why an SPA app wants it                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#where-the-files-actually-come-from">
+                                            Where the files actually come from                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#if-public-is-not-writable">
+                                            If public/ is not writable                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#config-publishing-optional">
+                                            Config Publishing (optional)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#view-publishing-optional">
+                                            View Publishing (optional)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#quick-start-table">
+                                            Quick Start: Table                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#quick-start-form">
+                                            Quick Start: Form                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#troubleshooting">
+                                            Troubleshooting                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#styles-are-missing">
+                                            Styles are missing                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#components-render-without-javascript-behavior">
+                                            Components render without JavaScript behavior                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#notifications-do-not-appear">
+                                            Notifications do not appear                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#development-monorepo">
+                                            Development (monorepo)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#next-steps">
+                                            Next Steps                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

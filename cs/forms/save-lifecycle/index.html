@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Životní cyklus ukládání | Wire Docs</title>
+    <meta name="description" content="Metoda Form::save() vykonává striktní 9-krokovou pipeline. Každý krok je jasně definovaný s hooky pro přizpůsobení.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/forms/save-lifecycle/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/forms/save-lifecycle/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/forms/save-lifecycle/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/forms/save-lifecycle/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Životní cyklus ukládání | Wire Docs">
+    <meta property="og:description" content="Metoda Form::save() vykonává striktní 9-krokovou pipeline. Každý krok je jasně definovaný s hooky pro přizpůsobení.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/forms/save-lifecycle/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Životní cyklus ukládání | Wire Docs">
+    <meta name="twitter:description" content="Metoda Form::save() vykonává striktní 9-krokovou pipeline. Každý krok je jasně definovaný s hooky pro přizpůsobení.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../forms/save-lifecycle/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/forms/save-lifecycle/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Začínáme</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Dokumentace Wire                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Začínáme                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Mapa projektu                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Konfigurace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Autorizace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Ošetření chyb                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Vzhled a přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testování                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Kuchařka                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Řešení potíží                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Návod k upgradu                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Formuláře</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../validation/">
+                                        Validace formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../reactive-fields/">
+                                        Reaktivní pole                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Životní cyklus ukládání                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../custom-fields/">
+                                        Rozšíření formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/">
+                                        Pole formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Tabulka</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../table/overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/columns/">
+                                        Sloupce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/filters/">
+                                        Filtry                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/actions/">
+                                        Akce tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/record-actions/">
+                                        Celořádkové akce (Record Actions)                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/selection/">
+                                        Výběr řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/gestures/">
+                                        Vrstva gest                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/exports/">
+                                        Exporty tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/imports/">
+                                        Importy tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/summaries/">
+                                        Souhrny                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/grouping/">
+                                        Seskupení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/sub-rows/">
+                                        Podřádky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/relation-managers/">
+                                        Správci relací                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/notifications/">
+                                        Notifikace tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../table/advanced/">
+                                        Pokročilé funkce                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Řazení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Řazení sloupců                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Pokročilé použití                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        Reference API                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Akce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifikace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modaly                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgety                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolisty                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editovatelné panely                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Pluginy                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server a nástroje                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines a Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Formuláře</span>
+                            </nav>
+                            <p class="eyebrow">Formuláře</p>
+                            <h1>Životní cyklus ukládání</h1>
+                                                            <p class="lead">Metoda Form::save() vykonává striktní 9-krokovou pipeline. Každý krok je jasně definovaný s hooky pro přizpůsobení.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#prehled-pipeline">Přehled pipeline</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-1-validace">Krok 1: Validace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-2-mutace-dat">Krok 2: Mutace dat</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#vice-mutaci">Více mutací</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-3-plugin-hook-formsaving">Krok 3: Plugin hook — form.saving</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-4-before-save">Krok 4: Before save</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-5-perzistence">Krok 5: Perzistence</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#vychozi-chovani">Výchozí chování</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#vlastni-perzistence">Vlastní perzistence</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#zadny-model">Žádný model</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#optimistic-locking">Optimistic locking</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-6-ulozeni-relaci">Krok 6: Uložení relací</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-7-after-save">Krok 7: After save</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-8-plugin-hook-formsaved">Krok 8: Plugin hook — form.saved</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#krok-9-notifikace">Krok 9: Notifikace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#kompletni-priklad">Kompletní příklad</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#osetreni-chyb">Ošetření chyb</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Metoda <code>Form::save()</code> vykonává striktní 9-krokovou pipeline. Každý krok je jasně definovaný s hooky pro přizpůsobení.</p>
+<p>Tato stránka popisuje, co se stane při uložení formuláře.</p>
+<hr>
+<h2 id="prehled-pipeline">Přehled pipeline</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">Form::save()</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 1. VALIDACE</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── Posbírat pravidla ze všech polí</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── Sloučit pravidla na úrovni formuláře</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── Projít přes ValidationPipeline</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Při selhání vyhodit ValidationException ← STOP</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 2. MUTACE</span></div><div class='line'><span style="color: #e1e4e8;">│   └── mutateDataBeforeSave(Closure $fn)</span></div><div class='line'><span style="color: #e1e4e8;">│       Transformovat zvalidovaná data před perzistencí</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 3. PLUGIN HOOK: form.saving</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Pluginy mohou prohlédnout nebo upravit $data</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 4. BEFORE SAVE</span></div><div class='line'><span style="color: #e1e4e8;">│   └── beforeSave(Closure $fn)</span></div><div class='line'><span style="color: #e1e4e8;">│       Void hook — side efekty, externí volání</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 5. PERZISTENCE</span></div><div class='line'><span style="color: #e1e4e8;">│   ├── Výchozí: Model::create($data) nebo $model-&gt;update($data)</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Vlastní: using(Closure $fn)</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 6. ULOŽENÍ RELACÍ</span></div><div class='line'><span style="color: #e1e4e8;">│   └── RelationshipSaveHandler kaskáduje Repeater data do relací modelu</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 7. AFTER SAVE</span></div><div class='line'><span style="color: #e1e4e8;">│   └── afterSave(Closure $fn)</span></div><div class='line'><span style="color: #e1e4e8;">│       Void hook — side efekty, vyčištění cache, události</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">├── 8. PLUGIN HOOK: form.saved</span></div><div class='line'><span style="color: #e1e4e8;">│   └── Pluginy pozorují perzistovaný $record</span></div><div class='line'><span style="color: #e1e4e8;">│</span></div><div class='line'><span style="color: #e1e4e8;">└── 9. NOTIFIKACE</span></div><div class='line'><span style="color: #e1e4e8;">    ├── Odeslat úspěšnou notifikaci přes Notifications modul</span></div><div class='line'><span style="color: #e1e4e8;">    └── Přeskočit při disableSuccessNotification()</span></div></code></pre>
+<hr>
+<h2 id="krok-1-validace">Krok 1: Validace</h2>
+<p>Posbírá pravidla ze všech field komponent a zvaliduje aktuální stav.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// Automatické v save()</span></div><div class='line'><span style="color: #6A737D;">// Lze také zavolat samostatně:</span></div><div class='line'><span style="color: #E1E4E8;">$data </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validate</span><span style="color: #E1E4E8;">();</span></div></code></pre>
+<p>Pokud validace selže, vyhodí se <code>Illuminate\Validation\ValidationException</code>. Kroky 2-9 se úplně přeskočí.</p>
+<p>Detaily o pravidlech polí, vlastních zprávách a ValidationPipeline viz <a href="../validation/">Validace</a>.</p>
+<hr>
+<h2 id="krok-2-mutace-dat">Krok 2: Mutace dat</h2>
+<p>Transformujte zvalidovaná data, než se dostanou k modelu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">mutateDataBeforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Slugify titulku</span></div><div class='line'><span style="color: #E1E4E8;">    $data[</span><span style="color: #9ECBFF;">&#39;slug&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Str</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">slug</span><span style="color: #E1E4E8;">($data[</span><span style="color: #9ECBFF;">&#39;title&#39;</span><span style="color: #E1E4E8;">]);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Odstranit dočasná pole</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">unset</span><span style="color: #E1E4E8;">($data[</span><span style="color: #9ECBFF;">&#39;agree_to_terms&#39;</span><span style="color: #E1E4E8;">]);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Zašifrovat citlivá data</span></div><div class='line'><span style="color: #E1E4E8;">    $data[</span><span style="color: #9ECBFF;">&#39;ssn&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">encrypt</span><span style="color: #E1E4E8;">($data[</span><span style="color: #9ECBFF;">&#39;ssn&#39;</span><span style="color: #E1E4E8;">]);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $data; </span><span style="color: #6A737D;">// MUSÍ vrátit pole</span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>Closura dostane pole zvalidovaných dat a <strong>musí</strong> vrátit upravené pole.</p>
+<h3 id="vice-mutaci">Více mutací</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">mutateDataBeforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; </span><span style="color: #79B8FF;">array_merge</span><span style="color: #E1E4E8;">($data, [</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;updated_by&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    ]));</span></div></code></pre>
+<hr>
+<h2 id="krok-3-plugin-hook-formsaving">Krok 3: Plugin hook — form.saving</h2>
+<p>Vystřelí automaticky, když jsou registrované pluginy přes <code>PluginManager</code>. Pluginy mohou prohlédnout nebo upravit <code>$data</code> před perzistencí. Uživatelský kód s tímto krokem přímo neinteraguje.</p>
+<hr>
+<h2 id="krok-4-before-save">Krok 4: Before save</h2>
+<p>Void hook, který běží po mutaci, ale před perzistencí:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">beforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Ověřit dostupnost externí služby</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">ExternalApi</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">isAvailable</span><span style="color: #E1E4E8;">()) {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">throw</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">new</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">\RuntimeException</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;External service is down&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Odeslat pre-save událost</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">event</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">new</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">UserSaving</span><span style="color: #E1E4E8;">($data));</span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>Closura dostane zmutovaná data, ale <strong>nevrací</strong> je.</p>
+<p>Pokud tento hook vyhodí výjimku, perzistence (krok 5) se přeskočí.</p>
+<hr>
+<h2 id="krok-5-perzistence">Krok 5: Perzistence</h2>
+<h3 id="vychozi-chovani">Výchozí chování</h3>
+<p>Logika perzistence závisí na režimu modelu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// Create mód — model je řetězec třídy</span></div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">User</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #6A737D;">// → User::create($data)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Edit mód — model je instance</span></div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">($user);</span></div><div class='line'><span style="color: #6A737D;">// → $user-&gt;update($data)</span></div></code></pre>
+<p><a id="custom-persistence"></a></p>
+<h3 id="vlastni-perzistence">Vlastní perzistence</h3>
+<p>Přepište výchozí pomocí <code>using()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">using</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Vytvořit</span></div><div class='line'><span style="color: #E1E4E8;">    $user </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">User</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">create</span><span style="color: #E1E4E8;">($data);</span></div><div class='line'><span style="color: #E1E4E8;">    $user</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">assignRole</span><span style="color: #E1E4E8;">($data[</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">]);</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $user;</span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>Callback <code>using()</code> nahrazuje celou výchozí create/update logiku. Dostane <code>$data</code> (pole zmutovaných dat). Návratová hodnota se stane výsledkem <code>save()</code>.</p>
+<p><strong>Relační repeatery a <code>using()</code>.</strong> <code>$data</code> obsahuje hodnotu každého pole, <strong>včetně relačních <code>Repeater</code> polí</strong> (např. klíč <code>children</code> pro <code>Repeater::make('children')-&gt;relationship('children')</code>). Výchozí cesta perzistence tyto klíče před zápisem rodiče odstraní; <code>using()</code> ne. Takže:</p>
+<ul>
+<li><strong>Neprovádějte</strong> hromadné přiřazení celého <code>$data</code> — <code>User::create($data)</code> by se pokusil zapsat <code>children</code> jako sloupec. Přiřaďte jen vlastní atributy rodiče.</li>
+<li><strong>Vraťte perzistovaný <code>Model</code></strong> a kaskáda relací (krok 6) stále poběží a uloží za vás řádky repeateru do relace:</li>
+</ul>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">using</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; </span><span style="color: #79B8FF;">User</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">create</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $data[</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">]]));</span></div><div class='line'><span style="color: #6A737D;">// → řádky children repeateru se nakaskádují na $user-&gt;children()</span></div></code></pre>
+<ul>
+<li>Vraťte <strong>cokoli jiného než <code>Model</code></strong> (id, DTO, výsledek příkazu) a kaskáda se přeskočí — váš callback vlastní perzistenci úplně, včetně relací.</li>
+</ul>
+<h3 id="zadny-model">Žádný model</h3>
+<p>Pokud je nastaveno <code>model(null)</code> a není poskytnut callback <code>using()</code>, <code>save()</code> vyhodí <code>InvalidArgumentException</code>.</p>
+<p><a id="optimistic-locking"></a></p>
+<h3 id="optimistic-locking">Optimistic locking</h3>
+<p>Souběžné editace se mohou tiše navzájem přepsat: dva uživatelé otevřou stejný záznam, oba uloží a druhý zápis přepíše první. Zapněte kontrolu verze pomocí <code>optimisticLock()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">($order)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">optimisticLock</span><span style="color: #E1E4E8;">();          </span><span style="color: #6A737D;">// výchozí sloupec &#39;updated_at&#39;</span></div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">($order)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">optimisticLock</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;version&#39;</span><span style="color: #E1E4E8;">); </span><span style="color: #6A737D;">// nebo libovolný integer/version sloupec</span></div></code></pre>
+<p>Když je zapnuto, hodnota lock sloupce se zachytí při naplnění formuláře ze záznamu a nese se přes Livewire round trip. Při uložení se <strong>znovu načte aktuální databázová hodnota</strong>; pokud už neodpovídá zachycené baseline — někdo jiný záznam mezitím uložil nebo smazal — uložení se přeruší s <code>NyonCode\WireForms\Forms\Runtime\StaleModelException</code> a konfliktní notifikací (<code>wire-forms::messages.stale</code>), přičemž novější data zůstanou nedotčená.</p>
+<ul>
+<li>Opt-in a zpětně kompatibilní — bez <code>optimisticLock()</code> se nic nemění.</li>
+<li>Běží jen v režimu <strong>update</strong> (existující model).</li>
+<li>Nastavte <code>-&gt;model($record)</code> <strong>před</strong> <code>-&gt;fill()</code>, aby se baseline mohla zachytit; pokud baseline chybí, kontrola selže open (uložení nezablokuje).</li>
+<li>Odchyťte <code>StaleModelException</code>, pokud chcete konflikt řešit sami (např. znovu načíst a znovu předložit formulář):</li>
+</ul>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireForms\Forms\Runtime\StaleModelException</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">try</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">} </span><span style="color: #F97583;">catch</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">StaleModelException</span><span style="color: #E1E4E8;"> $e) {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// $e-&gt;model, $e-&gt;lockColumn — znovu načíst a nechat uživatele zkusit znovu</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<hr>
+<h2 id="krok-6-ulozeni-relaci">Krok 6: Uložení relací</h2>
+<p>Po perzistenci modelu <code>RelationshipSaveHandler</code> nakaskáduje data Repeater polí do relací modelu. Tento krok běží jen když je výsledek perzistence instance Eloquent <code>Model</code> — což zahrnuje <code>Model</code> vrácený z vlastního callbacku <code>using()</code> (viz <a href="#vlastni-perzistence">Vlastní perzistence</a>).</p>
+<p>Uživatelský kód s tímto krokem přímo neinteraguje; řeší se automaticky pro Repeater pole s nakonfigurovaným <code>-&gt;relationship()</code>.</p>
+<hr>
+<h2 id="krok-7-after-save">Krok 7: After save</h2>
+<p>Void hook, který běží po úspěšné perzistenci:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">afterSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $record)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// $record je vytvořený/aktualizovaný Model (nebo návratová hodnota using())</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Cache</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">forget</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&quot;user:{</span><span style="color: #E1E4E8;">$record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id</span><span style="color: #9ECBFF;">}&quot;</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Odeslat událost</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">event</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">new</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">UserSaved</span><span style="color: #E1E4E8;">($record));</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Odeslat notifikaci</span></div><div class='line'><span style="color: #E1E4E8;">    $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">notify</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">new</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WelcomeNotification</span><span style="color: #E1E4E8;">());</span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>Dostane <code>$record</code> — návratovou hodnotu kroku perzistence (typicky instanci Modelu).</p>
+<hr>
+<h2 id="krok-8-plugin-hook-formsaved">Krok 8: Plugin hook — form.saved</h2>
+<p>Vystřelí po <code>afterSave</code>, aby pluginy mohly pozorovat perzistovaný záznam. Uživatelský kód s tímto krokem přímo neinteraguje.</p>
+<hr>
+<h2 id="krok-9-notifikace">Krok 9: Notifikace</h2>
+<p>Odešle úspěšnou notifikaci přes Notifications modul:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// Vlastní zpráva</span></div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">successMessage</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;User saved successfully!&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Vypnout úplně</span></div><div class='line'><span style="color: #E1E4E8;">$form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">disableSuccessNotification</span><span style="color: #E1E4E8;">();</span></div></code></pre>
+<p>Notifikace se odešle přes <code>NotificationManager</code> s aktivním driverem (session, Livewire, Flasher atd.).</p>
+<p>Tento krok vystřelí jen když:</p>
+<ol>
+<li>Notifications modul je dostupný (kontrola <code>app()-&gt;bound()</code>)</li>
+<li><code>disableSuccessNotification()</code> NEBYLO zavoláno</li>
+<li>Uložení proběhlo bez výjimek</li>
+</ol>
+<hr>
+<h2 id="kompletni-priklad">Kompletní příklad</h2>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">EditUser</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WithForms</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $user;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> [];</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">mount</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $user)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">user </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> $user;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">fill</span><span style="color: #E1E4E8;">($user</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toArray</span><span style="color: #E1E4E8;">());</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Form</span><span style="color: #E1E4E8;"> $form)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Form</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $form</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">statePath</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;data&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">user)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">maxLength</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">255</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">email</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Select</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Admin&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Toggle</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;active&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">            ])</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">mutateDataBeforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> { </span></div><div class='line line-focus'><span style="color: #E1E4E8;">                $data[</span><span style="color: #9ECBFF;">&#39;updated_by&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">();</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $data;</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            })</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">beforeSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span><span style="color: #E1E4E8;"> {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Log</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">info</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Updating user&#39;</span><span style="color: #E1E4E8;">, [</span><span style="color: #9ECBFF;">&#39;id&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">user</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id]);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            })</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">afterSave</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">mixed</span><span style="color: #E1E4E8;"> $record)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span><span style="color: #E1E4E8;"> {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Cache</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">forget</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&quot;user:{</span><span style="color: #E1E4E8;">$record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id</span><span style="color: #9ECBFF;">}&quot;</span><span style="color: #E1E4E8;">);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #B392F0;">event</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">new</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">UserUpdated</span><span style="color: #E1E4E8;">($record));</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            })</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">successMessage</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;User updated.&#39;</span><span style="color: #E1E4E8;">); </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">redirect</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;users.index&#39;</span><span style="color: #E1E4E8;">));</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<hr>
+<h2 id="osetreni-chyb">Ošetření chyb</h2>
+<table>
+<thead>
+<tr>
+<th>Výjimka</th>
+<th>Kdy</th>
+<th>Efekt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ValidationException</code></td>
+<td>Krok 1 selže</td>
+<td>Kroky 2-9 přeskočeny, chyby zobrazeny v UI</td>
+</tr>
+<tr>
+<td>Jakýkoli <code>Throwable</code></td>
+<td>Kroky 2-8 vyhodí</td>
+<td>Pipeline se přeruší, žádná notifikace</td>
+</tr>
+<tr>
+<td><code>InvalidArgumentException</code></td>
+<td>Žádný model + žádný <code>using()</code></td>
+<td>Krok 5 selže</td>
+</tr>
+</tbody>
+</table>
+<p>Save pipeline se ve výchozím stavu <strong>neobaluje</strong> do databázové transakce. Pokud potřebujete atomicitu, obalte do <code>DB::transaction()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">DB</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">transaction</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">form</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">save</span><span style="color: #E1E4E8;">());</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../reactive-fields/">
+                                        <span>← Předchozí</span>
+                                        <strong>Reaktivní pole</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../custom-fields/">
+                                        <span>Další →</span>
+                                        <strong>Rozšíření formulářů</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#prehled-pipeline">
+                                            Přehled pipeline                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-1-validace">
+                                            Krok 1: Validace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-2-mutace-dat">
+                                            Krok 2: Mutace dat                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#vice-mutaci">
+                                            Více mutací                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-3-plugin-hook-formsaving">
+                                            Krok 3: Plugin hook — form.saving                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-4-before-save">
+                                            Krok 4: Before save                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-5-perzistence">
+                                            Krok 5: Perzistence                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#vychozi-chovani">
+                                            Výchozí chování                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#vlastni-perzistence">
+                                            Vlastní perzistence                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#zadny-model">
+                                            Žádný model                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#optimistic-locking">
+                                            Optimistic locking                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-6-ulozeni-relaci">
+                                            Krok 6: Uložení relací                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-7-after-save">
+                                            Krok 7: After save                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-8-plugin-hook-formsaved">
+                                            Krok 8: Plugin hook — form.saved                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#krok-9-notifikace">
+                                            Krok 9: Notifikace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#kompletni-priklad">
+                                            Kompletní příklad                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#osetreni-chyb">
+                                            Ošetření chyb                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

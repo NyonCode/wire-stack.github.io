@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Celořádkové akce (Record Actions) | Wire Docs</title>
+    <meta name="description" content="Celořádkové akce promění celý řádek v ovládací prvek: dvojklik otevře záznam, pravé tlačítko zobrazí menu, šipky přesouvají mezi řádky a Enter spustí hlavní akci — jako v desktopové aplikaci. Jsou samostatnou skupinou vedle řádkových -&gt;actions(), -&gt;bulkActions() a -&gt;headerActions() a běží přes stejnou exekuci jako každá jiná akce, takže autorizace, potvrzovací modaly i formuláře fungují beze změny.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/table/record-actions/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/table/record-actions/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/table/record-actions/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/table/record-actions/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Celořádkové akce (Record Actions) | Wire Docs">
+    <meta property="og:description" content="Celořádkové akce promění celý řádek v ovládací prvek: dvojklik otevře záznam, pravé tlačítko zobrazí menu, šipky přesouvají mezi řádky a Enter spustí hlavní akci — jako v desktopové aplikaci. Jsou samostatnou skupinou vedle řádkových -&gt;actions(), -&gt;bulkActions() a -&gt;headerActions() a běží přes stejnou exekuci jako každá jiná akce, takže autorizace, potvrzovací modaly i formuláře fungují beze změny.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/table/record-actions/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Celořádkové akce (Record Actions) | Wire Docs">
+    <meta name="twitter:description" content="Celořádkové akce promění celý řádek v ovládací prvek: dvojklik otevře záznam, pravé tlačítko zobrazí menu, šipky přesouvají mezi řádky a Enter spustí hlavní akci — jako v desktopové aplikaci. Jsou samostatnou skupinou vedle řádkových -&gt;actions(), -&gt;bulkActions() a -&gt;headerActions() a běží přes stejnou exekuci jako každá jiná akce, takže autorizace, potvrzovací modaly i formuláře fungují beze změny.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../table/record-actions/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/table/record-actions/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Začínáme</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Dokumentace Wire                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Začínáme                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Mapa projektu                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Konfigurace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Autorizace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Ošetření chyb                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Vzhled a přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testování                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Kuchařka                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Řešení potíží                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Návod k upgradu                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Formuláře</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/validation/">
+                                        Validace formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/reactive-fields/">
+                                        Reaktivní pole                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/save-lifecycle/">
+                                        Životní cyklus ukládání                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/custom-fields/">
+                                        Rozšíření formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/">
+                                        Pole formulářů                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Tabulka</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../columns/">
+                                        Sloupce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../filters/">
+                                        Filtry                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../actions/">
+                                        Akce tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Celořádkové akce (Record Actions)                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../selection/">
+                                        Výběr řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../gestures/">
+                                        Vrstva gest                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../exports/">
+                                        Exporty tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../imports/">
+                                        Importy tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../summaries/">
+                                        Souhrny                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../grouping/">
+                                        Seskupení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sub-rows/">
+                                        Podřádky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../relation-managers/">
+                                        Správci relací                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../notifications/">
+                                        Notifikace tabulky                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../advanced/">
+                                        Pokročilé funkce                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Řazení řádků                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Řazení sloupců                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Přizpůsobení                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Pokročilé použití                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        Reference API                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Akce                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifikace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modaly                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgety                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolisty                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editovatelné panely                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Pluginy                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Úvod                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Instalace                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server a nástroje                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines a Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Tabulka</span>
+                            </nav>
+                            <p class="eyebrow">Tabulka</p>
+                            <h1>Celořádkové akce (Record Actions)</h1>
+                                                            <p class="lead">Celořádkové akce promění celý řádek v ovládací prvek: dvojklik otevře záznam, pravé tlačítko zobrazí menu, šipky přesouvají mezi řádky a Enter spustí hlavní akci — jako v desktopové aplikaci. Jsou samostatnou skupinou vedle řádkových -&gt;actions(), -&gt;bulkActions() a -&gt;headerActions() a běží přes stejnou exekuci jako každá jiná akce, takže autorizace, potvrzovací modaly i formuláře fungují beze změny.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#zakladni-pouziti">Základní použití</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#reference-na-existujici-akci">Reference na existující akci</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#triggery">Triggery</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#jen-chovani-vs-i-tlacitko">Jen chování vs. i tlačítko</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#vice-celoradkovych-akci">Více celořádkových akcí</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#ovladani-klavesnici">Ovládání klávesnicí</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#klavesy-ktere-si-grid-vyhrazuje">Klávesy, které si grid vyhrazuje</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#kombinace-s-vyberem-a-hromadnymi-akcemi">Kombinace s výběrem a hromadnými akcemi</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#styling">Styling</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#doporucene-ux">Doporučené UX</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#nejcastejsi-chyby">Nejčastější chyby</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#migrace-z-rowcontextmenu">Migrace z rowContextMenu()</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#souvisejici-dokumentace">Související dokumentace</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Celořádkové akce promění celý řádek v ovládací prvek: dvojklik otevře záznam,
+pravé tlačítko zobrazí menu, šipky přesouvají mezi řádky a Enter spustí hlavní
+akci — jako v desktopové aplikaci. Jsou samostatnou skupinou vedle řádkových
+<code>-&gt;actions()</code>, <code>-&gt;bulkActions()</code> a <code>-&gt;headerActions()</code> a běží přes stejnou
+exekuci jako každá jiná akce, takže autorizace, potvrzovací modaly i formuláře
+fungují beze změny.</p>
+<h2 id="zakladni-pouziti">Základní použití</h2>
+<p>Naváž akci na celořádkové gesto. Trigger je součástí bindingu, takže fluent
+metody se čtou jako to gesto:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\Action</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onClick</span><span style="color: #E1E4E8;">(),</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;pencil&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $record) =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">edit</span><span style="color: #E1E4E8;">($record)),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<p><code>Action::make(...)-&gt;onDoubleClick()</code> vrací <strong>record action</strong>, takže patří do
+<code>recordActions()</code>, nikdy do <code>-&gt;actions()</code>.</p>
+<h3 id="reference-na-existujici-akci">Reference na existující akci</h3>
+<p>Pokud akce už existuje v <code>-&gt;actions()</code>, jen ji pojmenuj místo nové definice:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">actions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $record) =&gt; </span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordAction</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #6A737D;">// dvojklik spustí tutéž akci &#39;edit&#39;</span></div></code></pre>
+<p>Samotné jméno má výchozí trigger dvojklik.</p>
+<h2 id="triggery">Triggery</h2>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Metoda</th>
+<th>Typické použití</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Klik</td>
+<td><code>-&gt;onClick()</code></td>
+<td>Otevřít záznam, když tabulka nemá výběr</td>
+</tr>
+<tr>
+<td>Dvojklik</td>
+<td><code>-&gt;onDoubleClick()</code></td>
+<td>Otevřít / editovat — doporučený primární</td>
+</tr>
+<tr>
+<td>Pravé tlačítko</td>
+<td><code>-&gt;onContextMenu()</code></td>
+<td>Kontextové menu řádku</td>
+</tr>
+<tr>
+<td>Klávesa</td>
+<td><code>-&gt;onKey('Delete')</code></td>
+<td>Klávesová zkratka proti aktivnímu řádku</td>
+</tr>
+</tbody>
+</table>
+<p><code>-&gt;onKey()</code> je cukr nad kanonickým <code>-&gt;keyboardShortcut()</code>, takže <code>mod+d</code>, <code>ctrl+c</code>
+i jednotlivé klávesy se resolvují stejně (⌘ na Macu, Ctrl jinde). Jeden binding
+může nést víc triggerů:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onKey</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Enter&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<h2 id="jen-chovani-vs-i-tlacitko">Jen chování vs. i tlačítko</h2>
+<p>Record action se ve výchozím stavu <strong>nerenderuje jako tlačítko</strong> — je to čisté
+chování řádku. Právě to dělá z tabulky appku místo mřížky tlačítek:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;open&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">behaviorOnly</span><span style="color: #E1E4E8;">() </span><span style="color: #6A737D;">// výchozí; řádek je jediný ovládací prvek</span></div></code></pre>
+<p>Opt-in pro <em>zároveň</em> zobrazení ve sloupci akcí:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">alsoInRowActions</span><span style="color: #E1E4E8;">()</span></div></code></pre>
+<h2 id="vice-celoradkovych-akci">Více celořádkových akcí</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onClick</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;preview&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onContextMenu</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<h2 id="ovladani-klavesnici">Ovládání klávesnicí</h2>
+<p>Klávesová navigace je opt-in přes <code>-&gt;gestures()</code>. Jakmile si o ni tabulka řekne,
+platí pro každou tabulku, kterou klávesnice umí ovládat řádek po řádku — pro tu
+s akcemi nad záznamem stejně jako pro tu, která je <code>-&gt;selectable()</code> nebo má
+hromadné akce — a taková tabulka se ohlásí jako ARIA grid:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">gestures</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordAction</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;open&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">())</span></div></code></pre>
+<table>
+<thead>
+<tr>
+<th>Klávesa</th>
+<th>Akce</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>↑</code> / <code>↓</code></td>
+<td>Posun aktivního řádku</td>
+</tr>
+<tr>
+<td><code>Home</code> / <code>End</code>, <code>PageUp</code> / <code>PageDown</code></td>
+<td>Skok na okraj, nebo posun o obrazovku</td>
+</tr>
+<tr>
+<td><code>Enter</code></td>
+<td>Primární record action (binding dvojkliku, jinak kliku)</td>
+</tr>
+<tr>
+<td><code>Shift</code> + <code>Enter</code></td>
+<td>Sekundární record action (druhý pointer binding)</td>
+</tr>
+<tr>
+<td><code>Space</code></td>
+<td>Přepnout výběr aktivního řádku (a nastavit kotvu) při selectable, jinak primární akce</td>
+</tr>
+<tr>
+<td><code>Shift</code> + <code>↑</code> / <code>↓</code></td>
+<td>Rozšířit výběr od kotvy</td>
+</tr>
+<tr>
+<td><code>mod</code> + <code>A</code></td>
+<td>Vybrat všechny řádky na stránce</td>
+</tr>
+<tr>
+<td>Menu klávesa, <code>Shift</code> + <code>F10</code></td>
+<td>Otevřít kontextové menu řádku</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>Zobrazit zkratky, na které tabulka reaguje</td>
+</tr>
+<tr>
+<td><code>Delete</code>, <code>mod+d</code>, …</td>
+<td>Vlastní <code>-&gt;onKey()</code> / <code>-&gt;keyboardShortcut()</code> akce</td>
+</tr>
+</tbody>
+</table>
+<p>Vazba <code>-&gt;onKey('Delete')</code> reaguje i na <code>Backspace</code> — na klávesnici Macu je to
+tatáž klávesa pod jiným jménem.</p>
+<p>Výběrová gesta — <code>Space</code>, rozsahy, <code>mod</code>+<code>A</code> — popisuje
+<a href="../selection/">Výběr řádků</a>, včetně gest myší a toho, co rozsah znamená, když je
+vybráno „vše odpovídající".</p>
+<p>Myš i klávesnice sdílejí jeden aktivní řádek: <strong>klik na řádek ho označí</strong> a šipky
+pokračují odtud, takže se tabulka nikdy neovládá ze dvou míst zároveň. Označení
+zůstane vidět i pod kurzorem, přežije roundtrip vyvolaný akcí a drží se svého
+záznamu i po přeřazení (když záznam ze stránky zmizí, tabstop se vrátí na první
+řádek).</p>
+<p>Klávesy dosáhnou na grid jen tehdy, když má fokus <strong>samotný řádek</strong>: stisk uvnitř
+tlačítka akce, inline editovatelné buňky nebo dropdownu patří tomu prvku. Dokud
+je otevřený modal akce, grid je inertní — žádná šipka neposune označení za
+dialogem a žádná zkratka nespustí druhou akci — a po zavření modalu se fokus
+vrátí na aktivní řádek, takže šipky dál fungují.</p>
+<p>Vynuť vypnutí (či zapnutí), pokud potřebuješ — klávesnice je jedna ze schopností
+<a href="../gestures/">vrstvy gest</a>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">gestures</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">TableGestures</span><span style="color: #E1E4E8;"> $g) =&gt; $g</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">keyboard</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">))</span></div></code></pre>
+<p>Protože Enter vždy dosáhne na primární akci, každá record action zůstává
+dostupná klávesnicí — behavior-only akce nikdy není past jen pro myš.</p>
+<h3 id="klavesy-ktere-si-grid-vyhrazuje">Klávesy, které si grid vyhrazuje</h3>
+<p>Klávesy, kterými grid naviguje, nejde navázat na akci — vazba by nikdy
+nevystřelila. Místo tichého zahození proto <code>-&gt;onKey()</code> vyhodí výjimku už při
+konfiguraci:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">Enter  Space  ArrowUp  ArrowDown  Home  End  PageUp  PageDown  ContextMenu  F10  ?</span></div></code></pre>
+<p><code>keyboardShortcut()</code> nastavený přímo na akci se jen přeskočí a nikdy není
+fatální — taková akce může legitimně sloužit i toolbaru nebo paletě.</p>
+<h2 id="kombinace-s-vyberem-a-hromadnymi-akcemi">Kombinace s výběrem a hromadnými akcemi</h2>
+<p>Když je tabulka <code>-&gt;selectable()</code>, výchozím triggerem record akce se stává
+<strong>dvojklik</strong>, takže jednoklik zůstává volný pro práci s výběrem — jen označí
+řádek, na který dopadne (aktivní řádek pro klávesnici a kotva dalšího
+<code>Shift</code>+rozsahu). Prostý klik zaškrtávátko nikdy nezaškrtne; ty s modifikátorem
+záměrně ano, protože přesně to <code>Shift</code> a <code>mod</code> znamenají všude jinde (viz
+<a href="../selection/">Výběr řádků</a>). Klik s modifikátorem je výběrové gesto a nikdy
+nespustí navázanou akci nad záznamem. Hromadné akce zůstávají nedotčené:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">selectable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">bulkActions</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">DeleteBulkAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()])</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;open&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<h2 id="styling">Styling</h2>
+<p>Řádek ukáže kurzor ruky, když je klikatelný. Nech neutrální hover, nebo ho
+obarvi pro silnější náznak „tento řádek je klikatelný":</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActionHover</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;primary&#39;</span><span style="color: #E1E4E8;">)   </span><span style="color: #6A737D;">// obarvený hover místo neutrální šedé</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeRowClass</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;bg-amber-100&#39;</span><span style="color: #E1E4E8;">)  </span><span style="color: #6A737D;">// přepis označení aktivního řádku (klik i klávesnice)</span></div></code></pre>
+<p>Aktivní řádek po dobu označení shazuje svůj hover tint, takže označení nikdy
+nepřebije <code>hover:bg-*</code>, když na něm spočine kurzor.</p>
+<p>Ve výchozím stavu jsou označením dva signály, ne jeden: podbarvení a pruh u
+náběžné hrany řádku. Samotné podbarvení má vůči prostému řádku kontrast asi
+1,1:1 — pod hranicí 3:1 a neviditelné pro každého, kdo ty dva odstíny nerozliší.
+<code>activeRowClass()</code> nahrazuje <strong>obě</strong> poloviny, takže přepis si ručí za vlastní
+kontrast:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeRowClass</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;bg-amber-100 [&amp;&gt;td:first-of-type]:before:bg-amber-600&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<h2 id="doporucene-ux">Doporučené UX</h2>
+<ul>
+<li><strong>App-like tabulka</strong> — <code>-&gt;recordAction('open')-&gt;behaviorOnly()</code> plus kontextové
+menu; zmenši nebo vypusť sloupec akcí. Řádky se chovají jako položky v
+Průzkumníku.</li>
+<li><strong>Klasická tabulka + zkratka</strong> — nech plný sloupec akcí a přidej
+<code>-&gt;recordAction('view')-&gt;onDoubleClick()-&gt;alsoInRowActions()</code> jen jako
+zrychlení.</li>
+<li><strong>Read-heavy</strong> — dvojklik otevře detail; pravé tlačítko nabídne
+editaci / smazání.</li>
+</ul>
+<h2 id="nejcastejsi-chyby">Nejčastější chyby</h2>
+<ul>
+<li><strong>Jednoklik jako primární u selectable tabulky</strong> — krade klik určený výběru.
+Použij dvojklik (výchozí při selectable).</li>
+<li><strong>Vložení <code>Action::make()-&gt;onDoubleClick()</code> do <code>-&gt;actions()</code></strong> — vrací record
+action a tam je odmítnuta; předej ji do <code>recordActions()</code>.</li>
+<li><strong>Očekávání record akcí na mobilní kartě nebo sub-rows</strong> — record akce jsou
+desktop pointer koncept na hlavních řádcích; touch karty používají viditelná
+tlačítka akcí a sub-rows jsou záměrně vyloučené.</li>
+</ul>
+<h2 id="migrace-z-rowcontextmenu">Migrace z <code>rowContextMenu()</code></h2>
+<p><code>Table::rowContextMenu([...])</code> je deprecated. Naváž místo toho trigger pravého
+tlačítka:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// dříve</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rowContextMenu</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">), </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;delete&#39;</span><span style="color: #E1E4E8;">)])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// nyní</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onContextMenu</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;delete&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onContextMenu</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<h2 id="souvisejici-dokumentace">Související dokumentace</h2>
+<ul>
+<li><a href="../selection/">Výběr řádků</a> — výběrová gesta, se kterými akce nad záznamem
+sdílejí řádek</li>
+<li><a href="../actions/">Akce</a> — řádkové, hromadné a hlavičkové akce</li>
+<li><a href="../gestures/">Vrstva gest</a> — vypnutí gest a tlačítkový fallback na mobilu</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../actions/">
+                                        <span>← Předchozí</span>
+                                        <strong>Akce tabulky</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../selection/">
+                                        <span>Další →</span>
+                                        <strong>Výběr řádků</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#zakladni-pouziti">
+                                            Základní použití                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#reference-na-existujici-akci">
+                                            Reference na existující akci                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#triggery">
+                                            Triggery                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#jen-chovani-vs-i-tlacitko">
+                                            Jen chování vs. i tlačítko                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#vice-celoradkovych-akci">
+                                            Více celořádkových akcí                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#ovladani-klavesnici">
+                                            Ovládání klávesnicí                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#klavesy-ktere-si-grid-vyhrazuje">
+                                            Klávesy, které si grid vyhrazuje                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#kombinace-s-vyberem-a-hromadnymi-akcemi">
+                                            Kombinace s výběrem a hromadnými akcemi                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#styling">
+                                            Styling                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#doporucene-ux">
+                                            Doporučené UX                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#nejcastejsi-chyby">
+                                            Nejčastější chyby                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#migrace-z-rowcontextmenu">
+                                            Migrace z rowContextMenu()                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#souvisejici-dokumentace">
+                                            Související dokumentace                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

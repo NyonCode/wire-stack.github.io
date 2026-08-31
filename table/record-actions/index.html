@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Record Actions | Wire Docs</title>
+    <meta name="description" content="Record actions turn a whole row into an affordance: a double-click opens the record, a right-click shows a menu, the arrow keys move between rows and Enter runs the primary action — the way a desktop app behaves. They are a distinct group from row -&gt;actions(), -&gt;bulkActions() and -&gt;headerActions(), and they run through the same execution as any other action, so authorization, confirmation modals and forms all work unchanged.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/table/record-actions/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/table/record-actions/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/table/record-actions/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/table/record-actions/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Record Actions | Wire Docs">
+    <meta property="og:description" content="Record actions turn a whole row into an affordance: a double-click opens the record, a right-click shows a menu, the arrow keys move between rows and Enter runs the primary action — the way a desktop app behaves. They are a distinct group from row -&gt;actions(), -&gt;bulkActions() and -&gt;headerActions(), and they run through the same execution as any other action, so authorization, confirmation modals and forms all work unchanged.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/table/record-actions/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Record Actions | Wire Docs">
+    <meta name="twitter:description" content="Record actions turn a whole row into an affordance: a double-click opens the record, a right-click shows a menu, the arrow keys move between rows and Enter runs the primary action — the way a desktop app behaves. They are a distinct group from row -&gt;actions(), -&gt;bulkActions() and -&gt;headerActions(), and they run through the same execution as any other action, so authorization, confirmation modals and forms all work unchanged.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark">W</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../table/record-actions/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../cs/table/record-actions/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v1.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <span class="version-item is-disabled" aria-disabled="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-soon">Soon</span>
+                                    </span>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                                    <section class="nav-section">
+                        <h2>Start Here</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../documentation/">
+                                        Wire Documentation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../getting-started/">
+                                        Getting Started                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../project-map/">
+                                        Project Map                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../configuration/">
+                                        Configuration                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../authorization/">
+                                        Authorization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../error-handling/">
+                                        Error Handling                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../theming/">
+                                        Theming &amp; Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../testing/">
+                                        Testing                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../cookbook/">
+                                        Cookbook                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../troubleshooting/">
+                                        Troubleshooting                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../upgrade/">
+                                        Upgrade Guide                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Forms</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../forms/overview/">
+                                        Wire Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/validation/">
+                                        Form Validation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/reactive-fields/">
+                                        Reactive Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/save-lifecycle/">
+                                        Save Lifecycle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/custom-fields/">
+                                        Extending Forms                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/">
+                                        Form Fields                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/alert/">
+                                        Alert                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/belongs-to-select/">
+                                        BelongsToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/builder/">
+                                        Builder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/button/">
+                                        Button                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox/">
+                                        Checkbox                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/checkbox-list/">
+                                        CheckboxList                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/code-editor/">
+                                        CodeEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/color-picker/">
+                                        ColorPicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/date-time-picker/">
+                                        DateTimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/file-upload/">
+                                        FileUpload                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/hidden/">
+                                        Hidden                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/html/">
+                                        Html                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/key-value/">
+                                        KeyValue                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/markdown-editor/">
+                                        MarkdownEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/morph-to-select/">
+                                        MorphToSelect                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/otp-input/">
+                                        OtpInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/placeholder/">
+                                        Placeholder                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/radio/">
+                                        Radio                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rating/">
+                                        Rating                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/repeater/">
+                                        Repeater                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/rich-editor/">
+                                        RichEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/select/">
+                                        Select                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/slider/">
+                                        Slider                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tags/">
+                                        Tags                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/textarea/">
+                                        Textarea                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/text-input/">
+                                        TextInput                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/time-picker/">
+                                        TimePicker                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/tiptap-editor/">
+                                        TiptapEditor                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/toggle/">
+                                        Toggle                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../forms/fields/view-field/">
+                                        ViewField                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Table</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../overview/">
+                                        Wire Table                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../columns/">
+                                        Columns                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../filters/">
+                                        Filters                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../actions/">
+                                        Table Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="is-active" href="./">
+                                        Record Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../selection/">
+                                        Selecting Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../gestures/">
+                                        The Gesture Layer                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../exports/">
+                                        Table Exports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../imports/">
+                                        Table Imports                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../summaries/">
+                                        Summaries                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../grouping/">
+                                        Row Grouping                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../sub-rows/">
+                                        Sub-Rows                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../relation-managers/">
+                                        Relation Managers                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../notifications/">
+                                        Table Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../advanced/">
+                                        Advanced Features                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Schema</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/schema/overview/">
+                                        Schema                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/fieldset/">
+                                        Fieldset                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/flex/">
+                                        Flex                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/grid/">
+                                        Grid                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/section/">
+                                        Section                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/tabs/">
+                                        Tabs                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/layout/wizard/">
+                                        Wizard                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/callout/">
+                                        Callout                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/schema/empty-state/">
+                                        Empty State                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Sortable</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../sortable/overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/row-sorting/">
+                                        Row Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/column-sorting/">
+                                        Column Reordering                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/customization/">
+                                        Customization                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/advanced/">
+                                        Advanced Usage                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../sortable/api-reference/">
+                                        API Reference                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Core</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../core/actions/">
+                                        Actions                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/foundation/">
+                                        Foundation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/notifications/">
+                                        Notifications                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/modals/">
+                                        Modals                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/widgets/">
+                                        Widgets                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/infolists/">
+                                        Infolists                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/panels/">
+                                        Editable panels                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/plugins/">
+                                        Core Plugins                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../core/audit/">
+                                        Audit Log                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                                    <section class="nav-section">
+                        <h2>Boost</h2>
+                        <ul>
+                                                            <li>
+                                    <a class="" href="../../boost/overview/">
+                                        Introduction                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/installation/">
+                                        Installation                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/mcp-tools/">
+                                        MCP Server &amp; Tools                                    </a>
+                                </li>
+                                                            <li>
+                                    <a class="" href="../../boost/guidelines-and-skills/">
+                                        Guidelines &amp; Skills                                    </a>
+                                </li>
+                                                    </ul>
+                    </section>
+                            </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Table</span>
+                            </nav>
+                            <p class="eyebrow">Table</p>
+                            <h1>Record Actions</h1>
+                                                            <p class="lead">Record actions turn a whole row into an affordance: a double-click opens the record, a right-click shows a menu, the arrow keys move between rows and Enter runs the primary action — the way a desktop app behaves. They are a distinct group from row -&gt;actions(), -&gt;bulkActions() and -&gt;headerActions(), and they run through the same execution as any other action, so authorization, confirmation modals and forms all work unchanged.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#basic-usage">Basic usage</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#reference-an-existing-action">Reference an existing action</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#triggers">Triggers</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#behaviour-only-vs-also-a-button">Behaviour-only vs. also a button</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#multiple-record-actions">Multiple record actions</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#keyboard-navigation">Keyboard navigation</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#keys-the-grid-reserves">Keys the grid reserves</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#combining-with-selection-and-bulk-actions">Combining with selection and bulk actions</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#styling">Styling</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#recommended-ux">Recommended UX</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#common-mistakes">Common mistakes</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#migrating-from-rowcontextmenu">Migrating from rowContextMenu()</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#related-docs">Related docs</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Record actions turn a whole row into an affordance: a double-click opens the
+record, a right-click shows a menu, the arrow keys move between rows and Enter
+runs the primary action — the way a desktop app behaves. They are a distinct
+group from row <code>-&gt;actions()</code>, <code>-&gt;bulkActions()</code> and <code>-&gt;headerActions()</code>, and they
+run through the same execution as any other action, so authorization,
+confirmation modals and forms all work unchanged.</p>
+<h2 id="basic-usage">Basic usage</h2>
+<p>Bind an action to a whole-row gesture. Because the trigger lives on the binding,
+the fluent methods read as the gesture:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\Action</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onClick</span><span style="color: #E1E4E8;">(),</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;pencil&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $record) =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">edit</span><span style="color: #E1E4E8;">($record)),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<p><code>Action::make(...)-&gt;onDoubleClick()</code> returns a <strong>record action</strong>, so it belongs in
+<code>recordActions()</code>, never in <code>-&gt;actions()</code>.</p>
+<h3 id="reference-an-existing-action">Reference an existing action</h3>
+<p>If the action already exists in <code>-&gt;actions()</code>, name it instead of redefining it:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">actions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $record) =&gt; </span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordAction</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #6A737D;">// double-click runs the same &#39;edit&#39; action</span></div></code></pre>
+<p>A bare name defaults to the double-click trigger.</p>
+<h2 id="triggers">Triggers</h2>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Method</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single click</td>
+<td><code>-&gt;onClick()</code></td>
+<td>Open a record when the table has no selection</td>
+</tr>
+<tr>
+<td>Double click</td>
+<td><code>-&gt;onDoubleClick()</code></td>
+<td>Open / edit — the recommended primary</td>
+</tr>
+<tr>
+<td>Right click</td>
+<td><code>-&gt;onContextMenu()</code></td>
+<td>A row context menu</td>
+</tr>
+<tr>
+<td>Key</td>
+<td><code>-&gt;onKey('Delete')</code></td>
+<td>A keyboard shortcut against the active row</td>
+</tr>
+</tbody>
+</table>
+<p><code>-&gt;onKey()</code> is sugar over the canonical <code>-&gt;keyboardShortcut()</code>, so <code>mod+d</code>, <code>ctrl+c</code>
+and single keys all resolve the same way (⌘ on Mac, Ctrl elsewhere). One binding
+can carry several triggers:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onKey</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Enter&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<h2 id="behaviour-only-vs-also-a-button">Behaviour-only vs. also a button</h2>
+<p>A record action renders <strong>no button</strong> by default — it is pure row behaviour. This
+is what lets a table feel like an app instead of a grid of buttons:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;open&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">behaviorOnly</span><span style="color: #E1E4E8;">() </span><span style="color: #6A737D;">// default; the row is the only affordance</span></div></code></pre>
+<p>Opt in to <em>also</em> showing it in the actions column:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">alsoInRowActions</span><span style="color: #E1E4E8;">()</span></div></code></pre>
+<h2 id="multiple-record-actions">Multiple record actions</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onClick</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;preview&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onContextMenu</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<h2 id="keyboard-navigation">Keyboard navigation</h2>
+<p>Keyboard navigation is opt-in, with <code>-&gt;gestures()</code>. Once a table has asked, it
+applies to any table the keyboard can drive row by row — one with record actions,
+and equally one that is <code>-&gt;selectable()</code> or has bulk actions — and such a table
+announces itself as an ARIA grid:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">gestures</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordAction</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;open&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">())</span></div></code></pre>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>↑</code> / <code>↓</code></td>
+<td>Move the active row</td>
+</tr>
+<tr>
+<td><code>Home</code> / <code>End</code>, <code>PageUp</code> / <code>PageDown</code></td>
+<td>Jump to an edge, or move by a screenful</td>
+</tr>
+<tr>
+<td><code>Enter</code></td>
+<td>Primary record action (double-click binding, else click)</td>
+</tr>
+<tr>
+<td><code>Shift</code> + <code>Enter</code></td>
+<td>Secondary record action (the other pointer binding)</td>
+</tr>
+<tr>
+<td><code>Space</code></td>
+<td>Toggle selection of the active row (and set the range anchor) when selectable, else the primary action</td>
+</tr>
+<tr>
+<td><code>Shift</code> + <code>↑</code> / <code>↓</code></td>
+<td>Extend a selection range from the anchor</td>
+</tr>
+<tr>
+<td><code>mod</code> + <code>A</code></td>
+<td>Select every row on the page</td>
+</tr>
+<tr>
+<td>Menu key, <code>Shift</code> + <code>F10</code></td>
+<td>Open the row context menu</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>Show the shortcuts this table answers to</td>
+</tr>
+<tr>
+<td><code>Delete</code>, <code>mod+d</code>, …</td>
+<td>Any record action's own <code>-&gt;onKey()</code> / <code>-&gt;keyboardShortcut()</code></td>
+</tr>
+</tbody>
+</table>
+<p>A <code>-&gt;onKey('Delete')</code> binding also answers to <code>Backspace</code>, which is the same key
+under a different name on a Mac keyboard.</p>
+<p>The selection gestures — <code>Space</code>, the ranges, <code>mod</code>+<code>A</code> — are covered in
+<a href="../selection/">Selecting Rows</a>, along with the mouse ones and what a range means
+when "all matching" is selected.</p>
+<p>Pointer and keyboard share one active row: <strong>clicking a row marks it</strong> and the
+arrows continue from there, so a table is never navigated from two places at
+once. The marker stays visible while the pointer hovers the row it marks, it
+survives the roundtrip an action triggers, and it follows its record through a
+re-sort (when the record leaves the page entirely, the tabstop falls back to the
+first row).</p>
+<p>Keys only reach the grid when a <strong>row itself</strong> has the focus: a keystroke inside
+a row action button, an inline-editable cell or a dropdown belongs to that
+element. While an action modal is open the grid is inert — no arrow moves the
+marker behind the dialog and no shortcut fires a second action — and closing the
+modal hands the focus back to the active row, so the arrows keep working.</p>
+<p>Force it off (or on) if you need to — the keyboard is one capability of the
+<a href="../gestures/">gesture layer</a>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">gestures</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">TableGestures</span><span style="color: #E1E4E8;"> $g) =&gt; $g</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">keyboard</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">))</span></div></code></pre>
+<p>Because Enter always reaches the primary action, every record action stays
+keyboard-accessible — a behaviour-only action is never a mouse-only trap.</p>
+<h3 id="keys-the-grid-reserves">Keys the grid reserves</h3>
+<p>The keys the grid navigates with cannot be bound to an action — the binding
+would never fire. Rather than dropping it silently, <code>-&gt;onKey()</code> throws at
+configuration time:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">Enter  Space  ArrowUp  ArrowDown  Home  End  PageUp  PageDown  ContextMenu  F10  ?</span></div></code></pre>
+<p>A <code>keyboardShortcut()</code> stamped on the action itself is only skipped, never fatal,
+since that action may legitimately serve a toolbar or a palette as well.</p>
+<h2 id="combining-with-selection-and-bulk-actions">Combining with selection and bulk actions</h2>
+<p>When the table is <code>-&gt;selectable()</code>, the default record-action trigger becomes
+<strong>double-click</strong>, so a single click stays free for working with the selection —
+it only marks the row it lands on (the active row for the keyboard and the anchor
+of the next <code>Shift</code>+range). A plain click never ticks the checkbox; the modified
+ones deliberately do, because that is what <code>Shift</code> and <code>mod</code> mean everywhere else
+(see <a href="../selection/">Selecting Rows</a>). A modified click is a selection gesture and
+never runs a bound record action. Bulk actions are untouched:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">selectable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">bulkActions</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">DeleteBulkAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()])</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;open&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onDoubleClick</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<h2 id="styling">Styling</h2>
+<p>The row shows a pointer cursor when it is clickable. Keep the neutral hover, or
+tint it for a stronger "this row is clickable" hint:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActionHover</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;primary&#39;</span><span style="color: #E1E4E8;">)   </span><span style="color: #6A737D;">// colored hover instead of neutral gray</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeRowClass</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;bg-amber-100&#39;</span><span style="color: #E1E4E8;">)  </span><span style="color: #6A737D;">// override the active-row marker (click + keyboard)</span></div></code></pre>
+<p>The active row drops its hover tint while it is marked, so the marker is never
+painted over by <code>hover:bg-*</code> when the pointer rests on it.</p>
+<p>By default the marker is two signals, not one: a background tint and a stripe
+down the row's leading edge. The tint on its own measures about 1.1:1 against a
+plain row — below the 3:1 contrast floor, and invisible to a reader who cannot
+separate the two hues. <code>activeRowClass()</code> replaces <strong>both</strong> halves, so an
+override owns its own contrast:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeRowClass</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;bg-amber-100 [&amp;&gt;td:first-of-type]:before:bg-amber-600&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<h2 id="recommended-ux">Recommended UX</h2>
+<ul>
+<li><strong>App-like table</strong> — <code>-&gt;recordAction('open')-&gt;behaviorOnly()</code> plus a context
+menu; shrink or drop the actions column. Rows behave like items in a file
+explorer.</li>
+<li><strong>Classic table + shortcut</strong> — keep the full actions column and add
+<code>-&gt;recordAction('view')-&gt;onDoubleClick()-&gt;alsoInRowActions()</code> purely as an
+accelerator.</li>
+<li><strong>Read-heavy</strong> — double-click opens a detail view; right-click offers
+edit / delete.</li>
+</ul>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul>
+<li><strong>Single click as the primary on a selectable table</strong> — it steals the
+selection click. Use double-click (the default when selectable).</li>
+<li><strong>Putting <code>Action::make()-&gt;onDoubleClick()</code> in <code>-&gt;actions()</code></strong> — it returns a
+record action and is rejected there; pass it to <code>recordActions()</code>.</li>
+<li><strong>Expecting record actions on the mobile card or sub-rows</strong> — record actions
+are a desktop pointer affordance on the main rows; touch cards use the visible
+action buttons, and sub-rows are intentionally excluded.</li>
+</ul>
+<h2 id="migrating-from-rowcontextmenu">Migrating from <code>rowContextMenu()</code></h2>
+<p><code>Table::rowContextMenu([...])</code> is deprecated. Bind the right-click trigger
+instead:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// before</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rowContextMenu</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">), </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;delete&#39;</span><span style="color: #E1E4E8;">)])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// after</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recordActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onContextMenu</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;delete&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onContextMenu</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<h2 id="related-docs">Related docs</h2>
+<ul>
+<li><a href="../selection/">Selecting Rows</a> — the selection gestures record actions share
+the row with</li>
+<li><a href="../actions/">Actions</a> — row, bulk and header actions</li>
+<li><a href="../gestures/">The Gesture Layer</a> — switching the gestures off, and the mobile
+button fallback</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../actions/">
+                                        <span>← Previous</span>
+                                        <strong>Table Actions</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../selection/">
+                                        <span>Next →</span>
+                                        <strong>Selecting Rows</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#basic-usage">
+                                            Basic usage                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#reference-an-existing-action">
+                                            Reference an existing action                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#triggers">
+                                            Triggers                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#behaviour-only-vs-also-a-button">
+                                            Behaviour-only vs. also a button                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#multiple-record-actions">
+                                            Multiple record actions                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#keyboard-navigation">
+                                            Keyboard navigation                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#keys-the-grid-reserves">
+                                            Keys the grid reserves                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#combining-with-selection-and-bulk-actions">
+                                            Combining with selection and bulk actions                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#styling">
+                                            Styling                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#recommended-ux">
+                                            Recommended UX                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#common-mistakes">
+                                            Common mistakes                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#migrating-from-rowcontextmenu">
+                                            Migrating from rowContextMenu()                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#related-docs">
+                                            Related docs                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>
