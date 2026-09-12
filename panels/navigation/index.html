@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Navigation | Wire Docs</title>
+    <meta name="description" content="How a resource reaches a menu — the entry it declares, the group it sits in, and the workspace that orders both.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/panels/navigation/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/panels/navigation/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/panels/navigation/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/panels/navigation/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Navigation | Wire Docs">
+    <meta property="og:description" content="How a resource reaches a menu — the entry it declares, the group it sits in, and the workspace that orders both.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/panels/navigation/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:title" content="Navigation | Wire Docs">
+    <meta name="twitter:description" content="How a resource reaches a menu — the entry it declares, the group it sits in, and the workspace that orders both.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../panels/navigation/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../cs/panels/navigation/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../v1/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Start Here</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../documentation/">
+                                Wire Documentation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/installation/">
+                                Installing Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/getting-started/">
+                                Getting Started                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/configuration/">
+                                Configuration                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/authorization/">
+                                Authorization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/theming/">
+                                Theming &amp; Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/testing/">
+                                Testing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/cookbook/">
+                                Cookbook                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/error-handling/">
+                                Error Handling                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/troubleshooting/">
+                                Troubleshooting                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/upgrade/">
+                                Upgrade Guide                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/project-map/">
+                                Project Map                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Forms</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/validation/">
+                                Form Validation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/reactive-fields/">
+                                Reactive Fields                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/save-lifecycle/">
+                                Save Lifecycle                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/custom-fields/">
+                                Extending Forms                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Fields</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/">
+                                            Form Fields                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Table</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/">
+                                            Columns                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/relations/">
+                                            Relation Paths &amp; Dot Notation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/casts/">
+                                            Enum &amp; JSON Casts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/editing/">
+                                            Editing &amp; Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/fill-handle/">
+                                            Fill Handle (Excel-style AutoFill)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/">
+                                            Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/relationships/">
+                                            Relationship &amp; Sub-Row Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/column-level/">
+                                            Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/custom/">
+                                            Custom Filter Class                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/actions/">
+                                Table Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/record-actions/">
+                                Record Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/selection/">
+                                Selecting Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/gestures/">
+                                The Gesture Layer                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/inactive-records/">
+                                Inactive Records                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/exports/">
+                                Table Exports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/imports/">
+                                Table Imports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/summaries/">
+                                Summaries                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/grouping/">
+                                Row Grouping                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/sub-rows/">
+                                Sub-Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/relation-managers/">
+                                Relation Managers                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/data-sources/">
+                                Data Sources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/notifications/">
+                                Table Notifications                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/advanced/">
+                                Advanced Features                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../core/overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/icons/">
+                                            Icons                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/colors/">
+                                            Colors                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/enums/">
+                                            Enums                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/blade-components/">
+                                            Blade Components                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/">
+                                            Actions                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/modals/">
+                                            Action Modals                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/lifecycle/">
+                                            Lifecycle And Queues                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/appearance/">
+                                            Buttons And Appearance                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/standalone/">
+                                            Actions Outside A Table                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/workflow/">
+                                            Workflow And Transitions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/modals/">
+                                Modals                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/">
+                                            Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/toasts/">
+                                            Toasts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/persistent/">
+                                            Persistent Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/usage/">
+                                            Where To Send From                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/custom-drivers/">
+                                            Custom Drivers                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/">
+                                            Widgets                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/stats/">
+                                            Stats                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/charts/">
+                                            Charts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/custom/">
+                                            Tables And Custom Views                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/dashboards/">
+                                            Dashboards                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/">
+                                            Infolists                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/actions/">
+                                            Infolist Actions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/record-panels/">
+                                Editable Panels                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/global-search/">
+                                Global Search                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/">
+                                            Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/registration/">
+                                            Registering Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/hooks/">
+                                            Hooks                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/extending/">
+                                            Extending Surfaces                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/examples/">
+                                            Examples And Testing                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../overview/">
+                                Panels                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../pages/">
+                                Pages                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="is-active" href="./">
+                                Navigation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../routing/">
+                                Routing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../modules/">
+                                Modules                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../admin/overview/">
+                                The Admin Shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/layout/">
+                                The Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/sidebar/">
+                                The Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/branding/">
+                                Branding And Theme                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../modules/">
+                                Ready-Made Modules                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/users/">
+                                The Users Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/teams-and-two-factor/">
+                                Teams and Two-Factor                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/auth/">
+                                The Auth Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/settings/">
+                                The Settings Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/notifications/">
+                                The Notifications Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/audit/">
+                                The Audit Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/media/">
+                                The Media Module                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../sortable/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/row-sorting/">
+                                Row Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/column-sorting/">
+                                Column Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/customization/">
+                                Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/advanced/">
+                                Advanced Usage                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/api-reference/">
+                                API Reference                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../boost/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/mcp-tools/">
+                                MCP Server &amp; Tools                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/guidelines-and-skills/">
+                                Guidelines &amp; Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Panels</span>
+                            </nav>
+                            <p class="eyebrow">Panels</p>
+                            <h1>Navigation</h1>
+                                                            <p class="lead">How a resource reaches a menu — the entry it declares, the group it sits in, and the workspace that orders both.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#declaring-an-entry">Declaring An Entry</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#entries-under-an-entry">Entries Under An Entry</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#groups">Groups</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#the-workspace">The Workspace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#rendering-the-menu">Rendering The Menu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#which-entry-is-active">Which Entry Is Active</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#when-the-convention-is-wrong">When the convention is wrong</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#changing-a-menu-you-did-not-register">Changing A Menu You Did Not Register</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#navigationitem-api">NavigationItem API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#activenavigation-api">ActiveNavigation API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#navigationgroup-api">NavigationGroup API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#navigationgroups-api">NavigationGroups API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#workspace-api">Workspace API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#catalog-api">Catalog API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#related">Related</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>A registry answers <em>what exists</em>. A menu is a different question — what is shown,
+under which heading, in what order, and where each entry links. That question is
+answered by three small objects: an entry a resource declares, a group the
+application declares, and a workspace that arranges them.</p>
+<h2 id="declaring-an-entry">Declaring An Entry</h2>
+<p>A resource that should appear in a menu implements <code>ProvidesNavigation</code>:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Resources\Contracts\ProvidesNavigation</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Resources\Navigation\NavigationItem</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">navigation</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NavigationItem</span><span style="color: #E1E4E8;">   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NavigationItem</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Orders&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;outline:shopping-cart&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;sales&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sort</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">10</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">badge</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; </span><span style="color: #79B8FF;">Order</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">whereNull</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;shipped_at&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">count</span><span style="color: #E1E4E8;">(), </span><span style="color: #9ECBFF;">&#39;danger&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Static, like identity, and for the same reason: a menu is built from every
+registered resource at once, and instantiating each to ask what it is called
+would compose a table and a form per entry. A resource that does not implement it
+is still registered and routable — it just does not appear, which is what an
+internal or nested resource wants.</p>
+<p><code>NavigationItem</code> is built on the canonical <code>HasLabel</code> / <code>HasIcon</code> /
+<code>HasVisibility</code> concerns rather than on properties of its own, so it speaks the
+same vocabulary as every other component. What it adds is only what a <em>menu</em>
+needs: <code>group()</code>, <code>sort()</code> and <code>badge()</code>. A badge closure is resolved on every
+read, never cached — a count of unshipped orders is wrong the moment it is.</p>
+<p>An entry that names no label of its own is named by its resource:
+<code>NavigationItem::make()</code> beside <code>-&gt;icon()</code> and <code>-&gt;group()</code> is the ordinary shape,
+and the menu shows <code>pluralLabel()</code> — "Orders". A resource that wants a menu
+label different from its plural passes one, and that one wins.</p>
+<h2 id="entries-under-an-entry">Entries Under An Entry</h2>
+<p>An entry may carry entries of its own, which is the second heading a menu has —
+one that is not a group, because it is a destination as well as a parent:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Resources\Navigation\NavigationItem</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">NavigationItem</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Catalogue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;outline:squares-2x2&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">children</span><span style="color: #E1E4E8;">([                                                    </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">NavigationItem</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Products&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;products.index&#39;</span><span style="color: #E1E4E8;">)),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">NavigationItem</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Categories&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;categories.index&#39;</span><span style="color: #E1E4E8;">))</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sort</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">10</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">NavigationItem</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Archive&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;products.archive&#39;</span><span style="color: #E1E4E8;">))</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> =&gt; </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">user</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">?-&gt;</span><span style="color: #B392F0;">can</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;viewArchive&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #F97583;">??</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ]);                                                             </span></div></code></pre>
+<p><strong>One level, and that is on purpose.</strong> A child's own children are not read by
+anything that draws a menu: a sidebar nesting three deep is a sidebar nobody can
+hit with a mouse, and the third level belongs on the page, as tabs or a secondary
+nav. Nesting further is not rejected, it is simply not drawn — a caller who does
+it sees the result immediately.</p>
+<p><code>getChildren()</code> does the filtering and the ordering, not the view: hidden
+children are dropped and the rest come back in <code>sort()</code> order, so every surface
+that draws a submenu agrees about what is in it. That is the same reason
+<code>Workspace</code> filters entries rather than leaving it to the sidebar. A closure is
+resolved per read for the reason a badge is — children that depend on what the
+current user may see must not be decided once, at registration, for everybody.</p>
+<p><code>hasChildren()</code> answers whether anything would be drawn, which is what decides
+whether a row is a link or a disclosure. Ask it rather than counting, because the
+children may still be a closure at that point. What a collapsed
+<a href="../../admin/sidebar/#the-collapsed-menu">rail</a> does with the difference — a
+tooltip for a leaf, a popover for a parent — is the shell's business, not this
+layer's.</p>
+<h2 id="groups">Groups</h2>
+<p><code>group()</code> takes a <strong>key</strong>, not a heading. No resource owns the group it sits in —
+several share it — so what the heading says, which icon it carries, where it sits
+among the other groups and whether it is shown at all belong to a
+<code>NavigationGroup</code>, declared where the application composes that part of itself:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Resources\Navigation\NavigationGroup</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Resources\Navigation\NavigationGroups</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">boot</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">NavigationGroups</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">registerMany</span><span style="color: #E1E4E8;">([   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">NavigationGroup</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;sales&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">__</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;nav.sales&#39;</span><span style="color: #E1E4E8;">))</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;outline:banknotes&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sort</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">10</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">NavigationGroup</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sort</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">90</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">collapsed</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> =&gt; </span><span style="color: #B392F0;">auth</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">user</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">?-&gt;</span><span style="color: #B392F0;">isAdmin</span><span style="color: #E1E4E8;">() </span><span style="color: #F97583;">??</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ]);                                                          </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p><strong>A group nothing declares still works.</strong> <code>Workspace</code> makes an implicit one from
+the key, so <code>-&gt;group('sales')</code> needs no registration; the heading falls back to
+<code>Str::headline()</code> of the key. Registering says the five things a bare key cannot
+— a heading separate from the key, an icon, an order among the other groups, one
+visibility condition covering everything in the group, and whether it folds. The
+typed list is the <a href="#navigationgroup-api"><code>NavigationGroup</code> API</a> below.</p>
+<p>The heading and the key are separate on purpose. <code>-&gt;group(__('nav.billing'))</code>
+made the translation the array key, so the same menu was keyed differently per
+locale; the key is now a slug and <code>HasLabel</code> owns the text. <code>hiddenLabel()</code> keeps
+the group without drawing its heading, which is what a menu that separates with
+rules rather than words wants.</p>
+<p>Folding comes from <code>CanBeCollapsed</code> — <code>-&gt;collapsible()</code> gives the heading a
+disclosure, <code>-&gt;collapsed()</code> starts it shut — the same concern <code>Section</code> and
+<code>Repeater</code> use, so the pair means one thing across the framework rather than
+three. A fold hides, it does not remove: a folded group still shows its entries
+in the collapsed <a href="../../admin/sidebar/#the-collapsed-menu">rail</a>, where the
+heading that would unfold it is not drawn at all.</p>
+<p><strong>A provider is not the only place.</strong> <code>NavigationGroups</code> is a container
+singleton, so anything holding the container may register into it before the menu
+is built — a provider's <code>boot()</code> is simply the ordinary moment. A
+<a href="../modules/">module</a> does not touch it at all: it returns its group from
+<code>Module::navigation()</code> and <code>wire-core</code> registers it while booting the modules, so
+a module ships its heading, icon and order beside the resources it groups rather
+than leaving them to whoever installed it. Modules are booted in registration
+order, so one listed after a module it depends on sees that module's groups
+already declared.</p>
+<p>Registering the same key twice replaces, which is how an application adjusts a
+group that a package shipped without editing the package. <code>NavigationGroups</code> is
+a container singleton and is otherwise a plain registry —
+<a href="#navigationgroups-api">its API</a> is five methods.</p>
+<h2 id="the-workspace">The Workspace</h2>
+<p><code>Workspace</code> arranges the result:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Core\Resources\Workspace</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$nav </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Workspace</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">navigation</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #6A737D;">// [&#39;sales&#39; =&gt; NavigationGroup, &#39;&#39; =&gt; NavigationGroup]   ungrouped is the &#39;&#39; key</span></div></code></pre>
+<p>Groups come back in <code>sort()</code> order, and groups that tie keep the order their
+first entry was registered in; within a group, entries follow the same rule.
+Hidden entries are dropped, and a hidden group takes its entries with it.</p>
+<p>Entries stay keyed by <strong>registered key</strong>, through the grouping and through the
+sort, and each one carries the URL of that key's page. Nothing declares it: the
+<em>registry</em> still holds no URL — one that did would be a panel — but the menu asks
+where the key is routed and fills in the answer, which is <code>null</code> for a resource
+that declares no pages and for an application that routes nothing.</p>
+<p>An entry may name its own destination with <code>-&gt;url('https://status.example.com')</code>,
+and what it names always wins — an external link, or an application whose shell
+has a URL scheme of its own.</p>
+<p><code>Workspace::items()</code> answers the same question without the headings: every
+visible entry, flat, in <code>sort()</code> order, keyed by registered key — what a menu
+that draws no groups shows. Entries whose group is hidden are not in it either.</p>
+<p>Both take a <a href="../routing/#zones">zone</a>, and <code>linkedOnly: true</code> when the menu should hold only
+what that zone can reach:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Workspace</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">navigation</span><span style="color: #E1E4E8;">();                                    </span><span style="color: #6A737D;">// every entry, unzoned</span></div><div class='line'><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Workspace</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">navigation</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">zone</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&#39;business&#39;</span><span style="color: #E1E4E8;">);                    </span><span style="color: #6A737D;">// linked into business</span></div><div class='line line-focus'><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Workspace</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">navigation</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">zone</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&#39;business&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">linkedOnly</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">);  </span></div></code></pre>
+<p><code>Workspace</code> does not know what a resource is, and that is deliberate. Its
+entries come from the <code>Catalog</code>, which reads any number of <code>RegistrySource</code>s —
+<code>ResourceRegistry</code> is one, <code>Widgets\DashboardRegistry</code> is another — so a menu
+mixes resources, dashboards and anything an application registers later without
+<code>Workspace</code> learning about any of them. The router and the global search palette
+read the same catalogue, so registering something once reaches all three. Two sources claiming one key is refused rather than resolved: one
+entry would otherwise take the other's place, and a menu that quietly lost a row
+is noticed on the day that row mattered.</p>
+<p>The label fallback above is a resource's, because <code>pluralLabel()</code> is a resource's
+word. Anything else in a menu names its own entry.</p>
+<p>Like the registry, <code>Workspace</code> owns no routing and no layout — what renders the
+menu is the application's. It asks where a key is routed; it does not decide.</p>
+<h2 id="rendering-the-menu">Rendering The Menu</h2>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">@foreach</span><span style="color: #E1E4E8;">($nav </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> $group)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($group</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasVisibleLabel</span><span style="color: #E1E4E8;">())</span></div><div class='line'><span style="color: #E1E4E8;">        &lt;</span><span style="color: #85E89D;">p</span><span style="color: #E1E4E8;">&gt;</span><span style="color: #79B8FF;">{!!</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">($group</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getIcon</span><span style="color: #E1E4E8;">()) </span><span style="color: #79B8FF;">!!}</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $group</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getLabel</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">p</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">@endif</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">@foreach</span><span style="color: #E1E4E8;">($group</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getItems</span><span style="color: #E1E4E8;">() </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> $key </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $item)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">{{-- A registered entry with no page of its own still belongs in the</span></div><div class='line'><span style="color: #6A737D;">             menu; it simply is not a link. --}}</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        &lt;</span><span style="color: #85E89D;">a</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($item</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getUrl</span><span style="color: #E1E4E8;">()) </span><span style="color: #B392F0;">href</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $item</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getUrl</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:navigate</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">@endif</span><span style="color: #E1E4E8;">&gt;   </span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">{!!</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">($item</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getIcon</span><span style="color: #E1E4E8;">()) </span><span style="color: #79B8FF;">!!}</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $item</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getLabel</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">            &lt;</span><span style="color: #FDAEB7;">x-wire::badge</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:color</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;$item-&gt;getBadgeColor() ?? &#39;gray&#39;&quot;</span><span style="color: #E1E4E8;">&gt;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $item</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getBadge</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span><span style="color: #E1E4E8;">&lt;/</span><span style="color: #FDAEB7;">x-wire::badge</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">        &lt;/</span><span style="color: #85E89D;">a</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($item</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasChildren</span><span style="color: #E1E4E8;">())</span></div><div class='line'><span style="color: #E1E4E8;">            &lt;</span><span style="color: #85E89D;">ul</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">@foreach</span><span style="color: #E1E4E8;">($item</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getChildren</span><span style="color: #E1E4E8;">() </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> $child)</span></div><div class='line'><span style="color: #E1E4E8;">                    &lt;</span><span style="color: #85E89D;">li</span><span style="color: #E1E4E8;">&gt;&lt;</span><span style="color: #85E89D;">a</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">href</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $child</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getUrl</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:navigate</span><span style="color: #E1E4E8;">&gt;</span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> $child</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getLabel</span><span style="color: #E1E4E8;">() </span><span style="color: #79B8FF;">}}</span><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">a</span><span style="color: #E1E4E8;">&gt;&lt;/</span><span style="color: #85E89D;">li</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">@endforeach</span></div><div class='line'><span style="color: #E1E4E8;">            &lt;/</span><span style="color: #85E89D;">ul</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">@endif</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">@endforeach</span></div><div class='line'><span style="color: #F97583;">@endforeach</span></div></code></pre>
+<p><code>wire-admin</code> ships this menu already written — see <a href="../../admin/sidebar/">the
+sidebar</a>, which draws the same three objects, marks the
+active entry from the route being rendered, and holds no state of its own. What
+is above is for an application rendering its own frame.</p>
+<h2 id="which-entry-is-active">Which Entry Is Active</h2>
+<p>One reading of the request, built once while the page renders and handed to every
+row: <code>ActiveNavigation</code>. Three rules decide, first answer wins.</p>
+<ol>
+<li><strong>What the entry declared.</strong> <code>activeWhen()</code>, below. Nothing else is consulted.</li>
+<li><strong>Its registered key</strong>, against the key of the route being rendered. This is
+what keeps the <em>Orders</em> row lit on <code>wire.orders.edit</code>: the menu knows the
+resource, not which of its pages you are on.</li>
+<li><strong>Its URL</strong>, matched exactly — a trailing slash and a relative URL are
+normalised away, a query string is not. Two entries over one list, an <em>All</em>
+and an <em>Archived</em>, are two entries.</li>
+</ol>
+<p><code>aria-current</code> follows the same reading and splits it in two: <code>page</code> for the entry
+whose URL <em>is</em> the URL being rendered, and <code>true</code> for the branch you are inside.
+That is not pedantry — a resource row stays active on that resource's edit screen,
+and <a href="../pages/#the-records-other-pages">the record's tabs</a> above the form are
+already saying "this is the page you are on".</p>
+<h3 id="when-the-convention-is-wrong">When the convention is wrong</h3>
+<p>Rule 3 is deliberately <strong>not</strong> a prefix match. A prefix rule would light
+<code>/settings</code> on <code>/settings/general/edit</code> — which anyone would want — and would
+equally light a <em>Home</em> entry pointing at the shell's own mount path on every page
+under it, for ever, because nothing here can tell a section from a root. A row
+that is always highlighted is a louder defect than a row that is not highlighted
+when it could be.</p>
+<p>So the entry that knows says so, and gets exactly what it meant:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">NavigationItem</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Settings&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;settings.general&#39;</span><span style="color: #E1E4E8;">))</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeWhen</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;settings/*&#39;</span><span style="color: #E1E4E8;">);          </span><span style="color: #6A737D;">// and every page under it</span></div></code></pre>
+<p>A pattern is matched against the current <strong>path</strong> and the current <strong>route name</strong>,
+so both readings of the same intent work:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeWhen</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;admin.settings.*&#39;</span><span style="color: #E1E4E8;">);                                  </span><span style="color: #6A737D;">// a route-name pattern</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeWhen</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;orders/*&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;invoices/*&#39;</span><span style="color: #E1E4E8;">]);                          </span><span style="color: #6A737D;">// several</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeWhen</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">ActiveNavigation</span><span style="color: #E1E4E8;"> $active)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> =&gt; $active</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">page </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>Declaring it <strong>replaces</strong> the convention rather than adding to it, which is what
+makes "never active here" possible to write at all.</p>
+<h2 id="changing-a-menu-you-did-not-register">Changing A Menu You Did Not Register</h2>
+<p>Installing a <a href="../modules/">module</a> puts its entries in the menu, and an application
+adjusts them through the <a href="../../core/plugins/hooks/"><code>navigation.building</code> hook</a>
+rather than by not installing the module:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hook</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Hook</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">NavigationBuilding</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">NavigationBuildingPayload</span><span style="color: #E1E4E8;"> $payload) {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">unset</span><span style="color: #E1E4E8;">($payload</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">items[</span><span style="color: #9ECBFF;">&#39;media&#39;</span><span style="color: #E1E4E8;">]);                                     </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    $payload</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">items[</span><span style="color: #9ECBFF;">&#39;docs&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NavigationItem</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Docs&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;/docs&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sort</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">90</span><span style="color: #E1E4E8;">); </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $payload;</span></div><div class='line'><span style="color: #E1E4E8;">}, </span><span style="color: #B392F0;">for</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>It runs on the <strong>flat, keyed list</strong>, before grouping and sorting, so it feeds
+<code>navigation()</code> and <code>items()</code> alike — a hook in only one of them would let a sidebar
+and a command palette disagree about what is in the menu. Preserve the keys: they
+are what a consumer turns into a link. Sorting here is wasted work, because the
+item's own <code>sort()</code> orders the menu afterwards.</p>
+<p><code>for:</code> names the <strong>zone</strong>, which is the only identity a menu has — it belongs to no
+component and shows no single registered class. A menu built for no zone carries no
+scope, so a scoped callback sits it out.</p>
+<h2 id="navigationitem-api">NavigationItem API</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NavigationItem::make(string|Closure|null $label = null)</code></td>
+<td><code>self</code></td>
+<td>A new entry. No label means the resource's <code>pluralLabel()</code> names it</td>
+</tr>
+<tr>
+<td><code>label(string|Closure|null $label)</code></td>
+<td><code>self</code></td>
+<td>The entry's own text, overriding that fallback</td>
+</tr>
+<tr>
+<td><code>hiddenLabel(bool $condition = true)</code></td>
+<td><code>self</code></td>
+<td>Keeps the entry, draws no text — an icon-only row</td>
+</tr>
+<tr>
+<td><code>icon(string|Icon|Closure|null $icon, string|IconPosition|null $position = null)</code></td>
+<td><code>self</code></td>
+<td>The icon beside the label</td>
+</tr>
+<tr>
+<td><code>group(string|Closure|null $group)</code></td>
+<td><code>self</code></td>
+<td>The group <strong>key</strong> this entry sits under; <code>null</code> is the top level</td>
+</tr>
+<tr>
+<td><code>sort(int $sort)</code></td>
+<td><code>self</code></td>
+<td>Order within its group; ties keep first-appearance order</td>
+</tr>
+<tr>
+<td><code>badge(mixed $badge, string|Closure|null $color = null)</code></td>
+<td><code>self</code></td>
+<td>A count or short string beside the label, with an optional colour</td>
+</tr>
+<tr>
+<td><code>url(string|Closure|null $url)</code></td>
+<td><code>self</code></td>
+<td>An explicit destination, which always beats the routed one</td>
+</tr>
+<tr>
+<td><code>children(array|Closure $children)</code></td>
+<td><code>self</code></td>
+<td>Entries under this one — one level, filtered and sorted on read</td>
+</tr>
+<tr>
+<td><code>activeWhen(Closure|array|string|null $activeWhen)</code></td>
+<td><code>self</code></td>
+<td>When this entry counts as the page you are on, when the convention is wrong: path or route-name patterns, or a Closure taking <code>ActiveNavigation</code>. <strong>Replaces</strong> the convention</td>
+</tr>
+<tr>
+<td><code>visible(bool|Closure $condition = true)</code> / <code>hidden(bool|Closure $condition = true)</code></td>
+<td><code>self</code></td>
+<td>Whether the entry is in the menu at all</td>
+</tr>
+<tr>
+<td><code>getLabel(): ?string</code></td>
+<td><code>string|null</code></td>
+<td>The resolved text, or <code>null</code> when nothing named it</td>
+</tr>
+<tr>
+<td><code>hasVisibleLabel(): bool</code> / <code>isLabelHidden(): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether to draw the text</td>
+</tr>
+<tr>
+<td><code>getIcon(): ?string</code></td>
+<td><code>string|null</code></td>
+<td>The resolved icon name</td>
+</tr>
+<tr>
+<td><code>getGroup(): ?string</code></td>
+<td><code>string|null</code></td>
+<td>The resolved group key</td>
+</tr>
+<tr>
+<td><code>getSort(): int</code></td>
+<td><code>int</code></td>
+<td>The sort weight</td>
+</tr>
+<tr>
+<td><code>getBadge(): ?string</code></td>
+<td><code>string|null</code></td>
+<td>The badge, resolved on <strong>every</strong> read, never cached</td>
+</tr>
+<tr>
+<td><code>getBadgeColor(): ?string</code></td>
+<td><code>string|null</code></td>
+<td>Its colour, or <code>null</code> for the consumer's default</td>
+</tr>
+<tr>
+<td><code>getUrl(): ?string</code></td>
+<td><code>string|null</code></td>
+<td>Explicit URL, else the routed one, else <code>null</code></td>
+</tr>
+<tr>
+<td><code>getChildren(): array</code></td>
+<td><code>array&lt;int, NavigationItem&gt;</code></td>
+<td>The visible children, in <code>sort()</code> order</td>
+</tr>
+<tr>
+<td><code>hasChildren(): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether a row is a disclosure rather than a plain link</td>
+</tr>
+<tr>
+<td><code>isActiveWhen(ActiveNavigation $active): ?bool</code></td>
+<td><code>bool|null</code></td>
+<td>The entry's own answer, or <code>null</code> when it declared none — three-valued, so a declared “no” cannot fall through to the conventions</td>
+</tr>
+<tr>
+<td><code>isVisible(): bool</code> / <code>isHidden(): bool</code></td>
+<td><code>bool</code></td>
+<td>The resolved visibility</td>
+</tr>
+</tbody>
+</table>
+<h2 id="activenavigation-api">ActiveNavigation API</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ActiveNavigation::current()</code></td>
+<td><code>self</code></td>
+<td>The reading for the request being rendered — key, page kind, URL, path and route name. A <strong>full page render</strong> only: inside a Livewire update the route name is <code>livewire.update</code></td>
+</tr>
+<tr>
+<td><code>withKey(?string $key)</code></td>
+<td><code>self</code></td>
+<td>The same reading with the key a host resolved for itself, which is what <code>&lt;x-wire-admin::sidebar :active-key="…"&gt;</code> passes</td>
+</tr>
+<tr>
+<td><code>isActive(NavigationItem $item, ?string $key = null): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether this entry is where you are, or where you are inside of</td>
+</tr>
+<tr>
+<td><code>isExactly(NavigationItem $item): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether this entry <em>is</em> the page being rendered</td>
+</tr>
+<tr>
+<td><code>hasActiveChild(NavigationItem $item): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether anything under it is</td>
+</tr>
+<tr>
+<td><code>ariaCurrent(NavigationItem $item, ?string $key = null): ?string</code></td>
+<td><code>string|null</code></td>
+<td><code>'page'</code>, <code>'true'</code>, or <code>null</code></td>
+</tr>
+<tr>
+<td><code>matchesPatterns(array $patterns): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether the request matches any pattern, by path or by route name</td>
+</tr>
+<tr>
+<td><code>public ?string $key</code> / <code>$page</code> / <code>$url</code> / <code>$path</code> / <code>$routeName</code></td>
+<td><code>string|null</code></td>
+<td>The reading itself</td>
+</tr>
+</tbody>
+</table>
+<h2 id="navigationgroup-api">NavigationGroup API</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NavigationGroup::make(string $key)</code></td>
+<td><code>self</code></td>
+<td>The key entries point at with <code>group()</code></td>
+</tr>
+<tr>
+<td><code>label(string|Closure|null $label)</code></td>
+<td><code>self</code></td>
+<td>The heading. Separate from the key on purpose: a translated heading must not become the array key</td>
+</tr>
+<tr>
+<td><code>hiddenLabel(bool $condition = true)</code></td>
+<td><code>self</code></td>
+<td>Group the entries, draw no heading</td>
+</tr>
+<tr>
+<td><code>icon(string|Icon|Closure|null $icon, string|IconPosition|null $position = null)</code></td>
+<td><code>self</code></td>
+<td>Icon beside the heading</td>
+</tr>
+<tr>
+<td><code>sort(int $sort)</code></td>
+<td><code>self</code></td>
+<td>Order among the other groups; ties keep first-appearance order</td>
+</tr>
+<tr>
+<td><code>visible(bool|Closure $condition = true)</code> / <code>hidden(bool|Closure $condition = true)</code></td>
+<td><code>self</code></td>
+<td>Shows or hides the <strong>whole</strong> group — one condition instead of the same one on every resource in it</td>
+</tr>
+<tr>
+<td><code>collapsible(bool|Closure $condition = true)</code></td>
+<td><code>self</code></td>
+<td>The heading gets a disclosure</td>
+</tr>
+<tr>
+<td><code>collapsed(bool|Closure $condition = true)</code></td>
+<td><code>self</code></td>
+<td>It starts folded. A fold hides; it never removes entries from the collapsed rail</td>
+</tr>
+<tr>
+<td><code>withItems(array $items): self</code></td>
+<td><code>self</code></td>
+<td>A <strong>copy</strong> carrying the entries a menu shows under it — <code>Workspace</code> calls it; a declared group is a singleton, so filling it in place would make the second <code>navigation()</code> call answer differently from the first</td>
+</tr>
+<tr>
+<td><code>getKey(): string</code></td>
+<td><code>string</code></td>
+<td>The slug, which is also <code>getName()</code></td>
+</tr>
+<tr>
+<td><code>getLabel(): ?string</code></td>
+<td><code>string|null</code></td>
+<td>The heading, falling back to <code>Str::headline()</code> of the key</td>
+</tr>
+<tr>
+<td><code>hasVisibleLabel(): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether to draw the heading</td>
+</tr>
+<tr>
+<td><code>getItems(): array</code></td>
+<td><code>array&lt;string, NavigationItem&gt;</code></td>
+<td>The entries under it, keyed by registered key</td>
+</tr>
+<tr>
+<td><code>hasItems(): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether the group would draw anything</td>
+</tr>
+<tr>
+<td><code>isCollapsible(): bool</code> / <code>isCollapsed(): bool</code></td>
+<td><code>bool</code></td>
+<td>The resolved fold state</td>
+</tr>
+</tbody>
+</table>
+<h2 id="navigationgroups-api">NavigationGroups API</h2>
+<p>The container singleton the declared groups live in. <code>Workspace</code> reads it; an
+application and a package both write to it.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register(NavigationGroup $group): void</code></td>
+<td><code>void</code></td>
+<td>Declare one group; the same key registered again replaces, which is how an application adjusts a group a package shipped</td>
+</tr>
+<tr>
+<td><code>registerMany(iterable $groups): void</code></td>
+<td><code>void</code></td>
+<td>The same for several at once</td>
+</tr>
+<tr>
+<td><code>find(string $key): ?NavigationGroup</code></td>
+<td><code>NavigationGroup|null</code></td>
+<td>The declared group with this key, or <code>null</code> when only entries name it</td>
+</tr>
+<tr>
+<td><code>has(string $key): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether a key was declared</td>
+</tr>
+<tr>
+<td><code>all(): array</code></td>
+<td><code>array&lt;string, NavigationGroup&gt;</code></td>
+<td>Every declared group, keyed by key, in registration order</td>
+</tr>
+</tbody>
+</table>
+<h2 id="workspace-api">Workspace API</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>navigation(?string $zone = null, bool $linkedOnly = false)</code></td>
+<td><code>array&lt;string, NavigationGroup&gt;</code></td>
+<td>The menu: groups in order, each carrying its entries</td>
+</tr>
+<tr>
+<td><code>items(?string $zone = null, bool $linkedOnly = false)</code></td>
+<td><code>array&lt;string, NavigationItem&gt;</code></td>
+<td>The same menu flat, without headings</td>
+</tr>
+<tr>
+<td><code>registered()</code></td>
+<td><code>array&lt;string, class-string&gt;</code></td>
+<td>Every class behind the menu, entry or not</td>
+</tr>
+</tbody>
+</table>
+<h2 id="catalog-api">Catalog API</h2>
+<p>Everything an application registered, whatever kind it is — the one list the
+menu, the router and the search palette read.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>all(): array</code></td>
+<td><code>array&lt;string, class-string&gt;</code></td>
+<td>Every registered class, keyed, in registration order; refuses two sources claiming one key</td>
+</tr>
+<tr>
+<td><code>implementing(string $capability): array</code></td>
+<td><code>array&lt;string, class-string&gt;</code></td>
+<td>Only those implementing one contract — <code>ProvidesNavigation</code>, <code>ProvidesPages</code>, <code>GloballySearchable</code></td>
+</tr>
+<tr>
+<td><code>find(string $key): ?string</code></td>
+<td><code>class-string|null</code></td>
+<td>The class with this key</td>
+</tr>
+<tr>
+<td><code>has(string $key): bool</code></td>
+<td><code>bool</code></td>
+<td>Whether a key is registered</td>
+</tr>
+</tbody>
+</table>
+<p>A registry becomes one of its sources by implementing <code>RegistrySource</code>
+(<code>registeredClasses(): array</code>), which is how a dashboard registry reaches all
+three surfaces without any of them importing it. Anything the router may address
+also implements <code>HasRegistryKey</code> (<code>static key(): string</code>) — <code>ProvidesPages</code>
+extends it, because a page that cannot be addressed cannot be given a URL.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="../resources/">Resources</a> — the owner an entry names</li>
+<li><a href="../routing/">Routing</a> — where an entry's URL comes from, and what a zone changes</li>
+<li><a href="../modules/">Modules</a> — a whole area's entries declared in one manifest</li>
+<li><a href="../../admin/sidebar/">The Sidebar</a> — the menu <code>wire-admin</code> draws from all of this</li>
+<li><a href="../../core/global-search/">Global Search</a> — the palette reading the same catalogue</li>
+<li><a href="../../core/widgets/">Widgets</a> — dashboards, the other kind of thing a menu holds</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../pages/">
+                                        <span>← Previous</span>
+                                        <strong>Pages</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../routing/">
+                                        <span>Next →</span>
+                                        <strong>Routing</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#declaring-an-entry">
+                                            Declaring An Entry                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#entries-under-an-entry">
+                                            Entries Under An Entry                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#groups">
+                                            Groups                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#the-workspace">
+                                            The Workspace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#rendering-the-menu">
+                                            Rendering The Menu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#which-entry-is-active">
+                                            Which Entry Is Active                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#when-the-convention-is-wrong">
+                                            When the convention is wrong                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#changing-a-menu-you-did-not-register">
+                                            Changing A Menu You Did Not Register                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#navigationitem-api">
+                                            NavigationItem API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#activenavigation-api">
+                                            ActiveNavigation API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#navigationgroup-api">
+                                            NavigationGroup API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#navigationgroups-api">
+                                            NavigationGroups API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#workspace-api">
+                                            Workspace API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#catalog-api">
+                                            Catalog API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#related">
+                                            Related                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

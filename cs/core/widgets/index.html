@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Widgety | Wire Docs</title>
+    <meta name="description" content="Co mají všechny widgety společné — základní třídu, polling, autorizaci a kompletní API — a po kterém typu sáhnout.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/core/widgets/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/core/widgets/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/core/widgets/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/core/widgets/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Widgety | Wire Docs">
+    <meta property="og:description" content="Co mají všechny widgety společné — základní třídu, polling, autorizaci a kompletní API — a po kterém typu sáhnout.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/core/widgets/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/cs/assets/previews/widgets-overview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/cs/assets/previews/widgets-overview.png">
+    <meta name="twitter:title" content="Widgety | Wire Docs">
+    <meta name="twitter:description" content="Co mají všechny widgety společné — základní třídu, polling, autorizaci a kompletní API — a po kterém typu sáhnout.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../core/widgets/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/core/widgets/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../../v1/cs/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Začínáme</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../documentation/">
+                                Dokumentace Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/installation/">
+                                Instalace Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/getting-started/">
+                                Začínáme                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/configuration/">
+                                Konfigurace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/authorization/">
+                                Autorizace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/theming/">
+                                Vzhled a přizpůsobení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/testing/">
+                                Testování                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/cookbook/">
+                                Kuchařka                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/error-handling/">
+                                Ošetření chyb                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/troubleshooting/">
+                                Řešení potíží                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/upgrade/">
+                                Návod k upgradu                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/project-map/">
+                                Mapa projektu                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Formuláře</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/validation/">
+                                Validace formulářů                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/reactive-fields/">
+                                Reaktivní pole                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/save-lifecycle/">
+                                Životní cyklus ukládání                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/custom-fields/">
+                                Rozšíření formulářů                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Pole</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/">
+                                            Pole formulářů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Tabulka</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/">
+                                            Sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/relations/">
+                                            Cesty relací a tečková notace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/casts/">
+                                            Enum a JSON casty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/editing/">
+                                            Editace a filtry na úrovni sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/fill-handle/">
+                                            Fill handle (vyplňování tažením jako v Excelu)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/patterns/">
+                                            Vzory a recepty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/">
+                                            Filtry                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/relationships/">
+                                            Filtry relací a podřádků                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/column-level/">
+                                            Filtry na úrovni sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/custom/">
+                                            Vlastní třída filtru                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/patterns/">
+                                            Vzory a recepty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/actions/">
+                                Akce tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/record-actions/">
+                                Celořádkové akce (Record Actions)                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/selection/">
+                                Výběr řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/gestures/">
+                                Vrstva gest                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/inactive-records/">
+                                Neaktivní záznamy                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/exports/">
+                                Exporty tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/imports/">
+                                Importy tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/summaries/">
+                                Souhrny                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/grouping/">
+                                Seskupení řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/sub-rows/">
+                                Podřádky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/relation-managers/">
+                                Správci relací                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/notifications/">
+                                Notifikace tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/data-sources/">
+                                Zdroje dat                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/advanced/">
+                                Pokročilé funkce                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/icons/">
+                                            Ikony                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/colors/">
+                                            Barvy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/enums/">
+                                            Enumy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/blade-components/">
+                                            Blade komponenty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../actions/">
+                                            Akce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/modals/">
+                                            Modaly akcí                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/lifecycle/">
+                                            Životní cyklus a fronty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/appearance/">
+                                            Tlačítka a vzhled                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/standalone/">
+                                            Akce mimo tabulku                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/workflow/">
+                                            Workflow a přechody                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../modals/">
+                                Modaly                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../notifications/">
+                                            Notifikace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/toasts/">
+                                            Toasty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/persistent/">
+                                            Perzistentní notifikace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/usage/">
+                                            Odkud je posílat                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/custom-drivers/">
+                                            Vlastní drivery                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group is-open" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="true">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="is-active" href="./">
+                                            Widgety                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="stats/">
+                                            Statistiky                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="charts/">
+                                            Grafy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="custom/">
+                                            Tabulky a vlastní pohledy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="dashboards/">
+                                            Dashboardy                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../infolists/">
+                                            Infolisty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../infolists/actions/">
+                                            Akce v infolistu                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../record-panels/">
+                                Editovatelné panely                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../global-search/">
+                                Globální hledání                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../plugins/">
+                                            Pluginy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/registration/">
+                                            Registrace pluginů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/hooks/">
+                                            Hooky                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/extending/">
+                                            Rozšiřování povrchů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/examples/">
+                                            Příklady a testování                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../panels/overview/">
+                                Panely                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/pages/">
+                                Stránky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/navigation/">
+                                Navigace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/routing/">
+                                Routování                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/modules/">
+                                Moduly                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../admin/overview/">
+                                Admin shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/layout/">
+                                Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/sidebar/">
+                                Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/branding/">
+                                Branding a motiv                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../modules/">
+                                Hotové moduly                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/users/">
+                                Modul uživatelů                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/teams-and-two-factor/">
+                                Týmy a dvoufázové ověření                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/auth/">
+                                Modul přihlášení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/settings/">
+                                Modul Nastavení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/notifications/">
+                                Modul notifikací                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/audit/">
+                                Modul auditu                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/media/">
+                                Modul médií                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../sortable/overview/">
+                                Úvod                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/installation/">
+                                Instalace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/row-sorting/">
+                                Řazení řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/column-sorting/">
+                                Řazení sloupců                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/customization/">
+                                Přizpůsobení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/advanced/">
+                                Pokročilé použití                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/api-reference/">
+                                Reference API                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../boost/overview/">
+                                Úvod                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/installation/">
+                                Instalace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/mcp-tools/">
+                                MCP Server a nástroje                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/guidelines-and-skills/">
+                                Guidelines a Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero has-preview">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Core</span>
+                            </nav>
+                            <p class="eyebrow">Core</p>
+                            <h1>Widgety</h1>
+                                                            <p class="lead">Co mají všechny widgety společné — základní třídu, polling, autorizaci a kompletní API — a po kterém typu sáhnout.</p>
+                            
+                                                            <figure class="hero-preview">
+                                    <img src="../../assets/previews/widgets-overview.png" alt="Widgety preview" loading="lazy">
+                                </figure>
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#typy-widgetu-prehledne">Typy widgetů přehledně</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#widget-base">Widget Base</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#polling">Polling</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#pouziti">Použití</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#polling-api">Polling API</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#tik-obnovi-widget-ne-cely-dashboard">Tik obnoví widget, ne celý dashboard</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#filtry">Filtry</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#jak-round-trip-funguje">Jak round trip funguje</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#odlozene-vykresleni">Odložené vykreslení</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#vlastni-widget">Vlastní widget</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#akce-v-hlavicce">Akce v hlavičce</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#co-widgetova-akce-je-a-co-neni">Co widgetová akce je a co není</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#jak-se-vubec-dostane-k-action">Jak se vůbec dostane k Action</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#prizpusobitelne-dashboardy">Přizpůsobitelné dashboardy</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#co-se-uklada">Co se ukládá</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#pravidla-ktera-stoji-za-to-znat">Pravidla, která stojí za to znát</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#aby-vyska-neco-znamenala-musi-byt-radek">Aby výška něco znamenala, musí být řádek</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#jak-se-presklada">Jak se přeskládá</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#api-rezimu-uprav">API režimu úprav</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#zasobnik">Zásobník</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#api-zasobniku">API zásobníku</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#hotove-ovladani">Hotové ovládání</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#co-je-potreba-aby-to-cele-fungovalo">Co je potřeba, aby to celé fungovalo</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#autorizace">Autorizace</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#reference-widget-api">Reference Widget API</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#widget-zakladni-trida">Widget (základní třída)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#blade-komponenty">Blade komponenty</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#v-teto-sekci">V této sekci</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#souvisejici">Související</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Widget je jeden panel dashboardu: číslo, graf, malá tabulka nebo vlastní pohled.
+Jsou to obyčejné PHP objekty vykreslující se do HTML, které hostitelská komponenta
+skládá do responzivní mřížky — takže widget nic neví o stránce, na které je, a
+stránka nic neví o tom, co widget kreslí.</p>
+<p>Každý widget sdílí stejný fluent builder, takže nadpis, viditelnost, autorizace, column span, polling, filtry a odklad fungují identicky napříč všemi typy.</p>
+<h2 id="typy-widgetu-prehledne">Typy widgetů přehledně</h2>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Třída</th>
+<th>Nejlepší pro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stats overview</strong></td>
+<td><code>StatsOverviewWidget</code></td>
+<td>KPI, počítadla a souhrnné metriky s volitelnými sparkliny</td>
+</tr>
+<tr>
+<td><strong>Chart</strong></td>
+<td><code>ChartWidget</code></td>
+<td>Line, bar, pie a doughnut charty poháněné Chart.js</td>
+</tr>
+<tr>
+<td><strong>Chart presety</strong></td>
+<td><code>LineChartWidget</code> / <code>PieChartWidget</code> / <code>DoughnutChartWidget</code></td>
+<td>Deklarativní <code>ChartWidget</code> presety (pie/doughnut ukazují legendu ve výchozím stavu)</td>
+</tr>
+<tr>
+<td><strong>Bar chart</strong></td>
+<td><code>BarChartWidget</code></td>
+<td>Čistě CSS vertikální/horizontální sloupce (finance, systém) — bez JavaScriptu</td>
+</tr>
+<tr>
+<td><strong>Progress</strong></td>
+<td><code>ProgressWidget</code></td>
+<td>Čistě CSS řádky výplně proti dráze — jak daleko je číslo ke svému cíli</td>
+</tr>
+<tr>
+<td><strong>List</strong></td>
+<td><code>ListWidget</code></td>
+<td>Čistě CSS feed posledních záznamů nebo událostí, každý volitelně odkaz</td>
+</tr>
+<tr>
+<td><strong>Table</strong></td>
+<td><code>TableWidget</code> (ve <code>wire-table</code>)</td>
+<td>Pár řádků tabulky uvnitř dashboardové karty — bez toolbaru a stránkování</td>
+</tr>
+<tr>
+<td><strong>Custom</strong></td>
+<td><code>CustomWidget</code></td>
+<td>Jakýkoli Blade pohled vykreslený jako widget</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Míchejte typy widgetů volně uvnitř jednoho <code>WithWidgets</code> dashboardu — každý widget řídí svůj vlastní column span, viditelnost a interval obnovení. Viz <a href="dashboards/#dashboard-layout-withwidgets">Dashboard layout</a>.</p>
+</blockquote>
+<h2 id="widget-base">Widget Base</h2>
+<p>Všechny widgety rozšiřují <code>NyonCode\WireCore\Widgets\Widget</code> — abstraktní třídu implementující <code>Htmlable</code>.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Widgets\Widget</span><span style="color: #E1E4E8;">;</span></div></code></pre>
+<p>Každý widget podporuje:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $heading)          </span><span style="color: #6A737D;">// titulek widgetu</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description)  </span><span style="color: #6A737D;">// podtitulek</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnSpan</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">int|string</span><span style="color: #E1E4E8;"> $span)       </span><span style="color: #6A737D;">// column span gridu (1-12, &#39;full&#39;)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">extraAttributes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $attrs)      </span><span style="color: #6A737D;">// vlastní HTML atributy</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hidden</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $hidden)       </span><span style="color: #6A737D;">// řízení viditelnosti</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $visible)     </span><span style="color: #6A737D;">// řízení viditelnosti</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $permission)     </span><span style="color: #6A737D;">// autorizace přes Gate</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorize</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $ability)         </span><span style="color: #6A737D;">// autorizace přes Gate ability</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorizeUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $callback)  </span><span style="color: #6A737D;">// vlastní autorizační callback</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $options, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $default </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)  </span><span style="color: #6A737D;">// select, který řeší server</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lazy</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $condition </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)       </span><span style="color: #6A737D;">// odložit první render</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">headerActions</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $actions)      </span><span style="color: #6A737D;">// tlačítka v hlavičce widgetu</span></div></code></pre>
+<p>Widgety se vykreslují přes Blade pohledy a podporují <code>toHtml()</code> / <code>__toString()</code> pro přímý výstup.</p>
+<hr>
+<h2 id="polling">Polling</h2>
+<p>Všechny widgety podporují automatické obnovení přes Livewire polling.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Widgets\Concerns\HasPolling</span><span style="color: #E1E4E8;">;</span></div></code></pre>
+<h3 id="pouziti">Použití</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;30s&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">ChartWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;60s&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingOnlyVisible</span><span style="color: #E1E4E8;">()            </span><span style="color: #6A737D;">// pozastavit polling, když je widget mimo obrazovku</span></div></code></pre>
+<h3 id="polling-api">Polling API</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $interval)       </span><span style="color: #6A737D;">// &#39;5s&#39;, &#39;10s&#39;, &#39;30s&#39;, &#39;60s&#39;, atd.</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getPollingInterval</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isPolling</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingOnlyVisible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $only </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)    </span><span style="color: #6A737D;">// pollovat jen když viditelné ve viewportu</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isPollingOnlyVisible</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getPollingDirective</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;">           </span><span style="color: #6A737D;">// vrací řetězec wire:poll direktivy</span></div></code></pre>
+<blockquote>
+<p><strong>Polling je ve výchozím stavu vědomý si viditelnosti.</strong> <code>pollingOnlyVisible</code> je výchozí <code>true</code>, takže widgety používají <code>wire:poll.visible</code> a pozastavují requesty, když jsou vyscrollovány mimo dohled. Zavolejte <code>-&gt;pollingOnlyVisible(false)</code> pro udržení obnovování mimo obrazovku.</p>
+</blockquote>
+<p><a id="a-tick-refreshes-the-widget-not-the-dashboard"></a></p>
+<h3 id="tik-obnovi-widget-ne-cely-dashboard">Tik obnoví widget, ne celý dashboard</h3>
+<p>Holé <code>wire:poll</code> je <code>$refresh</code> — Livewire vykreslí celou komponentu. Na dashboardu
+to znamená, že jeden pollující widget překreslí každý další widget vedle sebe
+i případnou tabulku na stránce: naměřeno na mřížce dvanácti widgetů <strong>6,5 ms
+a 57 219 B</strong>, aby se doručilo 3 940 B jednoho widgetu.</p>
+<p>Tik proto widget pojmenuje. Každý widget nese klíč a mřížka ten pollující ukotví:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:poll.30s.visible</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;refreshWidget(&#39;w1&#39;)&quot;</span><span style="color: #E1E4E8;">&gt;   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:partial</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;widget-w1&quot;</span><span style="color: #E1E4E8;">&gt; … &lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;         </span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p><code>WithWidgets::refreshWidget()</code> vykreslí jen ten widget a odpověď nese pouze jeho
+markup. Není co nastavovat — takhle se pollující widget prostě chová.</p>
+<p>Klíče se odvozují z pozice widgetu v <code>getWidgets()</code>, takže skrytí jednoho
+widgetu ostatní nepřečísluje. Tam, kde se pořadí deklarace bude nejspíš měnit,
+si klíč pojmenujte sami:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">)               </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;30s&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div></code></pre>
+<p>Pokud klíč při dalším requestu nic nepojmenuje — widget byl skryt, přestal
+pollovat nebo zmizel — tik se vrátí k plnému renderu, místo aby odpověděl půlkou
+stránky.</p>
+<blockquote>
+<p><strong>Mřížka dodá bundle z wire-core, když nějaký widget polluje.</strong> Kotva je jen
+atribut; kód, který oblast aplikuje, je v <code>wire-core-dropdown.js</code>. Dashboard bez
+rozbalovací nabídky, modalu nebo tabulky nemá jiný důvod ho načíst, takže si o něj mřížka
+řekne — jinak by odpověď dorazila a na stránce by se nezměnilo nic.</p>
+</blockquote>
+<hr>
+<p><a id="filters"></a></p>
+<h2 id="filtry">Filtry</h2>
+<p>Widget může nést select, který zúží, co ukazuje — a výběr se řeší <strong>na serveru</strong>,
+což je jediné místo, kde to jde, protože closure, která z klíče filtru dělá data,
+je PHP.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">ListWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Recent orders&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filter</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;week&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;This week&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;month&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;This month&#39;</span><span style="color: #E1E4E8;">], </span><span style="color: #9ECBFF;">&#39;week&#39;</span><span style="color: #E1E4E8;">)   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">items</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $filter) =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">orders</span><span style="color: #E1E4E8;">($filter))              </span></div></code></pre>
+<p><code>filter()</code> je na základní třídě widgetu, takže ho má každý typ: datasety grafu,
+položky seznamu i řádky progress nástěnky berou stejný tvar closure.</p>
+<h3 id="jak-round-trip-funguje">Jak round trip funguje</h3>
+<p>Select zavolá <code>filterWidget()</code> na hostitelské komponentě. Hostitel si volbu
+zapíše proti klíči widgetu, před renderem ji do widgetu vrátí a odpoví <strong>jen
+markupem toho jednoho widgetu</strong> — stejnou <code>wire:partial</code> oblastí, jakou používá
+tik pollingu:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">select</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:change</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;filterWidget(&#39;w0&#39;, $event.target.value)&quot;</span><span style="color: #E1E4E8;">&gt;   </span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">value</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;week&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">selected</span><span style="color: #E1E4E8;">&gt;This week&lt;/</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">value</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;month&quot;</span><span style="color: #E1E4E8;">&gt;This month&lt;/</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">select</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Tři důsledky, které stojí za to znát:</p>
+<ul>
+<li><strong>Výběr přežije.</strong> Žije na hostiteli (<code>$widgetFilters</code>), ne na widgetu — widget
+se z deklarace staví znovu při každém requestu a nemůže si pamatovat nic.</li>
+<li><strong>Widget odpovídá jen za volby, které vyjmenoval.</strong> Klíč i hodnota cestují v
+requestu, takže hodnota, kterou widget nikdy nenabídl, se ignoruje, místo aby
+skončila ve vašem <code>match</code>.</li>
+<li><strong>Widget bez filtru spadne zpět na plný render</strong>, jako každé volání, které
+nezařadilo žádnou oblast.</li>
+</ul>
+<blockquote>
+<p><strong>Dřív to nedělalo nic.</strong> Před 2.0 žil filtr jen na <code>ChartWidget</code> a řešil se v
+prohlížeči: Alpine <code>updateChart()</code> přiřadil <code>this.labels</code> a <code>this.datasets</code>
+zpátky na graf, se kterým byl sestaven, takže změna výběru překreslila
+identický graf a closure na datasety nikdy neběžela s ničím jiným než se svou
+výchozí hodnotou.</p>
+</blockquote>
+<hr>
+<p><a id="deferred-rendering"></a></p>
+<h2 id="odlozene-vykresleni">Odložené vykreslení</h2>
+<p>Widget, jehož číslo stojí dotaz, na který nemá zbytek stránky čekat, může nejdřív
+nakreslit placeholder a načíst se až potom:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Lifetime revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lazy</span><span style="color: #E1E4E8;">()                       </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lifetimeRevenue</span><span style="color: #E1E4E8;">())])</span></div></code></pre>
+<p>Mřížka vykreslí skeleton kartu o velikosti widgetu, <code>wire:init</code> zavolá na
+hostiteli <code>loadWidget()</code> a odpověď nese markup toho jednoho widgetu jako
+<code>wire:partial</code> oblast. Stránka je interaktivní dřív, než se číslo vrátí.</p>
+<p><strong>Jednou načteno, načteno.</strong> Hostitel si zapíše, které widgety už byly staženy,
+takže pozdější tik pollingu, změna filtru nebo plný render nakreslí skutečný
+widget, místo aby spadly zpátky na skeleton.</p>
+<p><strong>Placeholder je karta, ne spinner</strong> — mřížka už se rozhodla pro rozložení a
+placeholder nižší než jeho widget způsobí, že stránka poskočí, až ten skutečný
+dorazí. Nadpis se kreslí doopravdy, protože ho server už zná, a skeletonové
+pruhy nesou <code>aria-busy</code> s živou oblastí oznamující čekání.</p>
+<blockquote>
+<p><strong>Sahejte po tom jako po posledním.</strong> Pravidlo frameworku je udělat render
+<em>levným</em>, ne ho odložit: eager HTML zachová celý DOM, nepřidá žádnou latenci
+při otevření a nepotřebuje překreslení na klientovi. <code>lazy()</code> je pro widget,
+který je <strong>pomalý</strong>, ne pro ten, který je jen velký.</p>
+</blockquote>
+<hr>
+<p><a id="writing-your-own-widget"></a></p>
+<h2 id="vlastni-widget">Vlastní widget</h2>
+<p>Dva soubory — třída, která řeší stav, a Blade pohled, který ho kreslí — a
+generátor napíše oba:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">make:wire-widget</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">Revenue</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">app/Widgets/RevenueWidget.php</span></div><div class='line'><span style="color: #e1e4e8;">resources/views/widgets/revenue.blade.php</span></div></code></pre>
+<p>Třída rozšiřuje <code>Widget</code>, pojmenuje pohled ve <code>viewName()</code> a předá mu data z
+<code>getViewData()</code>; <code>$widget</code> je uvnitř pohledu vždy v rozsahu. Všechno z této
+stránky — polling, filtry, odklad, column span, autorizace — na něm funguje bez
+jediného dalšího řádku.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Widgets</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Models\Invoice</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Widgets\Widget</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">RevenueWidget</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Widget</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">      </span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;widgets.revenue&#39;</span><span style="color: #E1E4E8;">;              </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getViewData</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">    </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #9ECBFF;">&#39;value&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Invoice</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">whereMonth</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;paid_at&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">now</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">month)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sum</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;total&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        ];</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }                                          </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Existující pohled se nikdy nepřepíše — opětovné spuštění generátoru bývá o tom
+dostat zpátky třídu, a nahradit markup, který někdo napsal, není obchod, který
+si generátor smí dovolit. Třídu přepíšete přepínačem <code>--force</code>.</p>
+<p>Obě šablony jsou publikovatelné, takže aplikace může změnit, co generátor
+vyrábí:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-core::stubs</span></div></code></pre>
+<p>Skončí v <code>stubs/wire-core/</code>, jmenně oddělené podle balíčku, aby si dva balíčky se
+<code>stubs/dashboard.stub</code> nepřepsaly navzájem — a generátor je čte odtamtud.
+(<code>stubs/</code> se zkouší jako druhé, kvůli souboru položenému tam ručně.)</p>
+<p>Pro widget, který je jen Blade pohled bez vlastního stavu, sáhněte raději po
+<a href="custom/"><code>CustomWidget</code></a> — tam není co psát.</p>
+<hr>
+<p><a id="header-actions"></a></p>
+<h2 id="akce-v-hlavicce">Akce v hlavičce</h2>
+<p>Widget může nést tlačítka ve své hlavičce — obnovit číslo, exportovat řádky,
+označit frontu jako přečtenou:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\Action</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Open tickets&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">headerActions</span><span style="color: #E1E4E8;">([                                              </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;refresh&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Refresh&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;outline:arrow-path&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recount</span><span style="color: #E1E4E8;">()),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;report&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Full report&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;tickets.report&#39;</span><span style="color: #E1E4E8;">)),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ])                                                             </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Waiting&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">waiting</span><span style="color: #E1E4E8;">())])</span></div></code></pre>
+<p><code>headerActions()</code> je stejný slovník, jaký používá hlavička schema sekce a
+infolist entry — jeden vlastník, <code>Foundation\Concerns\HasActions</code> — takže akce
+napsaná pro jednu z těch ploch tu funguje beze změny. Kreslí je každý typ
+widgetu, každý ve své hlavičce.</p>
+<h3 id="co-widgetova-akce-je-a-co-neni">Co widgetová akce je a co není</h3>
+<p>Spustí svůj <strong>callback</strong> na serveru a widget se pak překreslí — ta jedna oblast,
+jako u tiku pollingu. Není to <em>životní cyklus</em> akce:</p>
+<table>
+<thead>
+<tr>
+<th>Funguje</th>
+<th>Nefunguje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-&gt;action(fn () =&gt; …)</code></td>
+<td><code>-&gt;requiresConfirmation()</code></td>
+</tr>
+<tr>
+<td><code>-&gt;url(…)</code>, <code>-&gt;openUrlInNewTab()</code></td>
+<td><code>-&gt;form([...])</code>, <code>-&gt;slideOver()</code>, <code>-&gt;modal()</code></td>
+</tr>
+<tr>
+<td><code>-&gt;label()</code>, <code>-&gt;icon()</code>, <code>-&gt;color()</code>, <code>-&gt;tooltip()</code></td>
+<td><code>-&gt;wizard()</code></td>
+</tr>
+<tr>
+<td><code>-&gt;hidden()</code> / <code>-&gt;visible()</code></td>
+<td>mountování a cokoli, co se vrací do namountované akce</td>
+</tr>
+</tbody>
+</table>
+<p>Akce, která svůj vlastní widget <em>odstraní</em> — tlačítko „Dismiss“, jehož callback
+překlopí to, co čte <code>visible()</code> widgetu — se zodpoví plným renderem. Partial umí
+element nahradit, ne smazat.</p>
+<p>Je to stejný obchod, jaký uzavírají akce infolist entry, a ze stejného důvodu:
+widget se z deklarace staví znovu při každém requestu, takže tlačítko nese
+<em>jméno</em>, ne closure, a není do čeho se vracet. Akce, která se musí nejdřív
+zeptat, patří na stránku — hostitel skládající <code>WithActions</code> vlastní modal host —
+nebo dovnitř <a href="custom/"><code>CustomWidget</code></a>, jehož pohled vykreslí
+<code>&lt;x-wire-actions::button&gt;</code>.</p>
+<h3 id="jak-se-vubec-dostane-k-action">Jak se vůbec dostane k Action</h3>
+<p>Stojí za jeden odstavec, protože je to vrstvové pravidlo frameworku v malém.
+<code>Widgets</code> a <code>Actions</code> jsou sourozenecké moduly a ani jeden nesmí importovat ten
+druhý, takže nic v hostiteli widgetů neví, co je <code>Action</code>: widget najde akci
+podle jména a odpoví kontraktem <code>Foundation\Contracts\ActionContract</code>, a
+<code>Foundation\Contracts\RunsComponentActions</code> — registrovaný v kontejneru,
+implementovaný na straně Actions — je to, co callback spustí. Widget v balíčku,
+který modul Actions nevyžaduje, se pořád zkompiluje; jeho tlačítka jen nemají co
+spouštět.</p>
+<hr>
+<p><a id="customisable-dashboards"></a></p>
+<h2 id="prizpusobitelne-dashboardy">Přizpůsobitelné dashboardy</h2>
+<p>Dashboard může nechat každého uživatele rozhodnout, které widgety na něm jsou, v
+jakém pořadí a jak velké. <strong>Ve výchozím stavu je to vypnuté</strong> a dashboard, který
+nic neřekne, se chová přesně jako dnes — žádné úložiště se nečte a layoutem je
+deklarace.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">SalesDashboard</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Dashboard</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">customisable</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;">   </span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">;                       </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">widgets</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">];</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Layout se ukládá podle <code>(klíč dashboardu, uživatel)</code> přes totéž
+<a href="../../table/advanced/#prepinani-sloupcu">úložiště preferencí</a>, jaké používá
+rozložení sloupců tabulky — konfiguruje se ale zvlášť, pod <code>wire-core.preferences</code>,
+protože jestli layout dashboardu stojí za řádek v databázi je vlastní otázka. Bez
+nakonfigurovaného driveru dashboard dál funguje, jen si nic nepamatuje.</p>
+<h3 id="co-se-uklada">Co se ukládá</h3>
+<p>Seřazený seznam toho, co je <em>umístěné</em>, každá položka se šířkou a výškou:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">[</span><span style="color: #9ECBFF;">&#39;widgets&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    [</span><span style="color: #9ECBFF;">&#39;key&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;w&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;h&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">],</span></div><div class='line'><span style="color: #E1E4E8;">    [</span><span style="color: #9ECBFF;">&#39;key&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;orders&#39;</span><span style="color: #E1E4E8;">,  </span><span style="color: #9ECBFF;">&#39;w&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;h&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">],</span></div><div class='line'><span style="color: #E1E4E8;">]]</span></div></code></pre>
+<p>Pozice plyne z pořadí a velikost ze dvou čísel; výsledek poskládá CSS Grid.
+Žádné souřadnice, takže není co kolidovat ani jakou díru přeskládávat — a taky
+není jak widget přibít na konkrétní buňku. <code>w</code> je rozpon sloupců (1–4), <code>h</code>
+rozpon řádků (1–6).</p>
+<h3 id="pravidla-ktera-stoji-za-to-znat">Pravidla, která stojí za to znát</h3>
+<ul>
+<li><strong>Seznam je to, co je umístěné.</strong> Deklarovaný widget, jehož klíč v něm není,
+na dashboardu není — je k dispozici k vrácení. Jedno pravidlo dělá dvě práce
+místo příznaku <code>hidden</code> vedle pořadí, který by s ním mohl nesouhlasit.</li>
+<li><strong>Prázdný seznam není totéž co žádný layout.</strong> Nic uloženého znamená, že
+rozhoduje deklarace — to musí vidět uživatel, který se dashboardu nikdy
+nedotkl. Uložený prázdný seznam znamená, že někdo všechno sundal, a má na
+prázdný dashboard nárok.</li>
+<li><strong>Layout je preference, nikdy oprávnění.</strong> Widget, který layout umístí a
+<code>visible()</code> nebo <code>permission()</code> skryje, zůstane skrytý.</li>
+<li><strong>Klíč, který deklarace už nemá, se zahodí.</strong> Layout nedokáže vykouzlit zpátky
+widget, který vlastník dashboardu přejmenoval nebo odebral.</li>
+<li><strong>Bag přichází z requestu</strong>, takže velikost mimo mřížku se ořízne a klíč
+uvedený dvakrát se umístí jednou, na své první pozici.</li>
+</ul>
+<h3 id="aby-vyska-neco-znamenala-musi-byt-radek">Aby výška něco znamenala, musí být řádek</h3>
+<p>Dlaždice s <code>row-span-2</code> potřebuje řádky známé výšky, takže mřížka, která takovou
+dlaždici má, dostane výchozí výšku řádku a dlaždice si scrollují vlastní obsah
+místo aby řádek natahovaly. Mřížka, kde nic řádky nepřesahuje, tu výchozí výšku
+nikdy nedostane — karta je tam pořád vysoká podle obsahu, přesně jako dřív.</p>
+<h3 id="jak-se-presklada">Jak se přeskládá</h3>
+<p>Úpravy jsou <strong>režim</strong>, ne trvalá sada úchytů. <code>Upravit</code> odhalí úchyty a
+stepper­y velikosti; <code>Uložit</code> uspořádání zachová, <code>Zrušit</code> ho zahodí, <code>Zpět na výchozí</code> layout úplně zapomene a vrátí to, co dashboard deklaruje.</p>
+<p>Metody dává hostitelský trait; chrome kolem mřížky je vaše, protože patří
+tomu, kdo dashboard vykresluje, ne mřížce:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($editingWidgets)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;saveWidgetLayout&quot;</span><span style="color: #E1E4E8;">&gt;Save layout&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;       </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;cancelEditingWidgets&quot;</span><span style="color: #E1E4E8;">&gt;Cancel&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;        </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;resetWidgetLayout&quot;</span><span style="color: #E1E4E8;">&gt;Reset to default&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt; </span></div><div class='line'><span style="color: #F97583;">@else</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;startEditingWidgets&quot;</span><span style="color: #E1E4E8;">&gt;Customise&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;      </span></div><div class='line'><span style="color: #F97583;">@endif</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.widget-grid&#39;</span><span style="color: #E1E4E8;">, [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;widgets&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getVisibleWidgets</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;columns&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;editing&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $editingWidgets,</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<p><strong>Dokud nedáte Uložit, nic se nezapíše.</strong> Uspořádání žije po dobu režimu v draftu
+na komponentě — a právě to dává <code>Zrušit</code> co zahodit. Živý drag by zapisoval při
+každém puštění, takže náhodné chycení by přepsalo layout, se kterým byl někdo
+spokojený, a nešlo by to vzít zpět.</p>
+<p><strong>Drag nestojí žádný JavaScript.</strong> Je to <code>x-sort</code>, vlastní Alpine plugin
+Livewiru, který si s sebou nese SortableJS i ducha při tažení. Dlaždici umísťuje
+server: puštění nahlásí „tenhle klíč, tahle pozice“, draft se přeskládá a mřížka
+se překreslí. Buňky nesou <code>wire:key</code>, takže je morph páruje podle klíče, ne
+podle pozice, a puštěné DOM se s odpovědí nemůže rozejít.</p>
+<p><strong>Změna velikosti jsou steppery, ne tažení za roh.</strong> Rozpon je 1–4 sloupce a 1–6
+řádků, takže dosažitelných velikostí je jedenáct a tlačítko říká, kterou dostanete.</p>
+<h3 id="api-rezimu-uprav">API režimu úprav</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">startEditingWidgets</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">      </span><span style="color: #6A737D;">// otevřít režim, z aktuálního uspořádání</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">saveWidgetLayout</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">         </span><span style="color: #6A737D;">// zachovat ho</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cancelEditingWidgets</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">     </span><span style="color: #6A737D;">// zahodit draft</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">resetWidgetLayout</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// zapomenout layout; zpět na deklaraci</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">moveWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $position): </span><span style="color: #79B8FF;">void</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">resizeWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $width, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $height): </span><span style="color: #79B8FF;">void</span></div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $editingWidgets</span></div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $widgetLayoutDraft</span></div></code></pre>
+<p>Na dashboardu, který se nepřihlásil, všechny nedělají nic — jsou to veřejné
+Livewire metody, takže je prohlížeč může zavolat, kdy se mu zachce.</p>
+<h3 id="zasobnik">Zásobník</h3>
+<p>Widgety, které si uživatel může dát na dashboard, ale nemá je tam. Objeví se s
+režimem úprav a je s mřížkou <strong>jeden drag</strong> — vytažená dlaždice se vrátí do
+zásobníku, vtažená přistane na dashboardu. Tlačítka dělají totéž pro toho, kdo
+ukazovací zařízení nepoužívá.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Money&#39;</span><span style="color: #E1E4E8;">)            </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">([[</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">], [</span><span style="color: #79B8FF;">4</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">]])   </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Total&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">revenue</span><span style="color: #E1E4E8;">())])</span></div></code></pre>
+<p><strong><code>group()</code> je nadpis v zásobníku a nic víc.</strong> Na dashboardu samotném nic
+neseskupuje — tam rozhoduje uživatelovo pořadí. Widgety bez skupiny jdou první,
+v jednom prostém běhu: jedna skupina je nadpis nad vším, což je nadpis, který nic
+neříká.</p>
+<p><strong><code>sizes()</code> zúží velikosti, ve kterých se widget nabízí</strong>, jako dvojice
+<code>[šířka, výška]</code>. Řádek se sparklinou není dlaždice 1×1 a jediné číslo není 4×6 —
+a nechat to uživatele zjistit tažením je horší než mu to nenabídnout. První
+dvojice je velikost, se kterou widget přistane. Bez deklarace zůstává celá
+mřížka: 1–4 sloupce a 1–6 řádků.</p>
+<p>Dvojice jsou <em>nabídka</em>, ne slib o úložišti: layout, který dorazí s velikostí
+mimo ně, se pořád jen ořízne na mřížku, protože uložený layout může přežít
+deklaraci, která ho utvářela.</p>
+<p><strong>„Odebraný“ a „dostupný“ je týž stav.</strong> Nikde se nezaznamenává, že byl widget
+sundán — prostě už není v layoutu, a to ho vrací do zásobníku. Jedno pravidlo
+dělá dvě práce, takže si nemohou odporovat.</p>
+<p>Widget, který skrývá politika, se nikdy nenabídne: zásobník s něčím, co po
+přidání zmizí, je horší než zásobník, který to nenabízí.</p>
+<h3 id="api-zasobniku">API zásobníku</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $group)                    </span><span style="color: #6A737D;">// nadpis v zásobníku, pod kterým se widget nabízí</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $sizes)                      </span><span style="color: #6A737D;">// [[w, h], …] — velikosti, které smí mít</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getGroup</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getSizes</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDefaultSize</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">                  </span><span style="color: #6A737D;">// první nabídnutá dvojice, nebo [1, 1]</span></div></code></pre>
+<p>na hostiteli:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">placeWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $position): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;">// přidat, nebo přesunout, když už tam je</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">removeWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key): </span><span style="color: #79B8FF;">void</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getAvailableWidgets</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">                    </span><span style="color: #6A737D;">// skupina =&gt; widgety, pro zásobník</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">widgetGridData</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?int</span><span style="color: #E1E4E8;"> $columns </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">     </span><span style="color: #6A737D;">// všechno, co view mřížky potřebuje</span></div></code></pre>
+<p><code>widgetGridData()</code> je jedno volání místo pěti klíčů k poskládání, protože čtyři z
+nich se spolu musí shodnout: mřížka bez <code>available</code> nakreslí prázdný zásobník a
+mřížka bez <code>trayGroup</code> dá zásobník a mřížku do různých drag skupin, takže mezi
+nimi dlaždice nepřejde. Ani jedno není nikde chyba.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">render</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.widget-grid&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">widgetGridData</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">));</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h3 id="hotove-ovladani">Hotové ovládání</h3>
+<p>Metody si můžete volat, odkud chcete — ale běžný případ je hotový:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.partials.widget-layout-controls&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.widget-grid&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Obojí na dashboardu, který nikdo přeskládat nesmí, nevykreslí nic, takže je
+bezpečné je includovat bez podmínky a není co držet v souladu. <code>DashboardPage</code> ve
+wire-panels už oboje includuje, takže deklarovaný dashboard s <code>customisable()</code> je
+přeskládatelný bez jediného vlastního view.</p>
+<p>Samostatný balíček na to není. Úložiště je wire-core, stránka wire-panels a
+widgety patří aplikaci — modul by nevlastnil nic, a „volitelné“ už znamená
+<code>customisable()</code> a konfigurace driveru.</p>
+<h3 id="co-je-potreba-aby-to-cele-fungovalo">Co je potřeba, aby to celé fungovalo</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-core.php — nebo to nech být a layouty budou žít jen po dobu stránky</span></div><div class='line'><span style="color: #9ECBFF;">&#39;preferences&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;default&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;database&#39;</span><span style="color: #E1E4E8;">],</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=</span><span style="color: #9ECBFF;">&quot;wire-core::migrations&quot;</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;"># pro database driver</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">migrate</span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">SalesDashboard</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Dashboard</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">customisable</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> { </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">; }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">widgets</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">)  </span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Money&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">([[</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">], [</span><span style="color: #79B8FF;">4</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">]])                    </span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Total&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">revenue</span><span style="color: #E1E4E8;">())]),</span></div><div class='line'><span style="color: #E1E4E8;">        ];</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Každý widget na přizpůsobitelném dashboardu potřebuje vlastní <code>key()</code>. Bez něj se
+klíč odvodí z <em>pozice</em> widgetu, a uložený layout adresuje widgety podle klíče —
+takže vložení widgetu navrch deklarace by způsobilo, že každý uložený layout
+popisuje jiné widgety než včera, a stránka se přitom vykreslí. Přizpůsobitelný
+dashboard to raději odmítne.</p>
+<hr>
+<p><a id="dashboard-layout-withwidgets"></a></p>
+<h2 id="autorizace">Autorizace</h2>
+<p>Widgety dědí autorizaci z <code>HasVisibility</code>, který používá trait <code>HasAuthorization</code>. Detaily viz <a href="#autorizace">Autorizace</a>.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view-dashboard-stats&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">ChartWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorize</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view-revenue-chart&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">CustomWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorizeUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($user) =&gt; $user</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasRole</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;manager&#39;</span><span style="color: #E1E4E8;">))</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;dashboard.manager-panel&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Neautorizované widgety jsou automaticky vyloučeny z <code>getVisibleWidgets()</code>.</p>
+<hr>
+<p><a id="widget-api-reference"></a></p>
+<h2 id="reference-widget-api">Reference Widget API</h2>
+<h3 id="widget-zakladni-trida">Widget (základní třída)</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Widget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">                              </span><span style="color: #6A737D;">// statická factory</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $heading)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getHeading</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDescription</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getKey</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">usesPartialAnchor</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;">                         </span><span style="color: #6A737D;">// true, když ho cílí tik, načtení nebo filtr</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">render</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">View</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toHtml</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">string</span></div></code></pre>
+<p>Zděděné z traitů:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnSpan</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">int|string</span><span style="color: #E1E4E8;"> $span): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// HasColumnSpan</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getColumnSpan</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">int|string</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rowSpan</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?int</span><span style="color: #E1E4E8;"> $span)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">           </span><span style="color: #6A737D;">// HasRowSpan — 1–6, null je jeden řádek podle obsahu</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getRowSpan</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?int</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">spansRows</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $group)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">             </span><span style="color: #6A737D;">// nadpis v zásobníku, pod kterým se nabízí</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $sizes): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">               </span><span style="color: #6A737D;">// [[w, h], …] — velikosti, které smí mít</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getGroup</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getSizes</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDefaultSize</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">extraAttributes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $attrs): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">      </span><span style="color: #6A737D;">// HasExtraAttributes</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getExtraAttributes</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $interval)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;"> </span><span style="color: #6A737D;">// HasPolling</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingOnlyVisible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $only </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">): </span><span style="color: #F97583;">static</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lazy</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $condition </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// CanBeLazy</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isLazy</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $options, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $default </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;">// HasWidgetFilter</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeFilter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $filter)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">applyFilter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $filter)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// ignoruje klíč, který widget nenabízí</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getFilterOptions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActiveFilter</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasFilter</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">items</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $items): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// HasWidgetItems — fn (?string $filter): array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">emptyState</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $message)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getItems</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasItems</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getEmptyState</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">string</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">headerActions</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $actions): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">      </span><span style="color: #6A737D;">// HasActions — array&lt;ActionContract&gt;</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">actions</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $actions): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">            </span><span style="color: #6A737D;">// tentýž seznam pod kanonickým jménem</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ActionContract</span><span style="color: #E1E4E8;"> $action): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">     </span><span style="color: #6A737D;">// přidat jednu</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">                        </span><span style="color: #6A737D;">// viditelné, v pořadí deklarace</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasActions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getFieldAction</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $name): </span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">ActionContract</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getRenderableActions</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">          </span><span style="color: #6A737D;">// ty, které mají kam odeslat — stačí klíč</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasRenderableActions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActionExpression</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ActionContract</span><span style="color: #E1E4E8;"> $action): </span><span style="color: #F97583;">?string</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hidden</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $hidden)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// HasVisibility + HasAuthorization</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $visible): </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $permission)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorize</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $ability)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorizeUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $callback)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isVisible</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isAuthorized</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div></code></pre>
+<h2 id="blade-komponenty">Blade komponenty</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">x-wire::widget-grid</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:widgets</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;$widgets&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:columns</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;2&quot;</span><span style="color: #E1E4E8;"> /&gt;</span></div></code></pre>
+<p>Pohledy, které jednotlivé widgety vykreslují, publikovatelné přes
+<code>vendor:publish --tag=wire-core::views</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.stats-overview</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.chart</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart.vertical-finance</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart.vertical-system</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart.horizontal-system</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.progress</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.list</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.custom</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.widget-grid</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.widget-cell</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-header</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-filter</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-actions</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-placeholder</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.list-item</span></div></code></pre>
+<h2 id="v-teto-sekci">V této sekci</h2>
+<table>
+<thead>
+<tr>
+<th>Stránka</th>
+<th>Co pokrývá</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="stats/">Statistiky</a></td>
+<td><code>StatsOverviewWidget</code> a hodnotový objekt <code>Stat</code> — čísla s trendem</td>
+</tr>
+<tr>
+<td><a href="charts/">Grafy</a></td>
+<td><code>ChartWidget</code>, <code>BarChartWidget</code> a <code>ChartItem</code></td>
+</tr>
+<tr>
+<td><a href="progress/">Progress</a></td>
+<td><code>ProgressWidget</code> a hodnotový objekt <code>ProgressItem</code> — výplň proti cíli</td>
+</tr>
+<tr>
+<td><a href="list/">Seznamy</a></td>
+<td><code>ListWidget</code> a hodnotový objekt <code>ListItem</code> — krátký feed záznamů nebo událostí</td>
+</tr>
+<tr>
+<td><a href="custom/">Tabulky a vlastní pohledy</a></td>
+<td><code>TableWidget</code> a <code>CustomWidget</code></td>
+</tr>
+<tr>
+<td><a href="dashboards/">Dashboardy</a></td>
+<td>Skládání widgetů na komponentě a deklarace dashboardu jako vlastníka</td>
+</tr>
+</tbody>
+</table>
+<h2 id="souvisejici">Související</h2>
+<ul>
+<li><a href="../../panels/pages/">Panely: Stránky</a> — <code>DashboardPage</code>, stránka, která deklarovaný dashboard vykreslí</li>
+<li><a href="../actions/">Akce</a> — tlačítka, která widget může nést</li>
+<li><a href="../../start/authorization/">Autorizace</a> — gate, na kterou se ptá viditelnost widgetu</li>
+<li><a href="../../table/overview/">Tabulky</a> — co vkládá tabulkový widget</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../notifications/custom-drivers/">
+                                        <span>← Předchozí</span>
+                                        <strong>Vlastní drivery</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="stats/">
+                                        <span>Další →</span>
+                                        <strong>Statistiky</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#typy-widgetu-prehledne">
+                                            Typy widgetů přehledně                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#widget-base">
+                                            Widget Base                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#polling">
+                                            Polling                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#pouziti">
+                                            Použití                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#polling-api">
+                                            Polling API                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#tik-obnovi-widget-ne-cely-dashboard">
+                                            Tik obnoví widget, ne celý dashboard                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#filtry">
+                                            Filtry                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#jak-round-trip-funguje">
+                                            Jak round trip funguje                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#odlozene-vykresleni">
+                                            Odložené vykreslení                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#vlastni-widget">
+                                            Vlastní widget                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#akce-v-hlavicce">
+                                            Akce v hlavičce                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#co-widgetova-akce-je-a-co-neni">
+                                            Co widgetová akce je a co není                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#jak-se-vubec-dostane-k-action">
+                                            Jak se vůbec dostane k Action                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#prizpusobitelne-dashboardy">
+                                            Přizpůsobitelné dashboardy                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#co-se-uklada">
+                                            Co se ukládá                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#pravidla-ktera-stoji-za-to-znat">
+                                            Pravidla, která stojí za to znát                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#aby-vyska-neco-znamenala-musi-byt-radek">
+                                            Aby výška něco znamenala, musí být řádek                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#jak-se-presklada">
+                                            Jak se přeskládá                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#api-rezimu-uprav">
+                                            API režimu úprav                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#zasobnik">
+                                            Zásobník                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#api-zasobniku">
+                                            API zásobníku                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#hotove-ovladani">
+                                            Hotové ovládání                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#co-je-potreba-aby-to-cele-fungovalo">
+                                            Co je potřeba, aby to celé fungovalo                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#autorizace">
+                                            Autorizace                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#reference-widget-api">
+                                            Reference Widget API                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#widget-zakladni-trida">
+                                            Widget (základní třída)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#blade-komponenty">
+                                            Blade komponenty                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#v-teto-sekci">
+                                            V této sekci                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#souvisejici">
+                                            Související                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

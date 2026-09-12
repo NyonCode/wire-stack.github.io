@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modaly | Wire Docs</title>
+    <meta name="description" content="Potvrzovací dialogy, slide-overy a vícekrokové wizardy — povrchy, které akce otevírá, a co každý z nich dělá s fokusem, stavem a odesláním.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/core/modals/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/core/modals/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/core/modals/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/core/modals/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Modaly | Wire Docs">
+    <meta property="og:description" content="Potvrzovací dialogy, slide-overy a vícekrokové wizardy — povrchy, které akce otevírá, a co každý z nich dělá s fokusem, stavem a odesláním.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/core/modals/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/cs/assets/previews/core-modal.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/cs/assets/previews/core-modal.png">
+    <meta name="twitter:title" content="Modaly | Wire Docs">
+    <meta name="twitter:description" content="Potvrzovací dialogy, slide-overy a vícekrokové wizardy — povrchy, které akce otevírá, a co každý z nich dělá s fokusem, stavem a odesláním.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../core/modals/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/core/modals/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../../v1/cs/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Začínáme</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../documentation/">
+                                Dokumentace Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/installation/">
+                                Instalace Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/getting-started/">
+                                Začínáme                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/configuration/">
+                                Konfigurace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/authorization/">
+                                Autorizace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/theming/">
+                                Vzhled a přizpůsobení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/testing/">
+                                Testování                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/cookbook/">
+                                Kuchařka                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/error-handling/">
+                                Ošetření chyb                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/troubleshooting/">
+                                Řešení potíží                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/upgrade/">
+                                Návod k upgradu                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/project-map/">
+                                Mapa projektu                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Formuláře</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/validation/">
+                                Validace formulářů                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/reactive-fields/">
+                                Reaktivní pole                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/save-lifecycle/">
+                                Životní cyklus ukládání                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/custom-fields/">
+                                Rozšíření formulářů                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Pole</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/">
+                                            Pole formulářů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Tabulka</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/">
+                                            Sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/relations/">
+                                            Cesty relací a tečková notace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/casts/">
+                                            Enum a JSON casty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/editing/">
+                                            Editace a filtry na úrovni sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/fill-handle/">
+                                            Fill handle (vyplňování tažením jako v Excelu)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/patterns/">
+                                            Vzory a recepty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/">
+                                            Filtry                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/relationships/">
+                                            Filtry relací a podřádků                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/column-level/">
+                                            Filtry na úrovni sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/custom/">
+                                            Vlastní třída filtru                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/patterns/">
+                                            Vzory a recepty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/actions/">
+                                Akce tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/record-actions/">
+                                Celořádkové akce (Record Actions)                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/selection/">
+                                Výběr řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/gestures/">
+                                Vrstva gest                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/inactive-records/">
+                                Neaktivní záznamy                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/exports/">
+                                Exporty tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/imports/">
+                                Importy tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/summaries/">
+                                Souhrny                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/grouping/">
+                                Seskupení řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/sub-rows/">
+                                Podřádky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/relation-managers/">
+                                Správci relací                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/notifications/">
+                                Notifikace tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/data-sources/">
+                                Zdroje dat                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/advanced/">
+                                Pokročilé funkce                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/icons/">
+                                            Ikony                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/colors/">
+                                            Barvy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/enums/">
+                                            Enumy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/blade-components/">
+                                            Blade komponenty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../actions/">
+                                            Akce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/modals/">
+                                            Modaly akcí                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/lifecycle/">
+                                            Životní cyklus a fronty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/appearance/">
+                                            Tlačítka a vzhled                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/standalone/">
+                                            Akce mimo tabulku                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/workflow/">
+                                            Workflow a přechody                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="is-active" href="./">
+                                Modaly                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../notifications/">
+                                            Notifikace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/toasts/">
+                                            Toasty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/persistent/">
+                                            Perzistentní notifikace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/usage/">
+                                            Odkud je posílat                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/custom-drivers/">
+                                            Vlastní drivery                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../widgets/">
+                                            Widgety                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/stats/">
+                                            Statistiky                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/charts/">
+                                            Grafy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/custom/">
+                                            Tabulky a vlastní pohledy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/dashboards/">
+                                            Dashboardy                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../infolists/">
+                                            Infolisty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../infolists/actions/">
+                                            Akce v infolistu                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../record-panels/">
+                                Editovatelné panely                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../global-search/">
+                                Globální hledání                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../plugins/">
+                                            Pluginy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/registration/">
+                                            Registrace pluginů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/hooks/">
+                                            Hooky                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/extending/">
+                                            Rozšiřování povrchů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/examples/">
+                                            Příklady a testování                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../panels/overview/">
+                                Panely                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/pages/">
+                                Stránky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/navigation/">
+                                Navigace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/routing/">
+                                Routování                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/modules/">
+                                Moduly                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../admin/overview/">
+                                Admin shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/layout/">
+                                Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/sidebar/">
+                                Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/branding/">
+                                Branding a motiv                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../modules/">
+                                Hotové moduly                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/users/">
+                                Modul uživatelů                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/teams-and-two-factor/">
+                                Týmy a dvoufázové ověření                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/auth/">
+                                Modul přihlášení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/settings/">
+                                Modul Nastavení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/notifications/">
+                                Modul notifikací                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/audit/">
+                                Modul auditu                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/media/">
+                                Modul médií                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../sortable/overview/">
+                                Úvod                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/installation/">
+                                Instalace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/row-sorting/">
+                                Řazení řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/column-sorting/">
+                                Řazení sloupců                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/customization/">
+                                Přizpůsobení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/advanced/">
+                                Pokročilé použití                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/api-reference/">
+                                Reference API                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../boost/overview/">
+                                Úvod                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/installation/">
+                                Instalace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/mcp-tools/">
+                                MCP Server a nástroje                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/guidelines-and-skills/">
+                                Guidelines a Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero has-preview">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Core</span>
+                            </nav>
+                            <p class="eyebrow">Core</p>
+                            <h1>Modaly</h1>
+                                                            <p class="lead">Potvrzovací dialogy, slide-overy a vícekrokové wizardy — povrchy, které akce otevírá, a co každý z nich dělá s fokusem, stavem a odesláním.</p>
+                            
+                                                            <figure class="hero-preview">
+                                    <img src="../../assets/previews/core-modal.png" alt="Modaly preview" loading="lazy">
+                                </figure>
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#typy-modalu">Typy modalů</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#potvrzovaci-dialog">Potvrzovací dialog</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#slide-over">Slide-over</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#konfigurace-modalu">Konfigurace modalu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#modal-config-objekty">Modal config objekty</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#akce-v-paticce">Akce v patičce</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#vicekrokovy-wizard">Vícekrokový wizard</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#prizpusobeni-popisku-navigace">Přizpůsobení popisků navigace</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#sestaveni-kroku-z-drivejsich-dat">Sestavení kroku z dřívějších dat</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#api-modalstep">API ModalStep</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#halt-modal">Halt modal</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#api-actionhalt">API ActionHalt</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#blade-komponenty">Blade komponenty</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Systém modalů pro potvrzovací dialogy, slide-overy a vícekrokové wizardy.</p>
+<h2 id="typy-modalu">Typy modalů</h2>
+<table>
+<thead>
+<tr>
+<th>Třída</th>
+<th>Popis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Modal</code></td>
+<td>Standardní vycentrovaný modal</td>
+</tr>
+<tr>
+<td><code>ConfirmationDialog</code></td>
+<td>Modal s tlačítky potvrdit/zrušit</td>
+</tr>
+<tr>
+<td><code>SlideOver</code></td>
+<td>Panel vysouvající se zprava</td>
+</tr>
+<tr>
+<td><code>Wizard</code></td>
+<td>Vícekrokový wizard s navigací kroků</td>
+</tr>
+</tbody>
+</table>
+<h2 id="potvrzovaci-dialog">Potvrzovací dialog</h2>
+<p>Nejběžnější použití — spouštěné z akcí:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;delete&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">requiresConfirmation</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalHeading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Delete this record?&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalDescription</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;This action cannot be undone.&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalIcon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;trash&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;danger&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalSubmitActionLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Yes, delete&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalCancelActionLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Cancel&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">delete</span><span style="color: #E1E4E8;">());</span></div></code></pre>
+<h2 id="slide-over">Slide-over</h2>
+<p>Panel se vysouvá zprava:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;details&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">slideOver</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stickyHeader</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stickyFooter</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalMaxHeight</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;60vh&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<h2 id="konfigurace-modalu">Konfigurace modalu</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Velikost</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalWidth</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;2xl&#39;</span><span style="color: #E1E4E8;">)              </span><span style="color: #6A737D;">// sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl, full</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Chování zavírání</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">closeModalOnClickAway</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">closeModalOnEscape</span><span style="color: #E1E4E8;">()</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// Mobilní adaptace</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">slideOverOnMobile</span><span style="color: #E1E4E8;">()            </span><span style="color: #6A737D;">// bottom-sheet na mobilu, dialog na desktopu</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">fullScreenOnMobile</span><span style="color: #E1E4E8;">()           </span><span style="color: #6A737D;">// celá obrazovka na mobilu</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">mobileBreakpoint</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;md&#39;</span><span style="color: #E1E4E8;">);        </span><span style="color: #6A737D;">// kde se sheet spustí (sm|md|lg)</span></div></code></pre>
+<p>Pod mobilním breakpointem <code>slideOverOnMobile()</code> vykreslí modal formuláře jako
+<strong>bottom-sheet</strong>, který se vysune od spodní hrany, a <code>fullScreenOnMobile()</code>
+vyplní viewport; oba scrollují tělo <em>uvnitř</em> panelu, takže tlačítka patičky
+zůstanou viditelná, a oba nechají vycentrovaný dialog na desktopu beze změny. Sheety přidávají
+safe-area padding, úchyt pro zavření tažením a focus trap automaticky.</p>
+<p>Breakpoint je ve výchozím stavu globální <code>wire-core.mobile.breakpoint</code> (<code>sm</code>, tj.
+<code>&lt; 640px</code>) a lze ho zvýšit u jednotlivých akcí pomocí <code>-&gt;mobileBreakpoint('md')</code> (<code>&lt; 768px</code>,
+zahrnuje malé tablety) nebo <code>'lg'</code> (<code>&lt; 1024px</code>). Globální výchozí viz
+<a href="../../start/configuration/#mobil">Konfigurace → Mobil</a>.</p>
+<p>Modal postavený přímo bere ještě jedno: <code>-&gt;mobileWidth(string $width)</code> nastaví
+šířku, kterou panel použije pod tím breakpointem — pro případ, kdy nechcete ani
+sheet, ani celou obrazovku.</p>
+<p><strong>Potvrzení, kde není co potvrzovat</strong> — hláška, kterou uživatel může jen vzít na
+vědomí — je <code>-&gt;informative()</code>: zahodí odesílací tlačítko a to zbylé přejmenuje na
+<em>Zavřít</em>, takže dialog, který se na nic neptá, ani nic nenabízí udělat.</p>
+<h2 id="modal-config-objekty">Modal config objekty</h2>
+<p>Místo fluent <code>-&gt;modal*()</code> setterů lze akci nakonfigurovat z
+deklarativního modal objektu. Předejte jakýkoli <code>ModalContract</code> — <code>Modal</code>, <code>SlideOver</code>,
+<code>ConfirmationDialog</code> nebo <code>Wizard</code> — do <code>-&gt;modal()</code>:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Modals\ConfirmationDialog</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Modals\Modal</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Modals\SlideOver</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Modals\Wizard</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Vycentrovaný dialog</span></div><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modal</span><span style="color: #E1E4E8;">(</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Modal</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">() </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Edit record&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Update the details below&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">width</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;lg&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;pencil&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;primary&#39;</span><span style="color: #E1E4E8;">) </span></div><div class='line'><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Slide-over panel (-&gt;mobileOnly() = slide-over na mobilu, modal na desktopu)</span></div><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modal</span><span style="color: #E1E4E8;">(</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">SlideOver</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Details&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">width</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;xl&#39;</span><span style="color: #E1E4E8;">) </span></div><div class='line'><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Potvrzovací dialog — s presety (delete / makeDanger / makeWarning / makeInfo)</span></div><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;delete&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modal</span><span style="color: #E1E4E8;">(</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">ConfirmationDialog</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">delete</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;User&#39;</span><span style="color: #E1E4E8;">) </span></div><div class='line'><span style="color: #E1E4E8;">);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// Vícekrokový wizard (viz níže)</span></div><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;create&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modal</span><span style="color: #E1E4E8;">(</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Wizard</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Create user&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">steps</span><span style="color: #E1E4E8;">([</span><span style="color: #6A737D;">/* ModalStep::make(...) */</span></div><div class='line'><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>Hodnoty config objektu se přeloží do modal stavu akce a
+vykreslí přes stejný runtime jako fluent settery — existuje jediný
+kanonický vlastník modalu, takže se oba styly chovají identicky.</p>
+<h2 id="akce-v-paticce">Akce v patičce</h2>
+<p>Vlastní tlačítka v patičce modalu:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\ModalFooterAction</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;edit&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalFooterActions</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalFooterAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;save&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Save&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">color</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;primary&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">submitsForm</span><span style="color: #E1E4E8;">(),</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalFooterAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;save-and-close&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Save &amp; Close&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">saveAndClose</span><span style="color: #E1E4E8;">()),</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalFooterAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;cancel&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Cancel&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">color</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;gray&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">outlined</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">closesModal</span><span style="color: #E1E4E8;">(),                 </span><span style="color: #6A737D;">// zavře modal</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalFooterAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;reset&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">requiresConfirmation</span><span style="color: #E1E4E8;">()         </span><span style="color: #6A737D;">// zeptá se před spuštěním (nativní wire:confirm)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">confirm</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Really reset the form?&#39;</span><span style="color: #E1E4E8;">) </span><span style="color: #6A737D;">// …nebo s vlastní zprávou</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($set) =&gt; $set(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;">)),</span></div><div class='line'><span style="color: #E1E4E8;">    ]);</span></div></code></pre>
+<p><a id="multi-step-wizard"></a></p>
+<h2 id="vicekrokovy-wizard">Vícekrokový wizard</h2>
+<p>Dejte akci více kroků pomocí <code>-&gt;steps([...])</code> (nebo <code>Wizard</code> objektu přes
+<code>-&gt;modal()</code>). Modal vykreslí indikátor kroků s navigací <strong>Back / Next / Submit</strong>;
+každý krok validuje před postupem, data jsou sdílená napříč všemi
+kroky a finální odeslání znovu zvaliduje každý krok.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\ModalStep</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;create&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">steps</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalStep</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Basic Info&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Enter user details&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;user&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">email</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">            ])</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validation</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;required|min:2&#39;</span><span style="color: #E1E4E8;">]),    </span><span style="color: #6A737D;">// extra pravidla pro každý krok</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalStep</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Settings&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Select</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">]),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Toggle</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;active&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">            ])</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">afterValidation</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; </span><span style="color: #B392F0;">logger</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;step 2 passed&#39;</span><span style="color: #E1E4E8;">, $data)),</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalStep</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Review&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">before</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; [</span><span style="color: #9ECBFF;">&#39;summary&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&quot;Creating {</span><span style="color: #E1E4E8;">$data</span><span style="color: #9ECBFF;">[&#39;name&#39;]}&quot;</span><span style="color: #E1E4E8;">]) </span><span style="color: #6A737D;">// předvyplnit</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Placeholder</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;summary&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">content</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($data) =&gt; $data[</span><span style="color: #9ECBFF;">&#39;summary&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">??</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">            ]),</span></div><div class='line'><span style="color: #E1E4E8;">    ])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record, $data) =&gt; </span><span style="color: #79B8FF;">User</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">create</span><span style="color: #E1E4E8;">($data));</span></div></code></pre>
+<p>Každý krok zapisuje do stejného form-data bagu, takže dříve zadané hodnoty přetrvají,
+jak se uživatel pohybuje tam a zpět. Validace na <strong>Next</strong> spustí field pravidla kroku
+(přes form runtime), pak jakákoli pravidla <code>-&gt;validation()</code>, pak
+hook <code>afterValidation</code>; hook <code>before</code> dalšího kroku může vrátit pole, aby ho
+předvyplnil. <strong>Submit</strong> znovu zvaliduje každý krok kumulativně (hooky
+<code>afterValidation</code> se nespouští znovu, takže nikdy nevystřelí dvakrát).</p>
+<h3 id="prizpusobeni-popisku-navigace">Přizpůsobení popisků navigace</h3>
+<p>Popisky wizardu <strong>Back</strong>, <strong>Next</strong> a submit-in-progress <strong>Saving…</strong> jsou
+konfigurovatelné a spadají na přeložitelné výchozí hodnoty
+(<code>wire-core::actions.{wizard_previous,wizard_next,submit_saving}</code>):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;create&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">steps</span><span style="color: #E1E4E8;">([</span><span style="color: #6A737D;">/* ... */</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalPreviousActionLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Back&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalNextActionLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Continue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalSubmitActionLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Create user&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">modalSavingLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Creating…&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p><a href="../../forms/reactive-fields/#akce-v-paticce-modalu"><code>modalFooterActions()</code></a> se vykreslí
+i v patičce wizardu, vedle Back / Next / Submit.</p>
+<h3 id="sestaveni-kroku-z-drivejsich-dat">Sestavení kroku z dřívějších dat</h3>
+<p>Předejte Closure do <code>-&gt;schema()</code> pro sestavení polí kroku z hodnot zadaných v
+předchozích krocích. Closura dostane naakumulovaný form-data bag, takže pozdější krok
+se může přizpůsobit dřívější volbě. Funguje to pro řádkové, hromadné <strong>i</strong> hlavičkové akce —
+hlavičková akce nenese žádný záznam, takže její step closury stále dostanou živý
+form-data bag (ne <code>null</code>):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">HeaderAction</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;create&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">steps</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalStep</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Type&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Select</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;kind&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;business&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Business&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;person&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Person&#39;</span><span style="color: #E1E4E8;">]),</span></div><div class='line'><span style="color: #E1E4E8;">            ]),</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">ModalStep</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Details&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #6A737D;">// $data drží vše zadané doposud (zde: &#39;kind&#39; z kroku 1).</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; [</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">($data[</span><span style="color: #9ECBFF;">&#39;kind&#39;</span><span style="color: #E1E4E8;">] </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;business&#39;</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">?</span><span style="color: #E1E4E8;"> [</span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;vat_id&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">()]</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> [</span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;birth_date&#39;</span><span style="color: #E1E4E8;">)]),</span></div><div class='line'><span style="color: #E1E4E8;">            ]),</span></div><div class='line'><span style="color: #E1E4E8;">    ])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data) =&gt; </span><span style="color: #79B8FF;">Customer</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">create</span><span style="color: #E1E4E8;">($data));</span></div></code></pre>
+<h3 id="api-modalstep">API ModalStep</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">ModalStep</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $label)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Icon</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $icon)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $fields)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validation</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $rules)         </span><span style="color: #6A737D;">// extra pravidla, klíčovaná názvem pole</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validationMessages</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?array</span><span style="color: #E1E4E8;"> $messages)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">afterValidation</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $callback)       </span><span style="color: #6A737D;">// běží po validaci kroku</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">before</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $callback)                </span><span style="color: #6A737D;">// běží před zobrazením kroku; vrátit pole pro předvyplnění</span></div></code></pre>
+<h2 id="halt-modal">Halt modal</h2>
+<p><code>ActionHalt</code> vytvoří sekundární potvrzovací modal uprostřed vykonávání:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;process&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">before</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> ($record, </span><span style="color: #79B8FF;">Action</span><span style="color: #E1E4E8;"> $action) {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> ($record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">has_warnings) {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            $action</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">halt</span><span style="color: #E1E4E8;">()                                    </span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Warnings Detected&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;There are unresolved warnings. Continue anyway?&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;exclamation&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;warning&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">submitLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Continue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cancelLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Cancel&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">width</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;md&#39;</span><span style="color: #E1E4E8;">);                                 </span></div><div class='line'><span style="color: #E1E4E8;">        }</span></div><div class='line'><span style="color: #E1E4E8;">    })</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">process</span><span style="color: #E1E4E8;">());</span></div></code></pre>
+<h3 id="api-actionhalt">API ActionHalt</h3>
+<p>Halt je modal, takže bere slovník modalů — tytéž <code>heading()</code> a <code>description()</code>,
+které používají třídy na této stránce:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Closure</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $heading)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Closure</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $description)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Icon</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $icon, </span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $color </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">submitLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $label)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cancelLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $label)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">width</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">ModalWidth</span><span style="color: #E1E4E8;"> $width)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">closeOnClickAway</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $close </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">closeOnEscape</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $close </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validation</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $rules, </span><span style="color: #F97583;">?array</span><span style="color: #E1E4E8;"> $messages </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">?array</span><span style="color: #E1E4E8;"> $attributes </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Celý povrch a to, co halt dělá s <code>before()</code> hooky při potvrzeném průchodu, najdete
+v <a href="../actions/lifecycle/#api-haltu">Životním cyklu a frontách</a>.</p>
+<h2 id="blade-komponenty">Blade komponenty</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">x-wire-modals::modal</span><span style="color: #E1E4E8;"> /&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">x-wire-modals::confirmation</span><span style="color: #E1E4E8;"> /&gt;</span></div></code></pre>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../actions/workflow/">
+                                        <span>← Předchozí</span>
+                                        <strong>Workflow a přechody</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../notifications/">
+                                        <span>Další →</span>
+                                        <strong>Notifikace</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#typy-modalu">
+                                            Typy modalů                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#potvrzovaci-dialog">
+                                            Potvrzovací dialog                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#slide-over">
+                                            Slide-over                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#konfigurace-modalu">
+                                            Konfigurace modalu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#modal-config-objekty">
+                                            Modal config objekty                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#akce-v-paticce">
+                                            Akce v patičce                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#vicekrokovy-wizard">
+                                            Vícekrokový wizard                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#prizpusobeni-popisku-navigace">
+                                            Přizpůsobení popisků navigace                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#sestaveni-kroku-z-drivejsich-dat">
+                                            Sestavení kroku z dřívějších dat                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#api-modalstep">
+                                            API ModalStep                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#halt-modal">
+                                            Halt modal                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#api-actionhalt">
+                                            API ActionHalt                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#blade-komponenty">
+                                            Blade komponenty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

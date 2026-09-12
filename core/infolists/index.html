@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Infolists | Wire Docs</title>
+    <meta name="description" content="The read-only counterpart of a form: what an infolist is, how a schema is composed, where each entry&#039;s value comes from, and the complete object API.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/core/infolists/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/core/infolists/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/core/infolists/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/core/infolists/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Infolists | Wire Docs">
+    <meta property="og:description" content="The read-only counterpart of a form: what an infolist is, how a schema is composed, where each entry&#039;s value comes from, and the complete object API.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/core/infolists/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/assets/previews/infolists-overview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/assets/previews/infolists-overview.png">
+    <meta name="twitter:title" content="Infolists | Wire Docs">
+    <meta name="twitter:description" content="The read-only counterpart of a form: what an infolist is, how a schema is composed, where each entry&#039;s value comes from, and the complete object API.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../core/infolists/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../cs/core/infolists/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../v1/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Start Here</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../documentation/">
+                                Wire Documentation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/installation/">
+                                Installing Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/getting-started/">
+                                Getting Started                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/configuration/">
+                                Configuration                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/authorization/">
+                                Authorization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/theming/">
+                                Theming &amp; Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/testing/">
+                                Testing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/cookbook/">
+                                Cookbook                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/error-handling/">
+                                Error Handling                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/troubleshooting/">
+                                Troubleshooting                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/upgrade/">
+                                Upgrade Guide                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/project-map/">
+                                Project Map                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Forms</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/validation/">
+                                Form Validation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/reactive-fields/">
+                                Reactive Fields                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/save-lifecycle/">
+                                Save Lifecycle                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/custom-fields/">
+                                Extending Forms                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Fields</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/">
+                                            Form Fields                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Table</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/">
+                                            Columns                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/relations/">
+                                            Relation Paths &amp; Dot Notation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/casts/">
+                                            Enum &amp; JSON Casts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/editing/">
+                                            Editing &amp; Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/fill-handle/">
+                                            Fill Handle (Excel-style AutoFill)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/">
+                                            Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/relationships/">
+                                            Relationship &amp; Sub-Row Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/column-level/">
+                                            Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/custom/">
+                                            Custom Filter Class                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/actions/">
+                                Table Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/record-actions/">
+                                Record Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/selection/">
+                                Selecting Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/gestures/">
+                                The Gesture Layer                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/inactive-records/">
+                                Inactive Records                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/exports/">
+                                Table Exports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/imports/">
+                                Table Imports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/summaries/">
+                                Summaries                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/grouping/">
+                                Row Grouping                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/sub-rows/">
+                                Sub-Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/relation-managers/">
+                                Relation Managers                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/data-sources/">
+                                Data Sources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/notifications/">
+                                Table Notifications                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/advanced/">
+                                Advanced Features                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/icons/">
+                                            Icons                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/colors/">
+                                            Colors                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/enums/">
+                                            Enums                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/blade-components/">
+                                            Blade Components                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../actions/">
+                                            Actions                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/modals/">
+                                            Action Modals                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/lifecycle/">
+                                            Lifecycle And Queues                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/appearance/">
+                                            Buttons And Appearance                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/standalone/">
+                                            Actions Outside A Table                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/workflow/">
+                                            Workflow And Transitions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../modals/">
+                                Modals                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../notifications/">
+                                            Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/toasts/">
+                                            Toasts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/persistent/">
+                                            Persistent Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/usage/">
+                                            Where To Send From                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/custom-drivers/">
+                                            Custom Drivers                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../widgets/">
+                                            Widgets                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/stats/">
+                                            Stats                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/charts/">
+                                            Charts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/custom/">
+                                            Tables And Custom Views                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../widgets/dashboards/">
+                                            Dashboards                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group is-open" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="true">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="is-active" href="./">
+                                            Infolists                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="actions/">
+                                            Infolist Actions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../record-panels/">
+                                Editable Panels                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../global-search/">
+                                Global Search                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../plugins/">
+                                            Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/registration/">
+                                            Registering Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/hooks/">
+                                            Hooks                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/extending/">
+                                            Extending Surfaces                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/examples/">
+                                            Examples And Testing                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../panels/overview/">
+                                Panels                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/pages/">
+                                Pages                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/navigation/">
+                                Navigation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/routing/">
+                                Routing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/modules/">
+                                Modules                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../admin/overview/">
+                                The Admin Shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/layout/">
+                                The Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/sidebar/">
+                                The Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/branding/">
+                                Branding And Theme                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../modules/">
+                                Ready-Made Modules                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/users/">
+                                The Users Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/teams-and-two-factor/">
+                                Teams and Two-Factor                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/auth/">
+                                The Auth Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/settings/">
+                                The Settings Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/notifications/">
+                                The Notifications Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/audit/">
+                                The Audit Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/media/">
+                                The Media Module                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../sortable/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/row-sorting/">
+                                Row Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/column-sorting/">
+                                Column Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/customization/">
+                                Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/advanced/">
+                                Advanced Usage                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/api-reference/">
+                                API Reference                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../boost/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/mcp-tools/">
+                                MCP Server &amp; Tools                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/guidelines-and-skills/">
+                                Guidelines &amp; Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero has-preview">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Core</span>
+                            </nav>
+                            <p class="eyebrow">Core</p>
+                            <h1>Infolists</h1>
+                                                            <p class="lead">The read-only counterpart of a form: what an infolist is, how a schema is composed, where each entry&#039;s value comes from, and the complete object API.</p>
+                            
+                                                            <figure class="hero-preview">
+                                    <img src="../../assets/previews/infolists-overview.png" alt="Infolists preview" loading="lazy">
+                                </figure>
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#installation">Installation</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#quick-start">Quick start</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#entry-types-at-a-glance">Entry types at a glance</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#the-infolist-object">The Infolist object</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#composing-the-schema">Composing the schema</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#state-resolution">State resolution</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#layout">Layout</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#flex">Flex</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#infolist-api">Infolist API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#in-this-section">In This Section</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#related">Related</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>An infolist <strong>displays</strong> one record the way a form edits it: the same declarative
+schema, the same sections and grids, the same concerns for label, icon, colour
+and visibility. What it does not have is state, validation or a submit — read-only
+is not a form with the inputs disabled, it is a different object with a smaller
+job.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Infolists\Infolist</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Infolists\Components\TextEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Infolists\Components\IconEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Schema\Section</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Colors\Color</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">Infolist</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">($user)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Profile&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;user&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">weight</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;bold&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;envelope&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">copyable</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">dateTime</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">since</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">badge</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">color</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($state) =&gt; $state </span><span style="color: #F97583;">===</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;active&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">Success</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">Gray</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">IconEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_verified&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">boolean</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        ]),                                                              </span></div><div class='line'><span style="color: #E1E4E8;">    ]);</span></div></code></pre>
+<blockquote>
+<p><strong>New to this?</strong> An infolist is just a list of things to show about one record. You build it in PHP, hand it a record, and echo it in Blade. The rest of this page builds up from the simplest possible example.</p>
+</blockquote>
+<h2 id="installation">Installation</h2>
+<p>Infolists ship with <code>wire-core</code> — nothing extra to install. Make sure the package views are in your Tailwind content paths so the styles are generated:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">export</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">default</span><span style="color: #E1E4E8;"> {</span></div><div class='line'><span style="color: #E1E4E8;">    content: [</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// ...your app paths</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;./vendor/nyoncode/wire-core/resources/views/**/*.blade.php&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    ],</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h2 id="quick-start">Quick start</h2>
+<p>An infolist lives on a Livewire component. The simplest way is a <a href="https://livewire.laravel.com/docs/computed-properties" target="_blank" rel="noreferrer">computed property</a> that returns the <code>Infolist</code>, which you then echo in the component's view.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Livewire\Attributes\Computed</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Livewire\Component</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Infolists\Infolist</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Infolists\Components\TextEntry</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Schema\Section</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">ShowUser</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $user;          </span><span style="color: #6A737D;">// the record you want to display</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    #[</span><span style="color: #79B8FF;">Computed</span><span style="color: #E1E4E8;">]</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">infolist</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Infolist</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Infolist</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">() </span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">user)               </span><span style="color: #6A737D;">// 1. give it the record</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([                           </span><span style="color: #6A737D;">// 2. list what to show</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Profile&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">),         </span><span style="color: #6A737D;">// reads $user-&gt;name</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">copyable</span><span style="color: #E1E4E8;">(),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    ]),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            ]); </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">render</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;livewire.show-user&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">{{-- resources/views/livewire/show-user.blade.php --}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">infolist </span><span style="color: #79B8FF;">}}</span><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">{{-- 3. render it --}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>That's the whole loop: <strong>record in → schema → echo out.</strong> <code>{{ $this-&gt;infolist }}</code> works because an <code>Infolist</code> is <code>Htmlable</code> and <code>$this-&gt;infolist</code> resolves the computed property — no special helper or trait required.</p>
+<blockquote>
+<p>You can name the method anything (<code>$this-&gt;orderInfolist</code>, <code>$this-&gt;summary</code>, …) and have several on one component — see <a href="#composing-the-schema">Composing the schema</a>.</p>
+</blockquote>
+<h2 id="entry-types-at-a-glance">Entry types at a glance</h2>
+<table>
+<thead>
+<tr>
+<th>Entry</th>
+<th>Class</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text</strong></td>
+<td><code>TextEntry</code></td>
+<td>Text, numbers, money, dates — plus badge, copy, list, and truncation</td>
+</tr>
+<tr>
+<td><strong>Badge</strong></td>
+<td><code>BadgeEntry</code></td>
+<td>A <code>TextEntry</code> preset as a colored pill</td>
+</tr>
+<tr>
+<td><strong>Icon</strong></td>
+<td><code>IconEntry</code></td>
+<td>Booleans and state → icon maps</td>
+</tr>
+<tr>
+<td><strong>Boolean</strong></td>
+<td><code>BooleanEntry</code></td>
+<td>An <code>IconEntry</code> preset to boolean check/x</td>
+</tr>
+<tr>
+<td><strong>List</strong></td>
+<td><code>ListEntry</code></td>
+<td>A collection as a bulleted list or badge chips</td>
+</tr>
+<tr>
+<td><strong>Image</strong></td>
+<td><code>ImageEntry</code></td>
+<td>Avatars and thumbnails (single or gallery)</td>
+</tr>
+<tr>
+<td><strong>Color</strong></td>
+<td><code>ColorEntry</code></td>
+<td>A color swatch + its value</td>
+</tr>
+<tr>
+<td><strong>Key-value</strong></td>
+<td><code>KeyValueEntry</code></td>
+<td>An array / JSON attribute as a key/value table</td>
+</tr>
+<tr>
+<td><strong>Repeatable</strong></td>
+<td><code>RepeatableEntry</code></td>
+<td>A nested entry schema repeated per item of a relation/array</td>
+</tr>
+<tr>
+<td><strong>Changes</strong></td>
+<td><code>ChangesEntry</code></td>
+<td>A before-and-after diff as one table, a row per field</td>
+</tr>
+<tr>
+<td><strong>Html</strong></td>
+<td><code>HtmlEntry</code></td>
+<td>Stored rich text printed as markup, with its <a href="../../forms/fields/tiptap-editor/#mentions">mentions</a> resolved on every render</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Enum casts.</strong> Entries read enum-cast attributes safely: <code>TextEntry</code> renders the enum label
+(via the <code>Enum\HasLabel</code> contract, else the backing value / case name), and <code>IconEntry</code>
+auto-resolves its icon and color from an enum implementing <code>Enum\HasColor</code> / <code>Enum\HasIcon</code>.
+See <a href="../foundation/enums/#enums">Foundation → Enums</a>.</p>
+</blockquote>
+<h2 id="the-infolist-object">The Infolist object</h2>
+<p><code>Infolist::make()</code> builds the container; <code>record()</code> binds the data source (an Eloquent model <strong>or</strong> a plain array), <code>schema()</code> holds the entries and layout, and <code>columns()</code> sets the top-level grid.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Infolist</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">($order)        </span><span style="color: #6A737D;">// Model|array</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)            </span><span style="color: #6A737D;">// top-level grid columns (default 1)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([ </span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;"> ]);</span></div></code></pre>
+<p><code>state(array $data)</code> is an alias for <code>record()</code> when the source is a plain array:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Infolist</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">state</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Ada&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;ada@example.com&#39;</span><span style="color: #E1E4E8;">])</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p>The record is propagated to every entry automatically when the infolist renders, recursing through layout components.</p>
+<p><code>getSchema()</code> is where the schema becomes final, and it is read through a plugin hook: <code>infolist.configuring</code> runs there, once, and the answer is memoized — so an installed package can add an entry to a detail page it does not own, and a schema read twice does not gain the entry twice. Re-declaring <code>schema()</code> asks again, because a re-declared schema is a different infolist. See <a href="../plugins/hooks/">Hooks</a>.</p>
+<h2 id="composing-the-schema">Composing the schema</h2>
+<blockquote>
+<p><strong>Can I add more than a couple of fields?</strong> Yes — <code>schema()</code> is just a list. Put as many entries as you like, group them with as many sections as you like, and mix any entry types together. There is no limit and no special wiring; you are only arranging objects in an array.</p>
+</blockquote>
+<p><strong>Add as many entries as you need.</strong> Each <code>make('column')</code> line shows one value:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Profile&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;phone&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">date</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">IconEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_verified&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">boolean</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">// ...add more, in any order</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p><strong>Use several sections</strong> to break a record into logical groups — each is a separate card:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Infolist</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">($order)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Customer&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;customer.name&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;customer.email&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    ]),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Payment&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;total&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">money</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">badge</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    ]),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Notes&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;notes&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">prose</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    ]),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p><strong>Nest layouts</strong> — a <code>Grid</code> or <code>Fieldset</code> can live inside a <code>Section</code>, and a <code>RepeatableEntry</code> carries its own sub-schema:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Order&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Grid</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">3</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;number&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;placed_at&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">date</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;total&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">money</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    ]),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">RepeatableEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;items&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">3</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;label&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;qty&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">numeric</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">money</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    ]),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p><strong>You don't even need a section</strong> — entries can sit directly in the infolist, arranged by the top-level <code>columns()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Infolist</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">record</span><span style="color: #E1E4E8;">($user)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p><strong>Several infolists on one page</strong> — just define more than one computed property and echo each where you want it:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">#[</span><span style="color: #79B8FF;">Computed</span><span style="color: #E1E4E8;">]</span></div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">profile</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Infolist</span><span style="color: #E1E4E8;"> { </span><span style="color: #6A737D;">/* ... */</span><span style="color: #E1E4E8;"> }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">#[</span><span style="color: #79B8FF;">Computed</span><span style="color: #E1E4E8;">]</span></div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">billing</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Infolist</span><span style="color: #E1E4E8;"> { </span><span style="color: #6A737D;">/* ... */</span><span style="color: #E1E4E8;"> }</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">class</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;space-y-6&quot;</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">profile </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">{{</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">billing </span><span style="color: #79B8FF;">}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<blockquote>
+<p><strong>Rule of thumb:</strong> if you can describe what to show as "this value, then that value, grouped under these headings", you can express it here — one entry per value, one section per group.</p>
+</blockquote>
+<h2 id="state-resolution">State resolution</h2>
+<p>By default an entry reads its value from the record by <strong>name</strong>, with dot notation for relations and nested arrays (resolved via <code>data_get</code>):</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">);              </span><span style="color: #6A737D;">// $record-&gt;name</span></div><div class='line'><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;company.name&#39;</span><span style="color: #E1E4E8;">);      </span><span style="color: #6A737D;">// $record-&gt;company-&gt;name</span></div><div class='line'><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;address.city&#39;</span><span style="color: #E1E4E8;">);      </span><span style="color: #6A737D;">// $record[&#39;address&#39;][&#39;city&#39;]</span></div></code></pre>
+<p>Override resolution with <code>state()</code> (receives the record), transform the resolved value with <code>formatStateUsing()</code> (receives <code>$state, $record</code>), and provide a fallback with <code>default()</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;full_name&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">state</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">first_name</span><span style="color: #F97583;">.</span><span style="color: #9ECBFF;">&#39; &#39;</span><span style="color: #F97583;">.</span><span style="color: #E1E4E8;">$record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">last_name);</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">formatStateUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($state) =&gt; </span><span style="color: #79B8FF;">ucfirst</span><span style="color: #E1E4E8;">($state))</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">default</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;—&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p><code>color()</code>, and any other dynamic property, also accept a closure resolved with <code>$state</code> and <code>$record</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">TextEntry</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;priority&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">badge</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">color</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($state) =&gt; </span><span style="color: #F97583;">match</span><span style="color: #E1E4E8;"> ($state) {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;high&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">Danger</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;medium&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">Warning</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">default</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">Gray</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    });</span></div></code></pre>
+<h2 id="layout">Layout</h2>
+<p>Infolists use the canonical schema layout from <code>NyonCode\WireCore\Foundation\Schema</code> — the same classes the form layouts subclass:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Schema\Section</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Schema\Grid</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Schema\Fieldset</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Billing&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;credit-card&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Plan and invoicing details&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">collapsible</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Grid</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">3</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([ </span><span style="color: #6A737D;">/* entries */</span><span style="color: #E1E4E8;"> ]),</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Fieldset</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Tax&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([ </span><span style="color: #6A737D;">/* entries */</span><span style="color: #E1E4E8;"> ]),</span></div><div class='line'><span style="color: #E1E4E8;">    ]);</span></div></code></pre>
+<p>Every entry accepts <code>columnSpan(int)</code> / <code>columnSpanFull()</code> to span the grid.</p>
+<h3 id="flex">Flex</h3>
+<p><code>Flex</code> arranges its children side by side on one horizontal (flexbox) axis, stacking vertically on small screens — useful for pairing a details card with a summary, or an avatar with a bio. Children grow to share the row evenly; <code>from()</code> sets the breakpoint (<code>sm</code> / <code>md</code> / <code>lg</code>, default <code>md</code>) at which the row becomes horizontal.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Schema\Flex</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">Flex</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">from</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;lg&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Details&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([ </span><span style="color: #6A737D;">/* entries */</span><span style="color: #E1E4E8;"> ]),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Section</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Summary&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">schema</span><span style="color: #E1E4E8;">([ </span><span style="color: #6A737D;">/* entries */</span><span style="color: #E1E4E8;"> ]),</span></div><div class='line'><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<h2 id="infolist-api">Infolist API</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>make()</code></td>
+<td>Create an infolist</td>
+</tr>
+<tr>
+<td><code>record(Model|array)</code></td>
+<td>Bind the data source</td>
+</tr>
+<tr>
+<td><code>state(array)</code></td>
+<td>Bind a plain array (alias of <code>record()</code>)</td>
+</tr>
+<tr>
+<td><code>schema(array)</code></td>
+<td>Entries and layout components</td>
+</tr>
+<tr>
+<td><code>columns(int)</code></td>
+<td>Top-level grid columns (default 1)</td>
+</tr>
+<tr>
+<td><code>getRecord()</code> / <code>getSchema()</code> / <code>getColumns()</code> / <code>getLivewireComponent()</code></td>
+<td>Accessors</td>
+</tr>
+<tr>
+<td><code>toHtml()</code></td>
+<td>Render (also via <code>Htmlable</code> echo)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="in-this-section">In This Section</h2>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="entries/">Entries</a></td>
+<td>Every entry type — text, badge, icon, boolean, list, image, colour, key-value, repeatable, changes</td>
+</tr>
+<tr>
+<td><a href="actions/">Actions</a></td>
+<td>Buttons on an infolist, and an infolist rendered inside an action modal</td>
+</tr>
+</tbody>
+</table>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="../record-panels/">Editable Panels</a> — the same shape, with entries that write back</li>
+<li><a href="../schema/overview/">Schema</a> — the layout vocabulary shared with forms</li>
+<li><a href="../../panels/pages/">Panels: Pages</a> — the view page that renders one of these</li>
+<li><a href="../../forms/overview/">Forms</a> — the editing counterpart</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../widgets/dashboards/">
+                                        <span>← Previous</span>
+                                        <strong>Dashboards</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="entries/">
+                                        <span>Next →</span>
+                                        <strong>Entries</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#installation">
+                                            Installation                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#quick-start">
+                                            Quick start                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#entry-types-at-a-glance">
+                                            Entry types at a glance                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#the-infolist-object">
+                                            The Infolist object                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#composing-the-schema">
+                                            Composing the schema                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#state-resolution">
+                                            State resolution                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#layout">
+                                            Layout                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#flex">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#infolist-api">
+                                            Infolist API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#in-this-section">
+                                            In This Section                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#related">
+                                            Related                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

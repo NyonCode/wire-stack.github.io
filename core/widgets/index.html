@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Widgets | Wire Docs</title>
+    <meta name="description" content="What every widget shares — the base class, polling, authorization and the complete API — and which type to reach for.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/core/widgets/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/core/widgets/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/core/widgets/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/core/widgets/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Widgets | Wire Docs">
+    <meta property="og:description" content="What every widget shares — the base class, polling, authorization and the complete API — and which type to reach for.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/core/widgets/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/assets/previews/widgets-overview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/assets/previews/widgets-overview.png">
+    <meta name="twitter:title" content="Widgets | Wire Docs">
+    <meta name="twitter:description" content="What every widget shares — the base class, polling, authorization and the complete API — and which type to reach for.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../core/widgets/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../cs/core/widgets/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../v1/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Start Here</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../documentation/">
+                                Wire Documentation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/installation/">
+                                Installing Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/getting-started/">
+                                Getting Started                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/configuration/">
+                                Configuration                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/authorization/">
+                                Authorization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/theming/">
+                                Theming &amp; Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/testing/">
+                                Testing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/cookbook/">
+                                Cookbook                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/error-handling/">
+                                Error Handling                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/troubleshooting/">
+                                Troubleshooting                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/upgrade/">
+                                Upgrade Guide                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/project-map/">
+                                Project Map                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Forms</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/validation/">
+                                Form Validation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/reactive-fields/">
+                                Reactive Fields                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/save-lifecycle/">
+                                Save Lifecycle                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/custom-fields/">
+                                Extending Forms                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Fields</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/">
+                                            Form Fields                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Table</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/">
+                                            Columns                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/relations/">
+                                            Relation Paths &amp; Dot Notation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/casts/">
+                                            Enum &amp; JSON Casts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/editing/">
+                                            Editing &amp; Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/fill-handle/">
+                                            Fill Handle (Excel-style AutoFill)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/">
+                                            Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/relationships/">
+                                            Relationship &amp; Sub-Row Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/column-level/">
+                                            Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/custom/">
+                                            Custom Filter Class                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/actions/">
+                                Table Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/record-actions/">
+                                Record Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/selection/">
+                                Selecting Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/gestures/">
+                                The Gesture Layer                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/inactive-records/">
+                                Inactive Records                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/exports/">
+                                Table Exports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/imports/">
+                                Table Imports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/summaries/">
+                                Summaries                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/grouping/">
+                                Row Grouping                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/sub-rows/">
+                                Sub-Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/relation-managers/">
+                                Relation Managers                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/data-sources/">
+                                Data Sources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/notifications/">
+                                Table Notifications                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/advanced/">
+                                Advanced Features                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/icons/">
+                                            Icons                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/colors/">
+                                            Colors                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/enums/">
+                                            Enums                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../foundation/blade-components/">
+                                            Blade Components                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../actions/">
+                                            Actions                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/modals/">
+                                            Action Modals                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/lifecycle/">
+                                            Lifecycle And Queues                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/appearance/">
+                                            Buttons And Appearance                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/standalone/">
+                                            Actions Outside A Table                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../actions/workflow/">
+                                            Workflow And Transitions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../modals/">
+                                Modals                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../notifications/">
+                                            Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/toasts/">
+                                            Toasts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/persistent/">
+                                            Persistent Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/usage/">
+                                            Where To Send From                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../notifications/custom-drivers/">
+                                            Custom Drivers                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group is-open" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="true">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="is-active" href="./">
+                                            Widgets                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="stats/">
+                                            Stats                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="charts/">
+                                            Charts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="custom/">
+                                            Tables And Custom Views                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="dashboards/">
+                                            Dashboards                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../infolists/">
+                                            Infolists                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../infolists/actions/">
+                                            Infolist Actions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../record-panels/">
+                                Editable Panels                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../global-search/">
+                                Global Search                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../plugins/">
+                                            Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/registration/">
+                                            Registering Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/hooks/">
+                                            Hooks                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/extending/">
+                                            Extending Surfaces                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../plugins/examples/">
+                                            Examples And Testing                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../panels/overview/">
+                                Panels                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/pages/">
+                                Pages                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/navigation/">
+                                Navigation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/routing/">
+                                Routing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/modules/">
+                                Modules                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../admin/overview/">
+                                The Admin Shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/layout/">
+                                The Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/sidebar/">
+                                The Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/branding/">
+                                Branding And Theme                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../modules/">
+                                Ready-Made Modules                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/users/">
+                                The Users Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/teams-and-two-factor/">
+                                Teams and Two-Factor                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/auth/">
+                                The Auth Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/settings/">
+                                The Settings Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/notifications/">
+                                The Notifications Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/audit/">
+                                The Audit Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modules/media/">
+                                The Media Module                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../sortable/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/row-sorting/">
+                                Row Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/column-sorting/">
+                                Column Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/customization/">
+                                Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/advanced/">
+                                Advanced Usage                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/api-reference/">
+                                API Reference                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../boost/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/mcp-tools/">
+                                MCP Server &amp; Tools                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/guidelines-and-skills/">
+                                Guidelines &amp; Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero has-preview">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Core</span>
+                            </nav>
+                            <p class="eyebrow">Core</p>
+                            <h1>Widgets</h1>
+                                                            <p class="lead">What every widget shares — the base class, polling, authorization and the complete API — and which type to reach for.</p>
+                            
+                                                            <figure class="hero-preview">
+                                    <img src="../../assets/previews/widgets-overview.png" alt="Widgets preview" loading="lazy">
+                                </figure>
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#widget-types-at-a-glance">Widget Types At A Glance</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#widget-base">Widget Base</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#polling">Polling</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#usage">Usage</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#polling-api">Polling API</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#a-tick-refreshes-the-widget-not-the-dashboard">A tick refreshes the widget, not the dashboard</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#filters">Filters</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#how-the-round-trip-works">How the round trip works</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#deferred-rendering">Deferred Rendering</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#writing-your-own-widget">Writing Your Own Widget</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#header-actions">Header Actions</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#what-a-widget-action-is-and-what-it-is-not">What a widget action is, and what it is not</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#how-it-reaches-an-action-at-all">How it reaches an Action at all</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#customisable-dashboards">Customisable Dashboards</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#what-is-stored">What is stored</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#the-rules-worth-knowing">The rules worth knowing</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#height-needs-a-row-to-mean-something">Height needs a row to mean something</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#rearranging-it">Rearranging it</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#edit-mode-api">Edit-mode API</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#the-tray">The tray</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#tray-api">Tray API</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#ready-made-controls">Ready-made controls</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#what-the-whole-thing-needs-to-work">What the whole thing needs to work</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#authorization">Authorization</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#widget-api-reference">Widget API Reference</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#widget-base-class">Widget (base class)</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#blade-components">Blade Components</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#in-this-section">In This Section</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#related">Related</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>A widget is one panel of a dashboard: a figure, a chart, a small table, or a view
+of your own. They are ordinary PHP objects that render to HTML, composed into a
+responsive grid by a host component — so a widget knows nothing about the page it
+is on, and a page knows nothing about what a widget draws.</p>
+<p>Every widget shares the same fluent builder, so heading, visibility, authorization, column span, polling, filters and deferral work identically across every type.</p>
+<h2 id="widget-types-at-a-glance">Widget Types At A Glance</h2>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Class</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stats overview</strong></td>
+<td><code>StatsOverviewWidget</code></td>
+<td>KPIs, counters, and summary metrics with optional sparklines</td>
+</tr>
+<tr>
+<td><strong>Chart</strong></td>
+<td><code>ChartWidget</code></td>
+<td>Line, bar, pie, and doughnut charts powered by Chart.js</td>
+</tr>
+<tr>
+<td><strong>Chart presets</strong></td>
+<td><code>LineChartWidget</code> / <code>PieChartWidget</code> / <code>DoughnutChartWidget</code></td>
+<td>Declarative <code>ChartWidget</code> presets (pie/doughnut show the legend by default)</td>
+</tr>
+<tr>
+<td><strong>Bar chart</strong></td>
+<td><code>BarChartWidget</code></td>
+<td>Pure-CSS vertical/horizontal bars (finance, system) — no JavaScript</td>
+</tr>
+<tr>
+<td><strong>Progress</strong></td>
+<td><code>ProgressWidget</code></td>
+<td>Pure-CSS rows of a fill against a track — how far a figure is toward its target</td>
+</tr>
+<tr>
+<td><strong>List</strong></td>
+<td><code>ListWidget</code></td>
+<td>Pure-CSS feed of recent records or events, each optionally a link</td>
+</tr>
+<tr>
+<td><strong>Table</strong></td>
+<td><code>TableWidget</code> (in <code>wire-table</code>)</td>
+<td>A few rows of a table inside a dashboard card — no toolbar, no pagination</td>
+</tr>
+<tr>
+<td><strong>Custom</strong></td>
+<td><code>CustomWidget</code></td>
+<td>Any Blade view rendered as a widget</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Mix widget types freely inside a single <code>WithWidgets</code> dashboard — each widget controls its own column span, visibility, and refresh interval. See <a href="dashboards/#dashboard-layout-withwidgets">Dashboard Layout</a>.</p>
+</blockquote>
+<h2 id="widget-base">Widget Base</h2>
+<p>All widgets extend <code>NyonCode\WireCore\Widgets\Widget</code> — an abstract class implementing <code>Htmlable</code>.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Widgets\Widget</span><span style="color: #E1E4E8;">;</span></div></code></pre>
+<p>Every widget supports:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $heading)          </span><span style="color: #6A737D;">// widget title</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description)  </span><span style="color: #6A737D;">// subtitle text</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnSpan</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">int|string</span><span style="color: #E1E4E8;"> $span)       </span><span style="color: #6A737D;">// grid column span (1-12, &#39;full&#39;)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">extraAttributes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $attrs)      </span><span style="color: #6A737D;">// custom HTML attributes</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hidden</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $hidden)       </span><span style="color: #6A737D;">// visibility control</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $visible)     </span><span style="color: #6A737D;">// visibility control</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $permission)     </span><span style="color: #6A737D;">// authorization via Gate</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorize</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $ability)         </span><span style="color: #6A737D;">// authorization via Gate ability</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorizeUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $callback)  </span><span style="color: #6A737D;">// custom authorization callback</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $options, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $default </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)  </span><span style="color: #6A737D;">// a select the server resolves</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lazy</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $condition </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)       </span><span style="color: #6A737D;">// defer the first render</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">headerActions</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $actions)      </span><span style="color: #6A737D;">// buttons in the widget header</span></div></code></pre>
+<p>Widgets render via Blade views and support <code>toHtml()</code> / <code>__toString()</code> for direct output.</p>
+<hr>
+<h2 id="polling">Polling</h2>
+<p>All widgets support auto-refresh via Livewire polling.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Widgets\Concerns\HasPolling</span><span style="color: #E1E4E8;">;</span></div></code></pre>
+<h3 id="usage">Usage</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;30s&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">ChartWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;60s&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingOnlyVisible</span><span style="color: #E1E4E8;">()            </span><span style="color: #6A737D;">// pause polling when widget is off-screen</span></div></code></pre>
+<h3 id="polling-api">Polling API</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $interval)       </span><span style="color: #6A737D;">// &#39;5s&#39;, &#39;10s&#39;, &#39;30s&#39;, &#39;60s&#39;, etc.</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getPollingInterval</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isPolling</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingOnlyVisible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $only </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)    </span><span style="color: #6A737D;">// only poll when visible in viewport</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isPollingOnlyVisible</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getPollingDirective</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;">           </span><span style="color: #6A737D;">// returns wire:poll directive string</span></div></code></pre>
+<blockquote>
+<p><strong>Polling is visibility-aware by default.</strong> <code>pollingOnlyVisible</code> defaults to <code>true</code>, so widgets use <code>wire:poll.visible</code> and pause requests while scrolled out of view. Call <code>-&gt;pollingOnlyVisible(false)</code> to keep refreshing off-screen.</p>
+</blockquote>
+<h3 id="a-tick-refreshes-the-widget-not-the-dashboard">A tick refreshes the widget, not the dashboard</h3>
+<p>A plain <code>wire:poll</code> is <code>$refresh</code> — Livewire renders the whole component. On a
+dashboard that means one polling widget re-renders every other widget beside it,
+and any table sharing the page: measured on a 12-widget grid, <strong>6.5 ms and
+57 219 B</strong> to deliver one widget's <strong>3 940 B</strong>.</p>
+<p>So the tick names the widget instead. Each widget carries a key, and the grid
+anchors the polling one:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:poll.30s.visible</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;refreshWidget(&#39;w1&#39;)&quot;</span><span style="color: #E1E4E8;">&gt;   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:partial</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;widget-w1&quot;</span><span style="color: #E1E4E8;">&gt; … &lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;         </span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">div</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p><code>WithWidgets::refreshWidget()</code> renders that widget alone and the response carries
+only its markup. Nothing to configure — it is how a polling widget behaves.</p>
+<p>Keys are derived from the widget's position in <code>getWidgets()</code>, so hiding a widget
+does not renumber the rest. Where the declaration's order is likely to change,
+name the key yourself:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">)               </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;30s&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div></code></pre>
+<p>If the key names nothing on the next request — the widget was hidden, stopped
+polling, or was removed — the tick falls back to a full render rather than
+answering with half a page.</p>
+<blockquote>
+<p><strong>The grid ships wire-core's bundle when a widget polls.</strong> The anchor is only
+an attribute; the code that applies the region lives in <code>wire-core-dropdown.js</code>.
+A dashboard with no dropdown, modal or table has no other reason to load it, so
+the grid asks for it — otherwise the response would arrive and nothing on the
+page would change.</p>
+</blockquote>
+<hr>
+<h2 id="filters">Filters</h2>
+<p>A widget can carry a select that narrows what it shows, and the selection is
+resolved <strong>on the server</strong> — which is the only place it can be, because the
+closure that turns a filter key into data is PHP.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">ListWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Recent orders&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filter</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;week&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;This week&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;month&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;This month&#39;</span><span style="color: #E1E4E8;">], </span><span style="color: #9ECBFF;">&#39;week&#39;</span><span style="color: #E1E4E8;">)   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">items</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $filter) =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">orders</span><span style="color: #E1E4E8;">($filter))              </span></div></code></pre>
+<p><code>filter()</code> is on the widget base, so every type has it: a chart's datasets, a
+list's entries and a progress board's rows all take the same closure shape.</p>
+<h3 id="how-the-round-trip-works">How the round trip works</h3>
+<p>The select calls <code>filterWidget()</code> on the host component. The host records the
+choice against the widget's key, pushes it back into the widget before anything
+renders, and answers with <strong>that widget's markup alone</strong> — the same <code>wire:partial</code>
+region a poll tick uses:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #E1E4E8;">&lt;</span><span style="color: #85E89D;">select</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:change</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;filterWidget(&#39;w0&#39;, $event.target.value)&quot;</span><span style="color: #E1E4E8;">&gt;   </span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">value</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;week&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">selected</span><span style="color: #E1E4E8;">&gt;This week&lt;/</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">value</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;month&quot;</span><span style="color: #E1E4E8;">&gt;This month&lt;/</span><span style="color: #85E89D;">option</span><span style="color: #E1E4E8;">&gt;</span></div><div class='line'><span style="color: #E1E4E8;">&lt;/</span><span style="color: #85E89D;">select</span><span style="color: #E1E4E8;">&gt;</span></div></code></pre>
+<p>Three consequences worth knowing:</p>
+<ul>
+<li><strong>The selection survives.</strong> It lives on the host (<code>$widgetFilters</code>), not on the
+widget — a widget is rebuilt from the declaration on every request and cannot
+remember anything.</li>
+<li><strong>A widget answers only for the options it enumerated.</strong> The key and the value
+both travel in the request, so a value the widget never offered is ignored
+rather than handed to your <code>match</code>.</li>
+<li><strong>A widget with no filter falls back to a full render</strong>, like any call that
+queues no region.</li>
+</ul>
+<blockquote>
+<p><strong>This used to do nothing.</strong> Before 2.0 the filter lived on <code>ChartWidget</code> alone
+and was resolved in the browser: an Alpine <code>updateChart()</code> assigned
+<code>this.labels</code> and <code>this.datasets</code> back onto the chart it was constructed with,
+so changing the selection redrew the identical chart and the dataset closure
+never ran with anything but its default.</p>
+</blockquote>
+<hr>
+<h2 id="deferred-rendering">Deferred Rendering</h2>
+<p>A widget whose figure costs a query the rest of the page should not wait for can
+draw a placeholder first and fetch itself afterwards:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Lifetime revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lazy</span><span style="color: #E1E4E8;">()                       </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lifetimeRevenue</span><span style="color: #E1E4E8;">())])</span></div></code></pre>
+<p>The grid renders a skeleton card the size of the widget, <code>wire:init</code> calls
+<code>loadWidget()</code> on the host, and the response carries that one widget's markup as
+a <code>wire:partial</code> region. The page is interactive before the count comes back.</p>
+<p><strong>Once loaded, loaded.</strong> The host records which widgets have been fetched, so a
+later poll tick, filter change or full render draws the real widget rather than
+dropping back to the skeleton.</p>
+<p><strong>The placeholder is a card, not a spinner</strong> — the grid has already committed to
+a layout, and a placeholder shorter than its widget makes the page jump when the
+real one lands. The heading is drawn for real, because the server already knows
+it, and the skeleton bars carry <code>aria-busy</code> with a live region announcing the
+wait.</p>
+<blockquote>
+<p><strong>Reach for it last.</strong> The framework's rule is to make a render <em>cheap</em> rather
+than to defer it: eager HTML keeps the full DOM, adds no open latency and needs
+no client-side re-render. <code>lazy()</code> is for a widget that is <strong>slow</strong>, not one
+that is merely large.</p>
+</blockquote>
+<hr>
+<h2 id="writing-your-own-widget">Writing Your Own Widget</h2>
+<p>Two files — a class that resolves state and a Blade view that draws it — and the
+generator writes both:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">make:wire-widget</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">Revenue</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">app/Widgets/RevenueWidget.php</span></div><div class='line'><span style="color: #e1e4e8;">resources/views/widgets/revenue.blade.php</span></div></code></pre>
+<p>The class extends <code>Widget</code>, names the view in <code>viewName()</code> and hands it data from
+<code>getViewData()</code>; <code>$widget</code> is always in scope inside the view. Everything on this
+page — polling, filters, deferral, column span, authorization — works on it
+without another line.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Widgets</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Models\Invoice</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Widgets\Widget</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">RevenueWidget</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Widget</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">viewName</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;">      </span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;widgets.revenue&#39;</span><span style="color: #E1E4E8;">;              </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">getViewData</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">    </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #9ECBFF;">&#39;value&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Invoice</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">whereMonth</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;paid_at&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #B392F0;">now</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">month)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sum</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;total&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        ];</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }                                          </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>An existing view is never overwritten — re-running the generator is usually about
+getting the class back, and replacing markup somebody wrote is not a trade a
+generator gets to make. Pass <code>--force</code> to overwrite the class.</p>
+<p>Both templates are publishable, so an application can change what the generator
+produces:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=wire-core::stubs</span></div></code></pre>
+<p>They land in <code>stubs/wire-core/</code>, namespaced by package so two packages shipping a
+<code>dashboard.stub</code> cannot overwrite each other, and the generator reads them from
+there. (<code>stubs/</code> is still consulted second, for a file put there by hand.)</p>
+<p>For a widget that is only a Blade view with no state of its own, reach for
+<a href="custom/"><code>CustomWidget</code></a> instead — no class to write at all.</p>
+<hr>
+<h2 id="header-actions">Header Actions</h2>
+<p>A widget can carry buttons in its header — refresh a figure, export the rows,
+mark a queue as read:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\Action</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Open tickets&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">headerActions</span><span style="color: #E1E4E8;">([                                              </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;refresh&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Refresh&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;outline:arrow-path&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> () =&gt; </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">recount</span><span style="color: #E1E4E8;">()),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;report&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Full report&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">url</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">route</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;tickets.report&#39;</span><span style="color: #E1E4E8;">)),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ])                                                             </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Waiting&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">waiting</span><span style="color: #E1E4E8;">())])</span></div></code></pre>
+<p><code>headerActions()</code> is the same vocabulary a schema section header and an infolist
+entry use — one owner, <code>Foundation\Concerns\HasActions</code> — so an action you wrote
+for one of those surfaces works here unchanged. Every widget type draws them, in
+its own header.</p>
+<h3 id="what-a-widget-action-is-and-what-it-is-not">What a widget action is, and what it is not</h3>
+<p>It runs its <strong>callback</strong>, on the server, and the widget is re-rendered
+afterwards — the one region, like a poll tick. It is not the action <em>lifecycle</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Works</th>
+<th>Does not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-&gt;action(fn () =&gt; …)</code></td>
+<td><code>-&gt;requiresConfirmation()</code></td>
+</tr>
+<tr>
+<td><code>-&gt;url(…)</code>, <code>-&gt;openUrlInNewTab()</code></td>
+<td><code>-&gt;form([...])</code>, <code>-&gt;slideOver()</code>, <code>-&gt;modal()</code></td>
+</tr>
+<tr>
+<td><code>-&gt;label()</code>, <code>-&gt;icon()</code>, <code>-&gt;color()</code>, <code>-&gt;tooltip()</code></td>
+<td><code>-&gt;wizard()</code></td>
+</tr>
+<tr>
+<td><code>-&gt;hidden()</code> / <code>-&gt;visible()</code></td>
+<td>mounting, and anything that resumes into a mounted action</td>
+</tr>
+</tbody>
+</table>
+<p>An action that <em>removes</em> its own widget — a "Dismiss" button whose callback
+flips what the widget's <code>visible()</code> reads — is answered with a full render
+instead. A partial can replace an element but not delete one.</p>
+<p>That is the same bargain an infolist entry's actions strike, and for the same
+reason: a widget is rebuilt from its declaration on every request, so the button
+carries a <em>name</em> rather than a closure and there is nothing mounted to resume
+into. An action that has to ask before it acts belongs on the page — a host
+composing <code>WithActions</code> owns a modal host — or inside a
+<a href="custom/"><code>CustomWidget</code></a> whose view renders <code>&lt;x-wire-actions::button&gt;</code>.</p>
+<h3 id="how-it-reaches-an-action-at-all">How it reaches an Action at all</h3>
+<p>Worth one paragraph, because it is the framework's own layering rule in
+miniature. <code>Widgets</code> and <code>Actions</code> are sibling modules and neither may import
+the other, so nothing in the widget host knows what an <code>Action</code> is: the widget
+resolves the action by name and answers with <code>Foundation\Contracts\ActionContract</code>,
+and <code>Foundation\Contracts\RunsComponentActions</code> — bound in the container,
+implemented on the Actions side — is what runs the callback. A widget in a
+package that does not require the Actions module still compiles; its buttons
+simply have nothing to run.</p>
+<hr>
+<p><a id="customisable-dashboards"></a></p>
+<h2 id="customisable-dashboards">Customisable Dashboards</h2>
+<p>A dashboard can let each user decide which widgets are on it, in what order, and
+how big each one is. It is <strong>off by default</strong>, and a dashboard that says nothing
+behaves exactly as it does today — no store is consulted and the declaration is
+the layout.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">SalesDashboard</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Dashboard</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">customisable</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;">   </span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">;                       </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">widgets</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span><span style="color: #6A737D;">/* … */</span><span style="color: #E1E4E8;">];</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>The layout is stored per <code>(dashboard key, user)</code>, through the same
+<a href="../../table/advanced/#column-toggling">preference store</a> a table's column
+layout uses — configured separately, under <code>wire-core.preferences</code>, because
+whether a dashboard layout is worth a database row is its own question. With no
+driver configured a dashboard still works and simply forgets.</p>
+<h3 id="what-is-stored">What is stored</h3>
+<p>An ordered list of what is <em>placed</em>, each entry with a width and a height:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">[</span><span style="color: #9ECBFF;">&#39;widgets&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    [</span><span style="color: #9ECBFF;">&#39;key&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;w&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;h&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">],</span></div><div class='line'><span style="color: #E1E4E8;">    [</span><span style="color: #9ECBFF;">&#39;key&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;orders&#39;</span><span style="color: #E1E4E8;">,  </span><span style="color: #9ECBFF;">&#39;w&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;h&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">],</span></div><div class='line'><span style="color: #E1E4E8;">]]</span></div></code></pre>
+<p>Position comes from the order and size from two integers; CSS Grid packs the
+result. There are no coordinates, so there is nothing to collide and no hole to
+re-pack — and no way to pin a widget to an absolute cell. <code>w</code> is the column span
+(1–4) and <code>h</code> the row span (1–6).</p>
+<h3 id="the-rules-worth-knowing">The rules worth knowing</h3>
+<ul>
+<li><strong>The list is what is placed.</strong> A declared widget whose key is not in it is
+not on the dashboard — it is available to put back. One rule doing two jobs,
+rather than a <code>hidden</code> flag beside the order that could disagree with it.</li>
+<li><strong>An empty list is not the same as no layout.</strong> Nothing stored means the
+declaration decides, which is what a user who has never touched this dashboard
+must see. A stored empty list means somebody took everything off, and they are
+entitled to an empty dashboard.</li>
+<li><strong>A layout is a preference, never a grant.</strong> A widget the layout places and
+<code>visible()</code> or <code>permission()</code> hides stays hidden.</li>
+<li><strong>A key the declaration no longer has is dropped.</strong> A layout cannot conjure
+back a widget that was renamed or removed by whoever owns the dashboard.</li>
+<li><strong>The bag arrives from a request</strong>, so a size outside the grid is clamped and a
+key listed twice is placed once, at its first position.</li>
+</ul>
+<h3 id="height-needs-a-row-to-mean-something">Height needs a row to mean something</h3>
+<p>A <code>row-span-2</code> tile needs rows of a known height, so a grid that has one gets a
+row baseline and its tiles scroll inside themselves rather than stretching the
+row. A grid where nothing spans rows never gets that baseline — a card there is
+still as tall as its contents, exactly as before.</p>
+<h3 id="rearranging-it">Rearranging it</h3>
+<p>Editing is a <strong>mode</strong>, not a permanent set of handles. <code>Customise</code> reveals the
+drag handles and the size steppers; <code>Save</code> keeps the arrangement, <code>Cancel</code>
+throws it away, <code>Reset</code> forgets the layout entirely and goes back to what the
+dashboard declares.</p>
+<p>The host trait gives you the methods; the chrome around the grid is yours,
+because it belongs to whatever renders the dashboard rather than to the grid:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">@if</span><span style="color: #E1E4E8;">($editingWidgets)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;saveWidgetLayout&quot;</span><span style="color: #E1E4E8;">&gt;Save layout&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;       </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;cancelEditingWidgets&quot;</span><span style="color: #E1E4E8;">&gt;Cancel&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;        </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;resetWidgetLayout&quot;</span><span style="color: #E1E4E8;">&gt;Reset to default&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt; </span></div><div class='line'><span style="color: #F97583;">@else</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    &lt;</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">wire:click</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;startEditingWidgets&quot;</span><span style="color: #E1E4E8;">&gt;Customise&lt;/</span><span style="color: #85E89D;">button</span><span style="color: #E1E4E8;">&gt;      </span></div><div class='line'><span style="color: #F97583;">@endif</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.widget-grid&#39;</span><span style="color: #E1E4E8;">, [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;widgets&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getVisibleWidgets</span><span style="color: #E1E4E8;">(),</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;columns&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;editing&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $editingWidgets,</span></div><div class='line'><span style="color: #E1E4E8;">])</span></div></code></pre>
+<p><strong>Nothing is written until Save.</strong> The arrangement lives in a draft on the
+component while the mode is open, which is what gives Cancel something to throw
+away — a live drag would persist on every drop, so a stray grab would overwrite a
+layout somebody was happy with and nothing could undo it.</p>
+<p><strong>The drag costs no JavaScript.</strong> It is <code>x-sort</code>, Livewire's own Alpine plugin,
+which carries SortableJS and a drag ghost with it. The server places the tile: a
+drop reports "this key, this position", the draft is reordered and the grid
+re-renders. Cells carry a <code>wire:key</code>, so the morph pairs them by key rather than
+position and the dropped DOM cannot disagree with the answer.</p>
+<p><strong>Resizing is steppers, not a drag corner.</strong> A span is 1–4 columns and 1–6 rows,
+so there are eleven reachable sizes and a button says which one you are getting.</p>
+<h3 id="edit-mode-api">Edit-mode API</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">startEditingWidgets</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">      </span><span style="color: #6A737D;">// open the mode, from the current arrangement</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">saveWidgetLayout</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">         </span><span style="color: #6A737D;">// keep it</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cancelEditingWidgets</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">     </span><span style="color: #6A737D;">// discard the draft</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">resetWidgetLayout</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// forget the layout; back to the declaration</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">moveWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $position): </span><span style="color: #79B8FF;">void</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">resizeWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $width, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $height): </span><span style="color: #79B8FF;">void</span></div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $editingWidgets</span></div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $widgetLayoutDraft</span></div></code></pre>
+<p>All of them are no-ops on a dashboard that never opted in — they are public
+Livewire methods, so the browser can call them whenever it likes.</p>
+<h3 id="the-tray">The tray</h3>
+<p>The widgets a user can put on the dashboard but has not. It appears with edit
+mode, and it is one drag with the grid — a tile dragged out goes back to the
+tray, one dragged in goes on the dashboard. Buttons do the same two things for
+anybody not using a pointer.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Money&#39;</span><span style="color: #E1E4E8;">)            </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">([[</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">], [</span><span style="color: #79B8FF;">4</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">]])   </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Total&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">revenue</span><span style="color: #E1E4E8;">())])</span></div></code></pre>
+<p><strong><code>group()</code> is the tray's heading, and nothing else.</strong> It does not group anything
+on the dashboard, where the user's own order decides. Widgets that name no group
+come first, in one plain run — one group is a heading over everything, which is a
+heading that says nothing.</p>
+<p><strong><code>sizes()</code> narrows what the widget is offered at</strong>, as <code>[width, height]</code> pairs.
+A sparkline row is not a 1×1 tile and a single figure is not a 4×6 one, and
+letting a user find that out by dragging is worse than not offering it. The first
+pair is the size the widget arrives at when it is added. Declaring none leaves
+the whole grid — 1–4 columns by 1–6 rows.</p>
+<p>The pairs are the <em>offer</em>, not a promise about storage: a layout that arrives
+carrying a size outside them is still clamped to the grid rather than rejected,
+because a stored layout can outlive the declaration that shaped it.</p>
+<p><strong>"Removed" and "available" are the same state.</strong> Nothing records that a widget
+was taken off — it is simply not in the layout any more, which is what puts it in
+the tray. One rule doing two jobs, so the two cannot disagree.</p>
+<p>A widget a policy hides is never offered: a tray listing something that vanishes
+when you add it is worse than one that does not list it.</p>
+<h3 id="tray-api">Tray API</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $group)                    </span><span style="color: #6A737D;">// the tray heading this widget is offered under</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $sizes)                      </span><span style="color: #6A737D;">// [[w, h], …] — the sizes it may take</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getGroup</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getSizes</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDefaultSize</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">                  </span><span style="color: #6A737D;">// the first offered pair, or [1, 1]</span></div></code></pre>
+<p>on the host:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">placeWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key, </span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $position): </span><span style="color: #79B8FF;">void</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;">// add, or move if already there</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">removeWidget</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key): </span><span style="color: #79B8FF;">void</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getAvailableWidgets</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">                    </span><span style="color: #6A737D;">// group =&gt; widgets, for the tray</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">widgetGridData</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?int</span><span style="color: #E1E4E8;"> $columns </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">     </span><span style="color: #6A737D;">// everything the grid view needs</span></div></code></pre>
+<p><code>widgetGridData()</code> is one call rather than five keys to assemble, because four of
+them have to agree: a grid rendered without <code>available</code> draws an empty tray, and
+one rendered without <code>trayGroup</code> puts the tray and the grid in different drag
+groups so a tile cannot cross between them. Neither is an error anywhere.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">render</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.widget-grid&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">widgetGridData</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">));</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h3 id="ready-made-controls">Ready-made controls</h3>
+<p>The methods are yours to call from wherever your layout puts buttons — but the
+common case ships:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.partials.widget-layout-controls&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">@include</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-core::widgets.widget-grid&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Both render nothing on a dashboard nobody may rearrange, so including them
+unconditionally is safe and there is no condition to keep in step. <code>DashboardPage</code>
+in wire-panels already includes both, so a declared dashboard that says
+<code>customisable()</code> is rearrangeable with no view of your own at all.</p>
+<p>There is no separate package for this. The store is wire-core's, the page is
+wire-panels', and the widgets are the application's — a module would have owned
+nothing, and "optional" is already what <code>customisable()</code> and the driver config
+mean.</p>
+<h3 id="what-the-whole-thing-needs-to-work">What the whole thing needs to work</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-core.php — or leave it, and layouts live for the page only</span></div><div class='line'><span style="color: #9ECBFF;">&#39;preferences&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;default&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;database&#39;</span><span style="color: #E1E4E8;">],</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">vendor:publish</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--tag=</span><span style="color: #9ECBFF;">&quot;wire-core::migrations&quot;</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;"># for the database driver</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">migrate</span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">SalesDashboard</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Dashboard</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">customisable</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> { </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">; }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">widgets</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;revenue&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">)  </span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Money&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">([[</span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">1</span><span style="color: #E1E4E8;">], [</span><span style="color: #79B8FF;">4</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">2</span><span style="color: #E1E4E8;">]])                    </span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">Stat</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Total&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">revenue</span><span style="color: #E1E4E8;">())]),</span></div><div class='line'><span style="color: #E1E4E8;">        ];</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Every widget on a customisable dashboard needs its own <code>key()</code>. Without one the
+key is derived from the widget's <em>position</em>, and a stored layout addresses
+widgets by key — so inserting a widget at the top of the declaration would make
+every saved layout describe different widgets than it did yesterday, while the
+page still renders. A customisable dashboard refuses rather than letting that
+happen.</p>
+<hr>
+<h2 id="authorization">Authorization</h2>
+<p>Widgets inherit authorization from <code>HasVisibility</code> which uses the <code>HasAuthorization</code> trait. See <a href="#authorization">Authorization</a> for details.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">StatsOverviewWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view-dashboard-stats&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">stats</span><span style="color: #E1E4E8;">([</span><span style="color: #F97583;">...</span><span style="color: #E1E4E8;">])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">ChartWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorize</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;view-revenue-chart&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Revenue&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">CustomWidget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorizeUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($user) =&gt; $user</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasRole</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;manager&#39;</span><span style="color: #E1E4E8;">))</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;dashboard.manager-panel&#39;</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Unauthorized widgets are automatically excluded from <code>getVisibleWidgets()</code>.</p>
+<hr>
+<h2 id="widget-api-reference">Widget API Reference</h2>
+<h3 id="widget-base-class">Widget (base class)</h3>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Widget</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">                              </span><span style="color: #6A737D;">// static factory</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $heading)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getHeading</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDescription</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">key</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $key)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getKey</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">usesPartialAnchor</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;">                         </span><span style="color: #6A737D;">// true when a tick, a load or a filter targets it</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">render</span><span style="color: #E1E4E8;">(): </span><span style="color: #79B8FF;">View</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">toHtml</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">string</span></div></code></pre>
+<p>Inherited from traits:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnSpan</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">int|string</span><span style="color: #E1E4E8;"> $span): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// HasColumnSpan</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getColumnSpan</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">int|string</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">rowSpan</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?int</span><span style="color: #E1E4E8;"> $span)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">           </span><span style="color: #6A737D;">// HasRowSpan — 1–6, null is one row sized by content</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getRowSpan</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?int</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">spansRows</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">group</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $group)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">             </span><span style="color: #6A737D;">// tray heading it is offered under</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sizes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $sizes): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">               </span><span style="color: #6A737D;">// [[w, h], …] — the sizes it may take</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getGroup</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getSizes</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getDefaultSize</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">extraAttributes</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $attrs): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">      </span><span style="color: #6A737D;">// HasExtraAttributes</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getExtraAttributes</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingInterval</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $interval)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;"> </span><span style="color: #6A737D;">// HasPolling</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">pollingOnlyVisible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $only </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">): </span><span style="color: #F97583;">static</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">lazy</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $condition </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// CanBeLazy</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isLazy</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $options, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $default </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;">// HasWidgetFilter</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">activeFilter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $filter)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">applyFilter</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $filter)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// ignores a key the widget does not offer</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getFilterOptions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">?array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActiveFilter</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">?string</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasFilter</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">items</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $items): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">        </span><span style="color: #6A737D;">// HasWidgetItems — fn (?string $filter): array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">emptyState</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $message)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getItems</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasItems</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getEmptyState</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">string</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">headerActions</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $actions): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">      </span><span style="color: #6A737D;">// HasActions — array&lt;ActionContract&gt;</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">actions</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $actions): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">            </span><span style="color: #6A737D;">// the same list, under its canonical name</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ActionContract</span><span style="color: #E1E4E8;"> $action): </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">     </span><span style="color: #6A737D;">// append one</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">                        </span><span style="color: #6A737D;">// the visible ones, in declaration order</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasActions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getFieldAction</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $name): </span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">ActionContract</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getRenderableActions</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;">          </span><span style="color: #6A737D;">// the ones with somewhere to dispatch to — a key is all it takes</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hasRenderableActions</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">getActionExpression</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ActionContract</span><span style="color: #E1E4E8;"> $action): </span><span style="color: #F97583;">?string</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hidden</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $hidden)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span><span style="color: #E1E4E8;">       </span><span style="color: #6A737D;">// HasVisibility + HasAuthorization</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">visible</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool|</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $visible): </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">permission</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $permission)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorize</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $ability)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">authorizeUsing</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?</span><span style="color: #79B8FF;">Closure</span><span style="color: #E1E4E8;"> $callback)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">static</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isVisible</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isAuthorized</span><span style="color: #E1E4E8;">(): </span><span style="color: #F97583;">bool</span></div></code></pre>
+<h2 id="blade-components">Blade Components</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">x-wire::widget-grid</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:widgets</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;$widgets&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:columns</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;2&quot;</span><span style="color: #E1E4E8;"> /&gt;</span></div></code></pre>
+<p>The views each widget renders, publishable with
+<code>vendor:publish --tag=wire-core::views</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.stats-overview</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.chart</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart.vertical-finance</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart.vertical-system</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.bar-chart.horizontal-system</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.progress</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.list</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.custom</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.widget-grid</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.widget-cell</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-header</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-filter</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-actions</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.widget-placeholder</span></div><div class='line'><span style="color: #e1e4e8;">wire-core::widgets.partials.list-item</span></div></code></pre>
+<h2 id="in-this-section">In This Section</h2>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="stats/">Stats</a></td>
+<td><code>StatsOverviewWidget</code> and the <code>Stat</code> value object — figures with a trend</td>
+</tr>
+<tr>
+<td><a href="charts/">Charts</a></td>
+<td><code>ChartWidget</code>, <code>BarChartWidget</code> and <code>ChartItem</code></td>
+</tr>
+<tr>
+<td><a href="progress/">Progress</a></td>
+<td><code>ProgressWidget</code> and the <code>ProgressItem</code> value object — a fill against a target</td>
+</tr>
+<tr>
+<td><a href="list/">Lists</a></td>
+<td><code>ListWidget</code> and the <code>ListItem</code> value object — a short feed of records or events</td>
+</tr>
+<tr>
+<td><a href="custom/">Tables And Custom Views</a></td>
+<td><code>TableWidget</code> and <code>CustomWidget</code></td>
+</tr>
+<tr>
+<td><a href="dashboards/">Dashboards</a></td>
+<td>Composing widgets on a component, and declaring a dashboard as an owner</td>
+</tr>
+</tbody>
+</table>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="../../panels/pages/">Panels: Pages</a> — <code>DashboardPage</code>, the page that renders a declared dashboard</li>
+<li><a href="../actions/">Actions</a> — buttons a widget can carry</li>
+<li><a href="../../start/authorization/">Authorization</a> — the gate a widget's visibility consults</li>
+<li><a href="../../table/overview/">Tables</a> — what a table widget embeds</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../notifications/custom-drivers/">
+                                        <span>← Previous</span>
+                                        <strong>Custom Drivers</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="stats/">
+                                        <span>Next →</span>
+                                        <strong>Stats</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#widget-types-at-a-glance">
+                                            Widget Types At A Glance                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#widget-base">
+                                            Widget Base                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#polling">
+                                            Polling                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#usage">
+                                            Usage                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#polling-api">
+                                            Polling API                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#a-tick-refreshes-the-widget-not-the-dashboard">
+                                            A tick refreshes the widget, not the dashboard                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#filters">
+                                            Filters                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#how-the-round-trip-works">
+                                            How the round trip works                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#deferred-rendering">
+                                            Deferred Rendering                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#writing-your-own-widget">
+                                            Writing Your Own Widget                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#header-actions">
+                                            Header Actions                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#what-a-widget-action-is-and-what-it-is-not">
+                                            What a widget action is, and what it is not                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#how-it-reaches-an-action-at-all">
+                                            How it reaches an Action at all                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#customisable-dashboards">
+                                            Customisable Dashboards                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#what-is-stored">
+                                            What is stored                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#the-rules-worth-knowing">
+                                            The rules worth knowing                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#height-needs-a-row-to-mean-something">
+                                            Height needs a row to mean something                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#rearranging-it">
+                                            Rearranging it                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#edit-mode-api">
+                                            Edit-mode API                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#the-tray">
+                                            The tray                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#tray-api">
+                                            Tray API                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#ready-made-controls">
+                                            Ready-made controls                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#what-the-whole-thing-needs-to-work">
+                                            What the whole thing needs to work                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#authorization">
+                                            Authorization                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#widget-api-reference">
+                                            Widget API Reference                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#widget-base-class">
+                                            Widget (base class)                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#blade-components">
+                                            Blade Components                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#in-this-section">
+                                            In This Section                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#related">
+                                            Related                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

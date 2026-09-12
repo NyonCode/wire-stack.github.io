@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Media Module | Wire Docs</title>
+    <meta name="description" content="A media library — uploads become rows, deleting a row deletes the file, and previews come from the disk it was stored on.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/modules/media/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/modules/media/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/modules/media/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/modules/media/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="The Media Module | Wire Docs">
+    <meta property="og:description" content="A media library — uploads become rows, deleting a row deletes the file, and previews come from the disk it was stored on.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/modules/media/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:title" content="The Media Module | Wire Docs">
+    <meta name="twitter:description" content="A media library — uploads become rows, deleting a row deletes the file, and previews come from the disk it was stored on.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../modules/media/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../cs/modules/media/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../v1/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Start Here</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../documentation/">
+                                Wire Documentation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/installation/">
+                                Installing Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/getting-started/">
+                                Getting Started                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/configuration/">
+                                Configuration                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/authorization/">
+                                Authorization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/theming/">
+                                Theming &amp; Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/testing/">
+                                Testing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/cookbook/">
+                                Cookbook                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/error-handling/">
+                                Error Handling                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/troubleshooting/">
+                                Troubleshooting                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/upgrade/">
+                                Upgrade Guide                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/project-map/">
+                                Project Map                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Forms</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/validation/">
+                                Form Validation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/reactive-fields/">
+                                Reactive Fields                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/save-lifecycle/">
+                                Save Lifecycle                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/custom-fields/">
+                                Extending Forms                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Fields</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/">
+                                            Form Fields                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Table</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/">
+                                            Columns                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/relations/">
+                                            Relation Paths &amp; Dot Notation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/casts/">
+                                            Enum &amp; JSON Casts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/editing/">
+                                            Editing &amp; Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/fill-handle/">
+                                            Fill Handle (Excel-style AutoFill)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/">
+                                            Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/relationships/">
+                                            Relationship &amp; Sub-Row Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/column-level/">
+                                            Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/custom/">
+                                            Custom Filter Class                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/actions/">
+                                Table Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/record-actions/">
+                                Record Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/selection/">
+                                Selecting Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/gestures/">
+                                The Gesture Layer                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/inactive-records/">
+                                Inactive Records                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/exports/">
+                                Table Exports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/imports/">
+                                Table Imports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/summaries/">
+                                Summaries                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/grouping/">
+                                Row Grouping                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/sub-rows/">
+                                Sub-Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/relation-managers/">
+                                Relation Managers                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/data-sources/">
+                                Data Sources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/notifications/">
+                                Table Notifications                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/advanced/">
+                                Advanced Features                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../core/overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/icons/">
+                                            Icons                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/colors/">
+                                            Colors                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/enums/">
+                                            Enums                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/blade-components/">
+                                            Blade Components                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/">
+                                            Actions                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/modals/">
+                                            Action Modals                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/lifecycle/">
+                                            Lifecycle And Queues                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/appearance/">
+                                            Buttons And Appearance                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/standalone/">
+                                            Actions Outside A Table                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/workflow/">
+                                            Workflow And Transitions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/modals/">
+                                Modals                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/">
+                                            Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/toasts/">
+                                            Toasts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/persistent/">
+                                            Persistent Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/usage/">
+                                            Where To Send From                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/custom-drivers/">
+                                            Custom Drivers                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/">
+                                            Widgets                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/stats/">
+                                            Stats                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/charts/">
+                                            Charts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/custom/">
+                                            Tables And Custom Views                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/dashboards/">
+                                            Dashboards                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/">
+                                            Infolists                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/actions/">
+                                            Infolist Actions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/record-panels/">
+                                Editable Panels                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/global-search/">
+                                Global Search                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/">
+                                            Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/registration/">
+                                            Registering Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/hooks/">
+                                            Hooks                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/extending/">
+                                            Extending Surfaces                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/examples/">
+                                            Examples And Testing                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../panels/overview/">
+                                Panels                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/pages/">
+                                Pages                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/navigation/">
+                                Navigation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/routing/">
+                                Routing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/modules/">
+                                Modules                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../admin/overview/">
+                                The Admin Shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/layout/">
+                                The Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/sidebar/">
+                                The Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/branding/">
+                                Branding And Theme                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../">
+                                Ready-Made Modules                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../users/">
+                                The Users Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../teams-and-two-factor/">
+                                Teams and Two-Factor                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../auth/">
+                                The Auth Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../settings/">
+                                The Settings Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../notifications/">
+                                The Notifications Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../audit/">
+                                The Audit Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="is-active" href="./">
+                                The Media Module                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../sortable/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/row-sorting/">
+                                Row Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/column-sorting/">
+                                Column Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/customization/">
+                                Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/advanced/">
+                                Advanced Usage                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/api-reference/">
+                                API Reference                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../boost/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/mcp-tools/">
+                                MCP Server &amp; Tools                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/guidelines-and-skills/">
+                                Guidelines &amp; Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Modules</span>
+                            </nav>
+                            <p class="eyebrow">Modules</p>
+                            <h1>The Media Module</h1>
+                                                            <p class="lead">A media library — uploads become rows, deleting a row deletes the file, and previews come from the disk it was stored on.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#how-it-works">How It Works</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#configuration">Configuration</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#folders">Folders</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#the-library-screen">The Library Screen</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#private-files-and-who-may-see-them">Private Files and Who May See Them</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#a-policy">A policy</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#thumbnails">Thumbnails</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#using-something-other-than-gd">Using something other than GD</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#editing-an-image">Editing an image</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#replacing-and-what-it-costs">Replacing, and what it costs</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#using-the-library-from-everywhere-else">Using the Library From Everywhere Else</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#attaching-files-to-any-record">Attaching files to any record</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#where-a-file-is-used">Where a file is used</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#a-field-on-any-form">A field on any form</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#the-rich-text-editor">The rich text editor</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#where-the-modal-comes-from">Where the modal comes from</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#one-file-once">One file, once</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#what-you-get">What You Get</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#related">Related</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Upload, find, delete. The row and the file are one thing: deleting the record
+deletes the file, because a library that leaves orphans behind fills a disk
+nobody is looking at.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">nyoncode/wire-module-media</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-module-media:install</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">migrate</span></div><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">storage:link</span></div></code></pre>
+<h2 id="how-it-works">How It Works</h2>
+<p><strong>The disk is stored on every row.</strong> It is part of a file's address — the same
+path means different files on <code>public</code> and <code>s3</code> — so changing the configured disk
+moves new uploads and leaves the old rows readable.</p>
+<p><strong>Metadata is read from the disk, not from the browser.</strong> The mime type and the
+size are what the stored file actually is; what an upload claimed about itself is
+a claim.</p>
+<p><strong>The row is written at the persistence step</strong>, through the form's <code>using()</code>
+seam. That is not an implementation detail you can ignore if you extend this: the
+file fields dehydrate <em>after</em> <code>mutateDataBeforeSave()</code>, so anything reading
+<code>path</code> earlier gets the temporary upload rather than the stored file.</p>
+<p><strong>Editing an image produces a new file by default.</strong> Replacing the bytes under a
+path other records already point at is how a library quietly changes what a
+published page shows — so the ordinary outcome of the editor is a new row, and
+the other one is behind a warning that names what it will break. See
+<a href="#editing-an-image">Editing an image</a>.</p>
+<h2 id="configuration">Configuration</h2>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-module-media.php</span></div><div class='line line-focus'><span style="color: #9ECBFF;">&#39;disk&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;public&#39;</span><span style="color: #E1E4E8;">,                 </span><span style="color: #6A737D;">// stored on every row too: changing it moves new uploads only </span></div><div class='line'><span style="color: #9ECBFF;">&#39;directory&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;media&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #9ECBFF;">&#39;table&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;wire_media&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #9ECBFF;">&#39;folders_table&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;wire_media_folders&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #9ECBFF;">&#39;accepts&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [],                    </span><span style="color: #6A737D;">// MIME types or extensions; empty accepts whatever your own rules do </span></div><div class='line line-focus'><span style="color: #9ECBFF;">&#39;max_size&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">10240</span><span style="color: #E1E4E8;">,                </span><span style="color: #6A737D;">// kilobytes, the unit Laravel&#39;s rules use </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #9ECBFF;">&#39;route&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;enabled&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,              </span><span style="color: #6A737D;">// the only way a private disk&#39;s files reach a browser</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;prefix&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;wire-media&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;middleware&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;web&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;auth&#39;</span><span style="color: #E1E4E8;">],</span></div><div class='line'><span style="color: #E1E4E8;">],</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #9ECBFF;">&#39;thumbnails&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;enabled&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;width&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">400</span><span style="color: #E1E4E8;">,                 </span><span style="color: #6A737D;">// the tile: the longest edge, never enlarged</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;sizes&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;row&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">96</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;preview&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1200</span><span style="color: #E1E4E8;">],</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;directory&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;thumbnails&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;queue&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">,               </span><span style="color: #6A737D;">// true, or a queue name, where a worker is actually running</span></div><div class='line'><span style="color: #E1E4E8;">],</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #9ECBFF;">&#39;navigation&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;group&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;content&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;label&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">,                </span><span style="color: #6A737D;">// null uses the module&#39;s own group heading</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;icon&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;outline:photo&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;sort&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">80</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<p>Each block has a section of its own below: <a href="#private-files-and-who-may-see-them">Private Files and Who May See
+Them</a> for the route, and
+<a href="#thumbnails">Thumbnails</a> for the sizes and the queue. Three keys have no section
+because there is nothing more to them than the line above:</p>
+<ul>
+<li><strong><code>accepts</code> and <code>max_size</code></strong> are the library's own upload rules. <code>accepts</code>
+empty means the library refuses nothing that your validation lets through —
+useful for a private library, and the wrong default for one anybody uploads to.</li>
+<li><strong><code>table</code> and <code>folders_table</code></strong> name where rows live, for an application that
+already had a <code>media</code> table when this one arrived.</li>
+</ul>
+<p>The wording is a published translation file and the markup a published view —
+<code>wire-module-media::translations</code> and <code>…::views</code>, with what each costs in
+<a href="../../start/theming/#localization">Theming → Localization</a> and
+<a href="../../start/theming/#overriding-views">Overriding Views</a>.</p>
+<h2 id="folders">Folders</h2>
+<p>A folder is <strong>a row, not a directory</strong>. Nothing on the disk moves when a file is
+filed somewhere else, and that is the trade this makes on purpose: moving the
+bytes would change the URL of a file a published page already links to, and a
+tidier bucket is not worth a broken image on a live page. The disk layout stays
+whatever <code>directory</code> says it is; the tree is what the library shows you.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireModuleMedia\Models\MediaFolder</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">$brand </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">MediaFolder</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">createIn</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;Brand&#39;</span><span style="color: #E1E4E8;">);       </span></div><div class='line line-focus'><span style="color: #E1E4E8;">$logos </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">MediaFolder</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">createIn</span><span style="color: #E1E4E8;">($brand, </span><span style="color: #9ECBFF;">&#39;Logos&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">$logos</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">moveTo</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">);                                 </span><span style="color: #6A737D;">// back out to the root</span></div></code></pre>
+<p>Each folder stores its <strong>full path</strong> rather than walking its parents, because a
+breadcrumb is drawn on every screen of the library and walking is one query per
+level. Renaming or moving a folder rewrites the paths below it, which is the cost
+of that choice and the reason those two operations are the only ones that touch
+more than one row.</p>
+<p>Every refusal comes from the model, as a <code>MediaException</code> carrying a sentence
+that says what it will not do and why:</p>
+<table>
+<thead>
+<tr>
+<th>It refuses</th>
+<th>Because</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two folders with one name beside each other</td>
+<td>They cannot be told apart in a breadcrumb</td>
+</tr>
+<tr>
+<td>Moving a folder into itself or its own subfolder</td>
+<td>Nothing in that branch could be reached again</td>
+</tr>
+<tr>
+<td>Deleting a folder that still holds anything</td>
+<td>Deleting a folder must not be a way to lose files without being asked</td>
+</tr>
+</tbody>
+</table>
+<p>The screen catches those and raises a notification. It does not re-check any of
+them — which is what keeps a console command, or your own code, getting the same
+answer the screen does.</p>
+<h2 id="the-library-screen">The Library Screen</h2>
+<p>The index page is a file manager rather than a table: a folder tree on the left,
+a grid or list on the right, and a breadcrumb that walks back out.</p>
+<ul>
+<li><strong>Drop files from the desktop</strong> anywhere on the right-hand pane and they upload
+into the folder you are looking at. <strong>Upload a whole folder</strong> with the button
+beside the Upload one — the files are filed into the folder you are looking at,
+because a folder here is a row and inventing four of them from a directory
+somebody happened to drag is not a decision this screen should make quietly.</li>
+<li><strong>The tray</strong> reports every file of a batch: stored, already here — with a link
+to the row the library kept — or refused, with the reason. It survives opening
+another folder, which is exactly what somebody does while a long batch is still
+going. "3 failed" in a toast is a sentence that makes the person who dropped
+forty photographs go and find the three themselves.</li>
+<li><strong>Drag a tile onto a folder</strong> to file it there; drag a folder onto another to
+move the whole branch. A tile that is <strong>part of the selection drags all of
+it</strong>. A collapsed branch you hover over during a drag opens itself after a
+moment, and every rung of the <strong>breadcrumb is a drop target</strong> — which is how a
+file goes back up one level without hunting for its folder in the tree.</li>
+<li><strong><code>⌘X</code> and <code>⌘V</code></strong> do the same thing without a mouse: cut the selection, open a
+folder, paste. A drag across a tree thirty folders deep is a gesture not
+everybody can make, and on a touch screen it is not a gesture at all.</li>
+<li><strong>The tree folds</strong>, remembers what you left open, and carries a file count per
+folder from one grouped query.</li>
+<li><strong>Select</strong> with the checkboxes for a bulk move or delete. The bar that appears
+stays at the bottom of the pane while the grid scrolls under it: a selection is
+made by scrolling through files, and a bar at the top is one you have to scroll
+back to. Deleting goes one row at a time on purpose — a mass delete would not
+fire the model event that removes the file, and the bytes would stay behind
+with no row pointing at them.</li>
+<li><strong>The list is a list</strong>: sortable headers over name, kind, size, dimensions,
+folder and upload date. The headers set the same <code>sort</code> the toolbar and the URL
+use, so a sorted view is still something you can send to somebody, and the four
+words it used to hold still work in a link somebody bookmarked.</li>
+<li><strong>Rename</strong> changes what the file is <em>listed</em> under, never where it is stored.</li>
+<li><strong>Search looks through the whole library</strong>, not the open folder. Searching only
+where you happen to be standing is how a file nobody remembers filing stays
+lost.</li>
+</ul>
+<h2 id="private-files-and-who-may-see-them">Private Files and Who May See Them</h2>
+<p>A disk your application <strong>publishes</strong> — the one with a <code>url</code> in its
+<code>filesystems.disks</code> entry — answers its own address and the browser fetches the
+file directly. That is the fastest thing that can happen and nothing here touches
+it.</p>
+<p>A disk you do not publish has no such address, and the library used to answer
+<code>null</code>: blank tiles, a missing download link, nothing saying why. Those files are
+now streamed through the module's own route.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #9ECBFF;">&#39;route&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [ </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;enabled&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;prefix&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;wire-media&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;middleware&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;web&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;auth&#39;</span><span style="color: #E1E4E8;">],</span></div><div class='line line-focus'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<p><strong>"Published" is the disk's <code>url</code> key, not what <code>Storage::url()</code> says.</strong> Laravel
+answers <code>/storage/{path}</code> for <em>any</em> local disk whether or not that address
+resolves — a convenience for the <code>public</code> disk and a wrong guess for every other
+one. Taking it at its word is how a private contract ends up linked from a page
+as though it were public.</p>
+<p>Switch the route off and an unpublished disk answers <code>null</code> again, deliberately:
+a broken image is a better answer than a public URL for a file somebody meant to
+keep private.</p>
+<h3 id="a-policy">A policy</h3>
+<p>Register one and it is obeyed everywhere at once — the screen, the picker, and
+the route that streams the file:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Gate</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">policy</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">NyonCode\WireModuleMedia\Models\Media</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">MediaPolicy</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>The abilities are Laravel's own: <code>viewAny</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>delete</code>.
+Every mutating method on the manager asks before it acts, rather than the view
+hiding a button — a Livewire method is a public endpoint, and a hidden button is
+not a check.</p>
+<p><strong>With no policy registered, nothing is refused.</strong> Laravel's gate denies an
+ability nobody defined, so asking it unconditionally would have locked every
+existing library out of its own files the moment it upgraded. Not writing a
+policy is how an application says "this is not access-controlled", and that is
+taken at face value.</p>
+<h2 id="thumbnails">Thumbnails</h2>
+<p>The grid used to load originals: a hundred files meant a hundred full-size
+photographs, scaled down by the browser after paying for every byte. Now an
+upload gets a scaled copy — one WebP, longest edge 400 pixels by default — and
+the grid, the picker and the media field all show that instead. The detail panel
+and the download link keep the original, which is never touched.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #9ECBFF;">&#39;thumbnails&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;enabled&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;width&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">400</span><span style="color: #E1E4E8;">,       </span><span style="color: #6A737D;">// the tile: the longest edge, ratio kept, small images not enlarged</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;directory&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;thumbnails&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;sizes&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [          </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;row&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">96</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;preview&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">1200</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ],</span></div><div class='line'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<p><strong>One copy used to serve three surfaces.</strong> A 32-pixel list row, a grid tile and a
+detail preview all loaded the same 400-pixel WebP, and two of those three paid
+for pixels they threw away on every screen of the library. Each surface now asks
+for the size it actually draws, and a retina screen gets the next size up through
+<code>srcset</code> — resolution descriptors, not widths, because a <code>sizes</code> attribute is a
+guess about a layout the model cannot see.</p>
+<p><code>width</code> still names the <strong>tile</strong>, and <code>thumb_path</code> still holds it. A library that
+upgrades renders exactly as it did and gains the other sizes as files are
+uploaded — or all at once:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-module-media:thumbnails</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--force</span><span style="color: #E1E4E8;">              </span><span style="color: #6A737D;"># remake everything</span></div><div class='line line-focus'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-module-media:thumbnails</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--size=preview</span><span style="color: #E1E4E8;">       </span></div></code></pre>
+<p><code>--size</code> fills in one name that was added to the config later, leaving the copies
+that already exist alone. A size that was never made falls back to the tile, and
+then to the original: a missing variant is never a broken image.</p>
+<p><strong>A private disk gets them too.</strong> It has no address of its own, so the streamed
+route takes the size as a parameter — without that, a grid of a hundred private
+photographs stayed a hundred full-size photographs, which is the thing thumbnails
+exist to prevent happening to the people who need them most.</p>
+<p><strong>Every tile is painted before its picture arrives.</strong> Making the copies is a
+resize, and a one-pixel resize on the way through is free — so the row stores the
+image's average colour as <code>#rrggbb</code>, and the grid has its shape and its rough
+colours immediately instead of reflowing forty times as the images land. The
+stored <code>width</code> and <code>height</code> go onto every <code>&lt;img&gt;</code> for the same reason.</p>
+<p><strong>A thumbnail is a convenience, so nothing about it may fail an upload.</strong> A PDF
+has no pixels, an SVG needs no raster copy, a GIF would lose its animation, a
+server may be built without GD, and a remote disk has no local file to read.
+Every one of those leaves <code>thumb_path</code> null, and <code>previewUrl()</code> falls back to the
+original — so no view needs a second code path and no upload is ever refused for
+it.</p>
+<p>Between dropping a photograph and seeing it there used to be a spinner — a round
+trip at best, and longer when the thumbnail is made on a queue. The browser
+already holds the bytes, so the tile appears <strong>immediately</strong>, drawn from the file
+itself through an object URL, with a bar that moves. The stored file replaces it
+when it lands, and the object URL is released — each one pins the whole file in
+memory until it is, and a library is exactly where somebody drops forty
+photographs at once.</p>
+<p>Where thumbnails are queued, the screen refreshes itself until the ones on it
+have arrived, and then stops. It asks only when the answer can change: thumbnails
+on, made on a queue, and the file uploaded in the last few minutes. A PNG that GD
+refused two months ago is null for good, and a screen left open on that folder
+would otherwise ask about it every three seconds until the tab was closed.</p>
+<p>Files that arrived before thumbnails existed catch up on demand:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-module-media:thumbnails</span><span style="color: #E1E4E8;">          </span></div><div class='line line-focus'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-module-media:thumbnails</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--force</span><span style="color: #E1E4E8;">  </span><span style="color: #6A737D;"># after changing the width</span></div></code></pre>
+<p>It chunks, and it reports two numbers: how many it made, and how many it looked
+at. The difference is not a failure to investigate — it is the PDFs.</p>
+<h3 id="using-something-other-than-gd">Using something other than GD</h3>
+<p>GD is bound by default because most PHP builds have it. An application with
+Imagick, Intervention, or a resizing CDN replaces one binding:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">bind</span><span style="color: #E1E4E8;">( </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">NyonCode\WireModuleMedia\Contracts\MakesThumbnails</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">ImagickThumbnailer</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>The contract is two methods — <code>supports()</code> and <code>make()</code> — and the same rule
+applies to anything implementing it: answer false, never throw.</p>
+<h2 id="editing-an-image">Editing an image</h2>
+<p>Crop, straighten, resize. The picture is opened from its panel and everything
+happens in a canvas in the browser, by the same code the file upload field uses
+to shrink a phone photograph — extended with rotation, a free crop and stepped
+downscaling rather than copied.</p>
+<p><strong>In the browser, and that is a decision.</strong> A server-side editor would inherit
+the thumbnailer's one limitation: <code>MakeThumbnail</code> gives up on a disk it cannot
+read a local file from, so an editor built the same way would silently not exist
+on S3 — the configuration a large library is most likely to be on. The browser
+reads a URL, and every disk has one.</p>
+<p>Saving has <strong>two outcomes and two buttons</strong>, never a checkbox that changes what
+one button does:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save as a new file</td>
+<td>A new row, <code>derived_from_id</code> pointing at the original, filed in the same folder, carrying the original's alt text. The original is untouched</td>
+</tr>
+<tr>
+<td>Replace the original</td>
+<td>The same row, the same path, new bytes</td>
+</tr>
+</tbody>
+</table>
+<p>The panel shows both directions of that link — what a file was cut from, and what
+has been cut from it — so a crop can be traced back rather than being related to
+its original only by a name somebody typed. <strong>Deleting an original does not
+delete its crops</strong>; they lose the pointer and stay.</p>
+<h3 id="replacing-and-what-it-costs">Replacing, and what it costs</h3>
+<p>Replacement changes every use of the file at once, including the ones the library
+<a href="#where-a-file-is-used">cannot see</a>. So the editor says what it is about to
+break, from the known-use count, and says the count is a floor. <strong>There is no
+undo.</strong></p>
+<p>The bytes are written <strong>to the same path on purpose</strong>. Moving them would change
+the URL of a file a published page already links to — which is exactly the kind
+of use that cannot be warned about — so keeping the path is what makes a
+replacement safe for the uses nobody can enumerate. Same address with different
+content is what a browser and a CDN get wrong, so <code>url()</code> carries the row's
+<code>updated_at</code>:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">/storage/media/2026/hero.jpg?v=1788766728</span></div></code></pre>
+<p>Everything the row says about the file is re-read from the disk afterwards —
+size, dimensions, checksum — and the thumbnail is remade. A row whose checksum
+still describes the old bytes lies to duplicate detection first.</p>
+<p>Replacing asks the policy for its own ability:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">replace</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">User</span><span style="color: #E1E4E8;"> $user, </span><span style="color: #79B8FF;">Media</span><span style="color: #E1E4E8;"> $media)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">bool</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $user</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">isAdmin</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>A policy that does not define <code>replace</code> is asked for <code>update</code> instead, so a
+library written before the editor existed keeps working exactly as it did.</p>
+<h2 id="using-the-library-from-everywhere-else">Using the Library From Everywhere Else</h2>
+<p>A media module that is only a screen is only a screen. What makes the files
+worth keeping is that a post, a product and a rich text editor can all point at
+the <strong>same row</strong> — one file, one URL, one description, changed once.</p>
+<h3 id="attaching-files-to-any-record">Attaching files to any record</h3>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireModuleMedia\Concerns\HasMedia</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Post</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Model</span><span style="color: #E1E4E8;"> </span></div><div class='line line-focus'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">HasMedia</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #E1E4E8;">}</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$post</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">attachMedia</span><span style="color: #E1E4E8;">($cover, </span><span style="color: #9ECBFF;">&#39;cover&#39;</span><span style="color: #E1E4E8;">);   </span><span style="color: #6A737D;">// a named collection</span></div><div class='line'><span style="color: #E1E4E8;">$post</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">media</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;gallery&#39;</span><span style="color: #E1E4E8;">);               </span><span style="color: #6A737D;">// what is in one</span></div><div class='line'><span style="color: #E1E4E8;">$post</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">syncMedia</span><span style="color: #E1E4E8;">([$b, $a], </span><span style="color: #9ECBFF;">&#39;gallery&#39;</span><span style="color: #E1E4E8;">); </span><span style="color: #6A737D;">// exactly these, in this order</span></div></code></pre>
+<p>The link is a row in <code>wire_mediables</code>, never a column on your table, which is
+what lets two records share a file instead of each storing a path of its own.
+Collections (<code>cover</code>, <code>gallery</code>, <code>attachments</code>) are named sets, so one record can
+carry a hero image and a list of downloads without either knowing about the
+other.</p>
+<p>Detaching removes the link and leaves the file. Deleting the <em>file</em> takes its
+links with it — a link to a file that no longer exists is a broken image on a
+page nobody remembers publishing.</p>
+<h3 id="where-a-file-is-used">Where a file is used</h3>
+<p><code>wire_mediables</code> is a complete record of one kind of use. Attaching through a
+field writes a link row, and a link row is findable in both directions.</p>
+<p>The rich text editor used to write no such row. It stored <code>&lt;img src="…"&gt;</code> and
+nothing else, so a photograph in twelve articles reported <strong>zero</strong> uses — and the
+confirmation in front of every delete was built on that zero. A warning that says
+"nothing uses this" about a file that is on the front page is not a weak warning;
+it is a false all-clear.</p>
+<p>The editor now keeps the id, and a model says which of its attributes hold
+written content:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireModuleMedia\Concerns\HasMedia</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireModuleMedia\Concerns\SyncsMediaUsage</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Post</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Model</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">HasMedia</span><span style="color: #E1E4E8;">;          </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">SyncsMediaUsage</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $mediaContent </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;body&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;perex&#39;</span><span style="color: #E1E4E8;">];</span></div><div class='line line-focus'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>On save, the ids are read out of those attributes and <strong>synced</strong> — not appended —
+into <code>wire_mediables</code> under the reserved collection <code>__content</code>. An image taken
+out of an article takes its link with it, or a count that only ever grows stops
+meaning anything the first time somebody edits.</p>
+<p>It is the same table a field writes to, so "where is this file" is one query and
+one mental model. The reserved name is underscored so it can never collide with a
+collection of your own, and <code>media('gallery')</code> never returns content uses.</p>
+<p><strong>The number is a floor, and every screen says so.</strong> A URL pasted into a Blade
+template, a seeder or an e-mail layout by hand is invisible to this and always
+will be. An honest floor is usable — "definitely in use, possibly more" — where a
+number presented as complete would be trusted and would eventually be wrong at
+the moment it mattered.</p>
+<p>The file's panel lists the uses it knows about, linking through to the record
+where a resource exists for its model. Deleting <strong>warns</strong> with the count and does
+not refuse: retiring a file whose old article is allowed to end up with a broken
+image is a legitimate thing to want, and refusing would make the library
+un-cleanable.</p>
+<p>Articles already in the database carry no id, so they are matched by URL, once:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-module-media:usage</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--model=</span><span style="color: #9ECBFF;">&quot;App\Models\Post&quot;</span><span style="color: #E1E4E8;">           </span></div><div class='line line-focus'><span style="color: #B392F0;">php</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">artisan</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">wire-module-media:usage</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--model=</span><span style="color: #9ECBFF;">&quot;App\Models\Post&quot;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">--dry-run</span></div></code></pre>
+<p>It reports how many links it wrote and across how many records, and how many
+records pointed at nothing the library holds. That difference is not a failure to
+investigate — it is the pictures that were never in this library.</p>
+<h3 id="a-field-on-any-form">A field on any form</h3>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireModuleMedia\Forms\MediaField</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #79B8FF;">MediaField</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;cover&#39;</span><span style="color: #E1E4E8;">), </span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #79B8FF;">MediaField</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;gallery&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">multiple</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">collection</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;gallery&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">accepts</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;image/&#39;</span><span style="color: #E1E4E8;">),</span></div></code></pre>
+<p><strong>It saves itself.</strong> The field's name is a collection, never a column, so it
+implements <code>SavesAfterRecord</code>: its value is taken out of the data before the
+record is written and written to the pivot afterwards, once the record has a key.
+The model needs <code>HasMedia</code> and nothing else — no column, no migration, no
+<code>afterSave</code> closure to remember.</p>
+<h3 id="the-rich-text-editor">The rich text editor</h3>
+<p><code>TiptapEditor::make('body')-&gt;withImages()</code> used to ask for a URL. With the media
+module installed, its image button opens the library instead, and the alt text
+comes back with the file.</p>
+<p>Nothing was configured to make that happen, and nothing could have been:
+<code>wire-forms</code> sits below this package and must never require it. So the editor
+<em>offers</em> the job as a cancelable DOM event and whoever handles it claims the
+event:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-js"><!-- Syntax highlighted by torchlight.dev --><div class='line line-focus'><span style="color: #F97583;">const</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">request</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">new</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">CustomEvent</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-media-picker:open&#39;</span><span style="color: #E1E4E8;">, { </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    cancelable: </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    detail: { token: </span><span style="color: #9ECBFF;">&#39;anything-unique&#39;</span><span style="color: #E1E4E8;">, multiple: </span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">, accepts: </span><span style="color: #9ECBFF;">&#39;image/&#39;</span><span style="color: #E1E4E8;"> },</span></div><div class='line line-focus'><span style="color: #E1E4E8;">});</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">window.</span><span style="color: #B392F0;">dispatchEvent</span><span style="color: #E1E4E8;">(request);</span></div><div class='line line-focus'>&nbsp;</div><div class='line'><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> request.defaultPrevented) { </span><span style="color: #6A737D;">/* nobody is listening — do what you did before */</span><span style="color: #E1E4E8;"> }</span></div></code></pre>
+<p>The answer arrives on <code>wire-media-picker:picked</code>, carrying the token it was
+opened with so two pickers on one page cannot cross. Your own code can open the
+library the same way.</p>
+<h3 id="where-the-modal-comes-from">Where the modal comes from</h3>
+<p>The picker has to be in every page, and the shell that renders every page
+(<code>wire-admin</code>) sits <em>above</em> this module and has never heard of it. So this module
+registers its view and the shell renders whatever is registered:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\View\PageChrome</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">add</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;wire-module-media::picker-modal&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>An application rendering its own layout instead of the shell's adds the same
+loop to it, and one that renders neither simply has no picker — a button that
+says so, rather than a page that breaks.</p>
+<h3 id="one-file-once">One file, once</h3>
+<p>The library refuses a second copy of a file it already holds. The sha-256 of the
+stored bytes is matched against what is there, and an upload of a file already in
+the library hands back the existing row and deletes the copy it just made. The
+same photograph uploaded from three screens should be one row with one URL and
+one alt text, or every use of it drifts apart.</p>
+<p>Checksums are only taken on disks with real files behind them. On S3 the file is
+not pulled back down to hash it — duplicate detection is a convenience, and one
+that downloads every upload twice is not one.</p>
+<h2 id="what-you-get">What You Get</h2>
+<table>
+<thead>
+<tr>
+<th>Screen</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Media</td>
+<td>The file manager: folder tree, grid or list, breadcrumb, search across the library</td>
+</tr>
+<tr>
+<td>Upload</td>
+<td>Drag files onto the pane, or pick them — the disk, directory, accepted types and size limit come from config</td>
+</tr>
+<tr>
+<td>One file</td>
+<td>Read-only, headed by the file's own name: a preview at a size you can see it at, then what the file is (type, size, dimensions, folder, upload date), what somebody wrote about it (alt text and title), and — folded away — the disk and path it lives on. Open and Download sit in the preview's header, as links: a private disk goes through the module's streamed route, and a file with no address at all offers neither</td>
+</tr>
+</tbody>
+</table>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="../../forms/fields/file-upload/">File uploads</a> — the field this uses</li>
+<li><a href="../../panels/modules/">Modules</a> — how a package ships an area like this</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../audit/">
+                                        <span>← Previous</span>
+                                        <strong>The Audit Module</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../../sortable/overview/">
+                                        <span>Next →</span>
+                                        <strong>Introduction</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#how-it-works">
+                                            How It Works                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#configuration">
+                                            Configuration                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#folders">
+                                            Folders                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#the-library-screen">
+                                            The Library Screen                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#private-files-and-who-may-see-them">
+                                            Private Files and Who May See Them                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#a-policy">
+                                            A policy                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#thumbnails">
+                                            Thumbnails                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#using-something-other-than-gd">
+                                            Using something other than GD                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#editing-an-image">
+                                            Editing an image                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#replacing-and-what-it-costs">
+                                            Replacing, and what it costs                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#using-the-library-from-everywhere-else">
+                                            Using the Library From Everywhere Else                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#attaching-files-to-any-record">
+                                            Attaching files to any record                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#where-a-file-is-used">
+                                            Where a file is used                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#a-field-on-any-form">
+                                            A field on any form                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#the-rich-text-editor">
+                                            The rich text editor                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#where-the-modal-comes-from">
+                                            Where the modal comes from                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#one-file-once">
+                                            One file, once                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#what-you-get">
+                                            What You Get                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#related">
+                                            Related                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

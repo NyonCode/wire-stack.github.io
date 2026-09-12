@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="cs" data-search-index="../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Týmy a dvoufázové ověření | Wire Docs</title>
+    <meta name="description" content="Dvoufázové ověření a role po týmech zapnuté v aplikaci, která už tenhle panel má — co vlastní Fortify, co permission vrstva a těch pár řádků, které jsou vaše.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/cs/modules/teams-and-two-factor/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/modules/teams-and-two-factor/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/modules/teams-and-two-factor/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/modules/teams-and-two-factor/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="cs">
+    <meta property="og:title" content="Týmy a dvoufázové ověření | Wire Docs">
+    <meta property="og:description" content="Dvoufázové ověření a role po týmech zapnuté v aplikaci, která už tenhle panel má — co vlastní Fortify, co permission vrstva a těch pár řádků, které jsou vaše.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/cs/modules/teams-and-two-factor/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/cs/assets/previews/auth-two-factor.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/cs/assets/previews/auth-two-factor.png">
+    <meta name="twitter:title" content="Týmy a dvoufázové ověření | Wire Docs">
+    <meta name="twitter:description" content="Dvoufázové ověření a role po týmech zapnuté v aplikaci, která už tenhle panel má — co vlastní Fortify, co permission vrstva a těch pár řádků, které jsou vaše.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"cs","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../assets/gsap.min.js"></script>
+    <script defer src="../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Kopírovat"
+    data-copied-label="Zkopírováno"
+    data-copy-aria-label="Kopírovat kód"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Zavřít navigaci">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">Čeština</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item"
+                href="../../../modules/teams-and-two-factor/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                            </a>
+                    <a
+                class="locale-item is-current"
+                href="../../../cs/modules/teams-and-two-factor/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../cs/" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../../v1/cs/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Začínáme</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../documentation/">
+                                Dokumentace Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/installation/">
+                                Instalace Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/getting-started/">
+                                Začínáme                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/configuration/">
+                                Konfigurace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/authorization/">
+                                Autorizace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/theming/">
+                                Vzhled a přizpůsobení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/testing/">
+                                Testování                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/cookbook/">
+                                Kuchařka                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/error-handling/">
+                                Ošetření chyb                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/troubleshooting/">
+                                Řešení potíží                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/upgrade/">
+                                Návod k upgradu                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../start/project-map/">
+                                Mapa projektu                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Formuláře</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/validation/">
+                                Validace formulářů                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/reactive-fields/">
+                                Reaktivní pole                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/save-lifecycle/">
+                                Životní cyklus ukládání                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../forms/custom-fields/">
+                                Rozšíření formulářů                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Pole</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/">
+                                            Pole formulářů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Tabulka</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/">
+                                            Sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/relations/">
+                                            Cesty relací a tečková notace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/casts/">
+                                            Enum a JSON casty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/editing/">
+                                            Editace a filtry na úrovni sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/fill-handle/">
+                                            Fill handle (vyplňování tažením jako v Excelu)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/columns/patterns/">
+                                            Vzory a recepty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/">
+                                            Filtry                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/relationships/">
+                                            Filtry relací a podřádků                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/column-level/">
+                                            Filtry na úrovni sloupce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/custom/">
+                                            Vlastní třída filtru                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../table/filters/patterns/">
+                                            Vzory a recepty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/actions/">
+                                Akce tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/record-actions/">
+                                Celořádkové akce (Record Actions)                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/selection/">
+                                Výběr řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/gestures/">
+                                Vrstva gest                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/inactive-records/">
+                                Neaktivní záznamy                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/exports/">
+                                Exporty tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/imports/">
+                                Importy tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/summaries/">
+                                Souhrny                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/grouping/">
+                                Seskupení řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/sub-rows/">
+                                Podřádky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/relation-managers/">
+                                Správci relací                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/notifications/">
+                                Notifikace tabulky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/data-sources/">
+                                Zdroje dat                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../table/advanced/">
+                                Pokročilé funkce                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../core/overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/icons/">
+                                            Ikony                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/colors/">
+                                            Barvy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/enums/">
+                                            Enumy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/foundation/blade-components/">
+                                            Blade komponenty                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/">
+                                            Akce                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/modals/">
+                                            Modaly akcí                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/lifecycle/">
+                                            Životní cyklus a fronty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/appearance/">
+                                            Tlačítka a vzhled                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/standalone/">
+                                            Akce mimo tabulku                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/actions/workflow/">
+                                            Workflow a přechody                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/modals/">
+                                Modaly                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/">
+                                            Notifikace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/toasts/">
+                                            Toasty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/persistent/">
+                                            Perzistentní notifikace                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/usage/">
+                                            Odkud je posílat                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/notifications/custom-drivers/">
+                                            Vlastní drivery                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/">
+                                            Widgety                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/stats/">
+                                            Statistiky                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/charts/">
+                                            Grafy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/custom/">
+                                            Tabulky a vlastní pohledy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/widgets/dashboards/">
+                                            Dashboardy                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/">
+                                            Infolisty                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/infolists/actions/">
+                                            Akce v infolistu                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/record-panels/">
+                                Editovatelné panely                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/global-search/">
+                                Globální hledání                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../core/audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/">
+                                            Pluginy                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/registration/">
+                                            Registrace pluginů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/hooks/">
+                                            Hooky                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/extending/">
+                                            Rozšiřování povrchů                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../core/plugins/examples/">
+                                            Příklady a testování                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../panels/overview/">
+                                Panely                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/pages/">
+                                Stránky                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/navigation/">
+                                Navigace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/routing/">
+                                Routování                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../panels/modules/">
+                                Moduly                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../admin/overview/">
+                                Admin shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/layout/">
+                                Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/sidebar/">
+                                Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../admin/branding/">
+                                Branding a motiv                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../">
+                                Hotové moduly                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../users/">
+                                Modul uživatelů                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="is-active" href="./">
+                                Týmy a dvoufázové ověření                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../auth/">
+                                Modul přihlášení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../settings/">
+                                Modul Nastavení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../notifications/">
+                                Modul notifikací                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../audit/">
+                                Modul auditu                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../media/">
+                                Modul médií                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../sortable/overview/">
+                                Úvod                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/installation/">
+                                Instalace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/row-sorting/">
+                                Řazení řádků                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/column-sorting/">
+                                Řazení sloupců                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/customization/">
+                                Přizpůsobení                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/advanced/">
+                                Pokročilé použití                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sortable/api-reference/">
+                                Reference API                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../boost/overview/">
+                                Úvod                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/installation/">
+                                Instalace                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/mcp-tools/">
+                                MCP Server a nástroje                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../boost/guidelines-and-skills/">
+                                Guidelines a Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Otevřít navigaci">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Prohledat dokumentaci…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Zrušit</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="Nic nenalezeno"
+                        data-empty-hint="Zkuste název balíčku, typ pole nebo termín z API."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Prohledat dokumentaci">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Přepnout motiv">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero has-preview">
+                            <nav class="breadcrumb" aria-label="Drobečková navigace">
+                                <a href="../../">Dokumentace</a>
+                                <span class="sep">/</span>
+                                <span class="current">Modules</span>
+                            </nav>
+                            <p class="eyebrow">Modules</p>
+                            <h1>Týmy a dvoufázové ověření</h1>
+                                                            <p class="lead">Dvoufázové ověření a role po týmech zapnuté v aplikaci, která už tenhle panel má — co vlastní Fortify, co permission vrstva a těch pár řádků, které jsou vaše.</p>
+                            
+                                                            <figure class="hero-preview">
+                                    <img src="../../assets/previews/auth-two-factor.png" alt="Týmy a dvoufázové ověření preview" loading="lazy">
+                                </figure>
+                            
+                                                                                        <div class="preview-gallery">
+                                                                            <article class="preview-card">
+                                            <figure class="preview-card-image">
+                                                <img src="../../assets/previews/auth-passkeys.png" alt="Passkeys" loading="lazy">
+                                            </figure>
+                                            <div class="preview-card-copy">
+                                                <strong>Passkeys</strong>
+                                                <p>Karta na profilu s klíčem zaregistrovaným skutečnou ceremonií WebAuthn. Přidání otevře vlastní dialog platformy, odebrání jde přes vlastní akci balíčku.</p>
+                                            </div>
+                                        </article>
+                                                                    </div>
+                                                    </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">Na této stránce</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#jak-to-funguje">Jak to funguje</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#jak-zapnout-dvoufazove-overeni">Jak zapnout dvoufázové ověření</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#odpovedet-za-sebe">Odpovědět za sebe</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#jak-zapnout-tymy">Jak zapnout týmy</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#odkud-se-prepinac-bere">Odkud se přepínač bere</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#passkeys-na-profilu">Passkeys na profilu</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#rozsireny-priklad">Rozšířený příklad</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#co-vlastni-ktery-balicek">Co vlastní který balíček</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#zmena-dvoufazoveho-overeni-nebo-passkeys-si-znovu-vyzada-heslo">Změna dvoufázového ověření nebo passkeys si znovu vyžádá heslo</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#souvisejici">Související</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Dvě funkce, o které se každá administrace dřív nebo později poprosí — a ani jedna
+z nich se tady neimplementuje.</p>
+<p><strong>Dvoufázové ověření vlastní Laravel Fortify.</strong> Tajemství, TOTP okno, záložní
+kódy, výzva při přihlašování a rate limiting kolem ní jsou bezpečnostní plocha
+s udržovaným vlastníkem. <strong>Týmy vlastní permission vrstva</strong> — role omezené na
+tým, sloupec navíc v pivot tabulkách a klíč cache, který ho musí obsahovat.</p>
+<p>Permission vrstvou je tady vždycky <code>nyoncode/laravel-permission-extended</code>. Není
+to alternativa ke <code>spatie/laravel-permission</code> — vyžaduje ho a rozšiřuje o
+wildcard matching, super-admin gate, Blade direktivy a události o změně
+oprávnění — a přesně to obrazovky rolí v tomhle frameworku předpokládají. Model
+na holém Spatie se záměrně <strong>nedetekuje</strong>, protože správcovské UI nad polovinou
+autorizačního modelu je horší než žádné.</p>
+<p>Co obojí záměrně vynechává, je obrazovka. Tenhle modul dodává obrazovku a volá
+jejich akce, takže panel funkci dostane, aniž by vedle té první stála druhá
+implementace.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-bash"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">laravel/fortify</span><span style="color: #E1E4E8;">                        </span><span style="color: #6A737D;"># dvoufázové ověření</span></div><div class='line'><span style="color: #B392F0;">composer</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">require</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">nyoncode/laravel-permission-extended</span><span style="color: #E1E4E8;">   </span><span style="color: #6A737D;"># role a týmy</span></div></code></pre>
+<h2 id="jak-to-funguje">Jak to funguje</h2>
+<p><strong>Detekce, ne konfigurace.</strong> Obě funkce jsou ve výchozím stavu <code>auto</code> a obě
+<code>auto</code> hledají tu věc samotnou:</p>
+<table>
+<thead>
+<tr>
+<th>Funkce</th>
+<th>Co <code>auto</code> kontroluje</th>
+<th>Kde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dvoufázové ověření</td>
+<td>existuje Fortify třída <code>EnableTwoFactorAuthentication</code> <strong>a</strong> <code>Features::enabled(Features::twoFactorAuthentication())</code></td>
+<td><code>Support\TwoFactor</code></td>
+</tr>
+<tr>
+<td>Týmy</td>
+<td><code>nyoncode/laravel-permission-extended</code> je nainstalovaný, <code>config('permission.teams')</code> je true, třída registraru existuje a <code>teams.model</code> se rozřeší</td>
+<td><code>Support\Teams</code></td>
+</tr>
+</tbody>
+</table>
+<p>V obou případech dvě podmínky, ne jedna — a obě stály za kontrolu. Fortify bývá
+závislostí několika věcí, které aplikace může mít nainstalované z jiných důvodů,
+a jeho dvoufázová funkce je řádek v <code>fortify.features</code>, který se dá prostě
+vynechat: nainstalované-ale-vypnuté musí číst jako vypnuté, jinak se karta objeví
+a její tlačítka spadnou. Týmy se řídí <code>permission.teams</code>, ne vlastním přepínačem,
+protože právě tohle nastavení dělá funkci <em>skutečnou</em>: přidává sloupec týmu do
+pivot tabulek a do klíče permission cache. Panel, který by s ním nesouhlasil, by
+ukazoval přepínač nad autorizací, která omezená není.</p>
+<p>Id týmu se pořád nastavuje na Spatie <code>PermissionRegistrar</code>, a není to spor:
+rozšiřující balíček přidává chování na model uživatele a registrar dědí beze
+změny, takže zůstává tím jediným objektem, který ví, čím je čtení oprávnění
+omezené.</p>
+<p><strong>Dvoufázové ověření má tři stavy, ne dva.</strong> Fortify zapíše tajemství ve chvíli,
+kdy se vygeneruje QR kód — takže člověk, který panel otevřel a zavřel záložku, ho
+má a nechrání ho nic:</p>
+<table>
+<thead>
+<tr>
+<th>Stav</th>
+<th>Znamená</th>
+<th>Karta ukáže</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vypnuto</td>
+<td>žádné tajemství</td>
+<td>jedno tlačítko: zapnout</td>
+</tr>
+<tr>
+<td>nedokončeno</td>
+<td>tajemství, nepotvrzené</td>
+<td>QR kód, klíč k opsání, šest políček na kód — a cestu ven</td>
+</tr>
+<tr>
+<td>zapnuto</td>
+<td><code>two_factor_confirmed_at</code> je vyplněné</td>
+<td>záložní kódy a cestu pryč</td>
+</tr>
+</tbody>
+</table>
+<p>Panel, který by tohle modeloval jako boolean, by nechal každé přerušené nastavení
+uvízlé v prostředním stavu, zatímco odznak tvrdí, že jsou v bezpečí. Odznak tam
+čte „Nedokončeno“ a <em>Vypnout</em> se nabízí i z něj, nejen ze stavu <code>zapnuto</code> —
+polorozdělané nastavení musí jít opustit oběma směry, jinak je to past.</p>
+<p><strong>Tým omezuje všechno, takže se nastavuje dřív, než ho něco přečte.</strong> Se zapnutým
+<code>permission.teams</code> je každé čtení role a oprávnění omezené tím id týmu, které
+registrar naposledy dostal — takže request, který mu ho nikdy neřekne, vidí
+<em>předchozí</em>, což ve workeru nebo v dlouho běžícím procesu znamená cizí. Modul
+přidá <code>SetCurrentTeam</code> do middleware skupiny <code>web</code>, a do skupiny, ne za alias,
+který si routa vyžádá: stránka, která by alias zapomněla, by autorizovala proti
+špatnému týmu a vypadala by naprosto správně.</p>
+<p><strong>Přepnutí přesměruje.</strong> Tým omezuje každé čtení oprávnění, takže stránka
+poskládaná <em>před</em> přepnutím — menu, akce, řádky, které pustila policy — byla
+postavená pro tým, ze kterého jste právě odešli. Jediná poctivá odpověď je nový
+request a <code>TeamSwitcher</code> ho vyvolá.</p>
+<p><strong>Členství se kontroluje při přepnutí, ne jen v seznamu.</strong> Přepínač vypíše týmy,
+do kterých patříte, a <code>Teams::switchTo()</code> členství ověří znovu, než cokoli uloží.
+<code>&lt;select&gt;</code> je markup a markup je to, co doletělo do prohlížeče.</p>
+<p><strong>Aktuální tým spadne zpátky, místo aby selhal.</strong> Session jeden jmenuje; když
+jmenuje tým, ve kterém už nejste — nebo zatím nejmenuje nic — použije se první,
+do kterého patříte. Oba případy jsou běžné a ani jeden by neměl člověka poslat na
+stránku omezenou na nic.</p>
+<h2 id="jak-zapnout-dvoufazove-overeni">Jak zapnout dvoufázové ověření</h2>
+<p>Nainstalujte Fortify, spusťte jeho migraci a zapněte funkci. Nic dalšího se
+v tomhle panelu nemění:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/fortify.php</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Laravel\Fortify\Features</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #9ECBFF;">&#39;features&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Features</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">twoFactorAuthentication</span><span style="color: #E1E4E8;">([   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;confirm&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;confirmPassword&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ]),                                   </span></div><div class='line'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// app/Models/User.php</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Foundation\Auth\User</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Authenticatable</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Laravel\Fortify\TwoFactorAuthenticatable</span><span style="color: #E1E4E8;">;   </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">User</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Authenticatable</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">TwoFactorAuthenticatable</span><span style="color: #E1E4E8;">;               </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Karta se na stránce profilu objeví ve chvíli, kdy platí obojí. <code>'confirm' =&gt; false</code>
+se taky respektuje — modul si to čte přímo z nastavení dané Fortify funkce, ne
+z kopie toho nastavení — a tajemství pak <em>je</em> celé nastavení, takže stav „nedokončeno“
+nenastane.</p>
+<p><strong>Kód se na obou stranách dveří zadává do stejného pole.</strong> Políčka na téhle kartě
+jsou <code>OtpInput</code> z <code>wire-forms</code> — stejné, jaké kreslí přihlašovací výzva: samy
+posouvají kurzor, rozeberou vložený kód a odešlou jednu hodnotu. Žádný druhý
+názor na to, jak vypadá šest číslic.</p>
+<p><strong>Výzva patří té druhé polovině.</strong> Tenhle modul vlastní <em>správcovskou</em> kartu — QR
+kód, záložní kódy, přepínač. Obrazovka, která se ptá na kód během přihlašování,
+patří modulu přihlášení, vedle přihlašovacího formuláře, a mechanismus pod obojím
+je tentýž Fortify. To rozdělení je záměr, ne náhoda: tenhle modul si Fortify
+<em>detekuje</em> a funguje i bez něj, kdežto balíček, jehož jediná práce jsou obrazovky
+Fortify, ho <em>vyžaduje</em>. Viz <a href="../auth/">modul přihlášení</a>.</p>
+<h3 id="odpovedet-za-sebe">Odpovědět za sebe</h3>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-module-users.php</span></div><div class='line line-focus'><span style="color: #9ECBFF;">&#39;two_factor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">,   </span><span style="color: #6A737D;">// kartu neukazovat, ať je nainstalované cokoli </span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #9ECBFF;">&#39;profile&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;two_factor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">,   </span><span style="color: #6A737D;">// držet ji mimo profil a namountovat jinde </span></div><div class='line'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<p>Po tom druhém sáhněte, když kartu chcete na vlastní stránce zabezpečení —
+<code>@livewire(\NyonCode\WireModuleUsers\Livewire\TwoFactorAuthentication::class)</code>
+nebere argumenty, protože účet, na kterém pracuje, je vždycky ten přihlášený.</p>
+<h2 id="jak-zapnout-tymy">Jak zapnout týmy</h2>
+<p>Týmy potřebují od vaší aplikace tři věci: nastavení, model týmu a relaci na
+uživateli, která se k němu dostane. Tenhle modul nedodává ani jednu, protože
+aplikace, která týmy má, má všechny tři.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/permission.php — vlastní config spatie/laravel-permission, publikovaný</span></div><div class='line'><span style="color: #6A737D;">// přes závislost rozšiřujícího balíčku</span></div><div class='line line-focus'><span style="color: #9ECBFF;">&#39;teams&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,                    </span></div><div class='line'><span style="color: #9ECBFF;">&#39;team_foreign_key&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;team_id&#39;</span><span style="color: #E1E4E8;">,</span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-module-users.php</span></div><div class='line'><span style="color: #9ECBFF;">&#39;teams&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;enabled&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;auto&#39;</span><span style="color: #E1E4E8;">,            </span><span style="color: #6A737D;">// řídí se permission.teams</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;model&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;App\Models\Team&#39;</span><span style="color: #E1E4E8;">,   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;relation&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;teams&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;label_attribute&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">,    </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;session_key&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;wire.team&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// app/Models/User.php</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Database\Eloquent\Relations\BelongsToMany</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Foundation\Auth\User</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Authenticatable</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\PermissionExtended\Traits\HasRoles</span><span style="color: #E1E4E8;">;   </span><span style="color: #6A737D;">// tenhle, nikdy Spatie </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">User</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Authenticatable</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">HasRoles</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">/** Relace, kterou jmenuje `wire-module-users.teams.relation`. */</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">teams</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">BelongsToMany</span><span style="color: #E1E4E8;">     </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">belongsToMany</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Team</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }                                          </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>To je celé. V horní liště se objeví přepínač pro každého, kdo patří do víc než
+jednoho týmu, middleware omezí každé čtení oprávnění v každém web requestu
+a <code>Gate::allows()</code> začne odpovídat po týmech, aniž by se změnilo jediné volací
+místo.</p>
+<h3 id="odkud-se-prepinac-bere">Odkud se přepínač bere</h3>
+<p>Není v layoutu shellu a tenhle modul do toho souboru nikdy nesahá. Registruje
+view do registru chrome ve <code>wire-core</code> a shell vykreslí, co je zaregistrované —
+tentýž šev, jaký používá media picker na druhém konci dokumentu:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// packages/module-users/src/WireModuleUsersServiceProvider.php</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\View\PageChrome</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">bootTeams</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Teams</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">enabled</span><span style="color: #E1E4E8;">()) {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;">;                                          </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Kernel</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">appendMiddlewareToGroup</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;web&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">SetCurrentTeam</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">);</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">app</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PageChrome</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">add</span><span style="color: #E1E4E8;">(</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;wire-module-users::team-switcher&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">PageChrome</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">TOPBAR</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    );                                                   </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p><code>PageChrome::TOPBAR</code> je region pro věci, které musí být <strong>vidět</strong> — přepínač
+týmu, výběr tenanta, odznak prostředí. <code>PageChrome::BODY</code>, výchozí, je pro věci,
+které musí jen <strong>existovat</strong>: modal, který otevírá něco jiného, hostitel
+potvrzení. Vaše vlastní aplikace se může registrovat do obou, a jakýkoli jiný
+balíček taky:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// app/Providers/AppServiceProvider.php</span></div><div class='line'><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">boot</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #B392F0;">app</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">PageChrome</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">add</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;partials.environment-badge&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">PageChrome</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">TOPBAR</span><span style="color: #E1E4E8;">); </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<h2 id="passkeys-na-profilu">Passkeys na profilu</h2>
+<p>Třetí věc, kterou se dá účet zajistit, a nejnovější: passkey je vlastní
+přihlašovací údaj platformy — Touch ID, Windows Hello, telefon, bezpečnostní
+klíč. <strong>Laravel má celé</strong>, přesně jako dvoufázové ověření: <code>laravel/passkeys</code> za
+<code>Features::passkeys()</code> ve Fortify přináší ceremonii WebAuthn, řádky s údaji i
+klienta do prohlížeče. Tenhle modul přidává kartu.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-module-users.php</span></div><div class='line'><span style="color: #9ECBFF;">&#39;profile&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;passkeys&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,   </span><span style="color: #6A737D;">// karta tam, kde je funkce zapnutá </span></div><div class='line'><span style="color: #E1E4E8;">],</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #9ECBFF;">&#39;passkeys&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;auto&#39;</span><span style="color: #E1E4E8;">,     </span><span style="color: #6A737D;">// &#39;auto&#39; hledá balíčky se zapnutou funkcí </span></div></code></pre>
+<p>Dva řádky na user modelu — a právě ty, jejichž chybění je tiché: všechny routy
+odpovídají a zaregistrovaný klíč nepatří nikomu, takže se karta na ně dívá a
+řekne, co chybí:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Laravel\Passkeys\Contracts\PasskeyUser</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Laravel\Passkeys\PasskeyAuthenticatable</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line line-focus'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">User</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Authenticatable</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">implements</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">PasskeyUser</span><span style="color: #E1E4E8;">   </span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">PasskeyAuthenticatable</span><span style="color: #E1E4E8;">;                             </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Karta vypíše, co účet má, vezme jméno pro nový klíč a otevře dialog platformy, a
+odebírá vlastní akcí balíčku — takže se vyvolá <code>PasskeyDeleted</code> pro cokoli, co
+naslouchá.</p>
+<p><strong>Tlačítko pro přihlášení patří té druhé polovině</strong>, vedle přihlašovacího
+formuláře, ze stejného důvodu jako dvoufázová výzva. Viz <a href="../auth/#passkeys">modul
+auth</a> — včetně pasti při vývoji: choďte na <code>localhost</code>, nikdy na
+<code>127.0.0.1</code>.</p>
+<h2 id="rozsireny-priklad">Rozšířený příklad</h2>
+<p>Všechno výše v jedné aplikaci: tabulka uživatelů s fotkou, týmy omezující
+autorizaci a dvoufázové ověření dostupné každému, kdo o něj stojí.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// app/Models/User.php</span></div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Models</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Database\Eloquent\Relations\BelongsToMany</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Illuminate\Foundation\Auth\User</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">as</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Authenticatable</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Laravel\Fortify\TwoFactorAuthenticatable</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Foundation\Contracts\HasAvatar</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\PermissionExtended\Traits\HasRoles</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireModuleUsers\Concerns\InteractsWithAvatar</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">User</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Authenticatable</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">implements</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">HasAvatar</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">HasRoles</span><span style="color: #E1E4E8;">;</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">InteractsWithAvatar</span><span style="color: #E1E4E8;">;        </span><span style="color: #6A737D;">// fotka, z nakonfigurovaného sloupce </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">TwoFactorAuthenticatable</span><span style="color: #E1E4E8;">;   </span><span style="color: #6A737D;">// tajemství a záložní kódy, Fortify </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> $fillable </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;password&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;avatar_path&#39;</span><span style="color: #E1E4E8;">];</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">protected</span><span style="color: #E1E4E8;"> $hidden </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> [</span><span style="color: #9ECBFF;">&#39;password&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;remember_token&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;two_factor_secret&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;two_factor_recovery_codes&#39;</span><span style="color: #E1E4E8;">];</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #6A737D;">/** Co vypíše přepínač v liště a proti čemu kontroluje Teams::switchTo(). */</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">teams</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">BelongsToMany</span><span style="color: #E1E4E8;">   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">belongsToMany</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Team</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">);</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    }                                        </span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-module-users.php</span></div><div class='line'><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;model&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Models\User</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;avatar&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;enabled&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;auto&#39;</span><span style="color: #E1E4E8;">,           </span><span style="color: #6A737D;">// rozhoduje sloupec níž </span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;column&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;avatar_path&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;disk&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;public&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ],</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;two_factor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;auto&#39;</span><span style="color: #E1E4E8;">,            </span><span style="color: #6A737D;">// rozhoduje Fortify</span></div><div class='line line-focus'>&nbsp;</div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;teams&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;enabled&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;auto&#39;</span><span style="color: #E1E4E8;">,           </span><span style="color: #6A737D;">// rozhoduje permission.teams</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;model&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Models\Team</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;relation&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;teams&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    ],                                 </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;profile&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;password&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;two_factor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #9ECBFF;">&#39;delete_account&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">false</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">    ],</span></div><div class='line'><span style="color: #E1E4E8;">];</span></div></code></pre>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// database/migrations/…_add_profile_columns_to_users_table.php</span></div><div class='line'><span style="color: #79B8FF;">Schema</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">table</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;users&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">Blueprint</span><span style="color: #E1E4E8;"> $table)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span><span style="color: #E1E4E8;"> {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    $table</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">string</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;avatar_path&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">nullable</span><span style="color: #E1E4E8;">();   </span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>Nic dalšího. Spusťte <code>php artisan about</code> a panel nahlásí, kterou ze čtyř
+volitelných půlek tahle instalace opravdu dostala:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-text"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #e1e4e8;">  Wire Module Users .......................................................</span></div><div class='line'><span style="color: #e1e4e8;">  Avatars ......................................................... enabled</span></div><div class='line'><span style="color: #e1e4e8;">  Roles ........................................................... enabled</span></div><div class='line'><span style="color: #e1e4e8;">  Teams ........................................................... enabled</span></div><div class='line'><span style="color: #e1e4e8;">  Two-factor ...................................................... enabled</span></div><div class='line'><span style="color: #e1e4e8;">  User model ..................................... App\Models\User</span></div></code></pre>
+<h2 id="co-vlastni-ktery-balicek">Co vlastní který balíček</h2>
+<table>
+<thead>
+<tr>
+<th>Oblast</th>
+<th>Vlastník</th>
+<th>Podíl tohohle modulu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hashování hesla, pravidlo <code>current_password</code></td>
+<td>Laravel</td>
+<td>karta, která se ptá, a udržení session přihlášené po změně</td>
+</tr>
+<tr>
+<td>Dvoufázová tajemství, TOTP, záložní kódy, výzva při přihlášení</td>
+<td>Fortify</td>
+<td>třístavová karta, která volá Fortify akce</td>
+</tr>
+<tr>
+<td>Role, oprávnění, omezení na tým, permission cache</td>
+<td>nyoncode/laravel-permission-extended, nad spatie/laravel-permission, který vyžaduje</td>
+<td>obrazovky rolí a to, ve kterém týmu je tenhle request</td>
+</tr>
+<tr>
+<td>Přihlášení, registrace, reset hesla, ověření e-mailu</td>
+<td>Fortify nebo Breeze</td>
+<td>nic — viz <a href="../../admin/overview/">admin shell</a></td>
+</tr>
+<tr>
+<td>Týmy samotné: tabulka, model, členství</td>
+<td>vaše aplikace</td>
+<td>přepínač nad tím, co už máte</td>
+</tr>
+</tbody>
+</table>
+<h3 id="zmena-dvoufazoveho-overeni-nebo-passkeys-si-znovu-vyzada-heslo">Změna dvoufázového ověření nebo passkeys si znovu vyžádá heslo</h3>
+<p>Fortify dává <code>password.confirm</code> na každou route, která vypíná dvoufázové
+ověření, čte záložní kód nebo odebírá passkey — a má to ve výchozím stavu
+zapnuté. Tyto karty ovšem volají Fortify akce přes Livewire, čímž se k nim
+dostanou <strong>mimo</strong> ten middleware — takže je ta pojistka zopakovaná přímo na
+kartě, místo aby se ztratila. Kdo drží vypůjčenou session, nevypne druhý faktor,
+nepřečte TOTP secret ani nesmaže passkey, aniž by znal heslo, které to všechno
+chrání.</p>
+<p>Čte se stejné okno, jaké zapisuje Laravelí vlastní <code>RequirePassword</code> —
+<code>auth.password_confirmed_at</code> proti <code>auth.password_timeout</code> — takže potvrzení
+hesla kdekoli v aplikaci vyhoví všem těmto místům a timeout se nastavuje na
+jediném místě:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/auth.php</span></div><div class='line line-focus'><span style="color: #9ECBFF;">&#39;password_timeout&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">10800</span><span style="color: #E1E4E8;">, </span><span style="color: #6A737D;">// v sekundách; Laravel má ve výchozím stavu tři hodiny </span></div></code></pre>
+<p>Mimo toto okno tlačítka přesměrují na obrazovku pro potvrzení hesla a karta
+řekne proč, místo aby tiše zobrazila prázdný panel.</p>
+<h2 id="souvisejici">Související</h2>
+<ul>
+<li><a href="../users/">Modul uživatelů</a> — stránka profilu, na které tyhle karty žijí</li>
+<li><a href="../../admin/overview/">Admin shell</a> — auth rám a kam patří přihlašovací obrazovka</li>
+<li><a href="../../panels/modules/">Moduly</a> — co je modul a jak ho balíček dodá</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Stránkování">
+                                                                    <a class="page-nav-link is-prev" href="../users/">
+                                        <span>← Předchozí</span>
+                                        <strong>Modul uživatelů</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../auth/">
+                                        <span>Další →</span>
+                                        <strong>Modul přihlášení</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">Na této stránce</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#jak-to-funguje">
+                                            Jak to funguje                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#jak-zapnout-dvoufazove-overeni">
+                                            Jak zapnout dvoufázové ověření                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#odpovedet-za-sebe">
+                                            Odpovědět za sebe                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#jak-zapnout-tymy">
+                                            Jak zapnout týmy                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#odkud-se-prepinac-bere">
+                                            Odkud se přepínač bere                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#passkeys-na-profilu">
+                                            Passkeys na profilu                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#rozsireny-priklad">
+                                            Rozšířený příklad                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#co-vlastni-ktery-balicek">
+                                            Co vlastní který balíček                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#zmena-dvoufazoveho-overeni-nebo-passkeys-si-znovu-vyzada-heslo">
+                                            Změna dvoufázového ověření nebo passkeys si znovu vyžádá heslo                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#souvisejici">
+                                            Související                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Zpět nahoru">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>

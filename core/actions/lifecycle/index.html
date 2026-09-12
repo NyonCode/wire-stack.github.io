@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lifecycle And Queues | Wire Docs</title>
+    <meta name="description" content="What runs around the callback — before, after, on failure — how to stop a run from inside a hook, and what changes when the work belongs on a queue.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/core/actions/lifecycle/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/core/actions/lifecycle/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/core/actions/lifecycle/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/core/actions/lifecycle/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Lifecycle And Queues | Wire Docs">
+    <meta property="og:description" content="What runs around the callback — before, after, on failure — how to stop a run from inside a hook, and what changes when the work belongs on a queue.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/core/actions/lifecycle/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:title" content="Lifecycle And Queues | Wire Docs">
+    <meta name="twitter:description" content="What runs around the callback — before, after, on failure — how to stop a run from inside a hook, and what changes when the work belongs on a queue.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../../assets/gsap.min.js"></script>
+    <script defer src="../../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64" fill="none">
+        <path d="M52 12H20A10 10 0 0 0 20 32H44A10 10 0 0 1 44 52H12" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="52" cy="12" r="4.6" fill="currentColor"/>
+        <circle cx="12" cy="52" r="4.6" fill="currentColor"/>
+    </svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../../core/actions/lifecycle/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../../cs/core/actions/lifecycle/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../../v1/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Start Here</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../documentation/">
+                                Wire Documentation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/installation/">
+                                Installing Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/getting-started/">
+                                Getting Started                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/configuration/">
+                                Configuration                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/authorization/">
+                                Authorization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/theming/">
+                                Theming &amp; Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/testing/">
+                                Testing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/cookbook/">
+                                Cookbook                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/error-handling/">
+                                Error Handling                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/troubleshooting/">
+                                Troubleshooting                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/upgrade/">
+                                Upgrade Guide                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/project-map/">
+                                Project Map                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Forms</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/validation/">
+                                Form Validation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/reactive-fields/">
+                                Reactive Fields                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/save-lifecycle/">
+                                Save Lifecycle                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/custom-fields/">
+                                Extending Forms                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Fields</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/">
+                                            Form Fields                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Table</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../table/overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/">
+                                            Columns                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/relations/">
+                                            Relation Paths &amp; Dot Notation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/casts/">
+                                            Enum &amp; JSON Casts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/editing/">
+                                            Editing &amp; Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/fill-handle/">
+                                            Fill Handle (Excel-style AutoFill)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/columns/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">11</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/">
+                                            Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/relationships/">
+                                            Relationship &amp; Sub-Row Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/column-level/">
+                                            Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/custom/">
+                                            Custom Filter Class                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../table/filters/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/actions/">
+                                Table Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/record-actions/">
+                                Record Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/selection/">
+                                Selecting Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/gestures/">
+                                The Gesture Layer                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/inactive-records/">
+                                Inactive Records                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/exports/">
+                                Table Exports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/imports/">
+                                Table Imports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/summaries/">
+                                Summaries                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/grouping/">
+                                Row Grouping                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/sub-rows/">
+                                Sub-Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/relation-managers/">
+                                Relation Managers                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/data-sources/">
+                                Data Sources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/notifications/">
+                                Table Notifications                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../table/advanced/">
+                                Advanced Features                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../foundation/icons/">
+                                            Icons                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../foundation/colors/">
+                                            Colors                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../foundation/enums/">
+                                            Enums                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../foundation/blade-components/">
+                                            Blade Components                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group is-open" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="true">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../">
+                                            Actions                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../modals/">
+                                            Action Modals                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="is-active" href="./">
+                                            Lifecycle And Queues                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../appearance/">
+                                            Buttons And Appearance                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../standalone/">
+                                            Actions Outside A Table                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../workflow/">
+                                            Workflow And Transitions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../modals/">
+                                Modals                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../notifications/">
+                                            Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../notifications/toasts/">
+                                            Toasts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../notifications/persistent/">
+                                            Persistent Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../notifications/usage/">
+                                            Where To Send From                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../notifications/custom-drivers/">
+                                            Custom Drivers                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../widgets/">
+                                            Widgets                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../widgets/stats/">
+                                            Stats                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../widgets/charts/">
+                                            Charts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../widgets/progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../widgets/list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../widgets/custom/">
+                                            Tables And Custom Views                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../widgets/dashboards/">
+                                            Dashboards                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../infolists/">
+                                            Infolists                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../infolists/actions/">
+                                            Infolist Actions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../record-panels/">
+                                Editable Panels                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../global-search/">
+                                Global Search                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../plugins/">
+                                            Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../plugins/registration/">
+                                            Registering Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../plugins/hooks/">
+                                            Hooks                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../plugins/extending/">
+                                            Extending Surfaces                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../plugins/examples/">
+                                            Examples And Testing                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../panels/overview/">
+                                Panels                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/pages/">
+                                Pages                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/navigation/">
+                                Navigation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/routing/">
+                                Routing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/modules/">
+                                Modules                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../admin/overview/">
+                                The Admin Shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../admin/layout/">
+                                The Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../admin/sidebar/">
+                                The Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../admin/branding/">
+                                Branding And Theme                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../modules/">
+                                Ready-Made Modules                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/users/">
+                                The Users Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/teams-and-two-factor/">
+                                Teams and Two-Factor                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/auth/">
+                                The Auth Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/settings/">
+                                The Settings Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/notifications/">
+                                The Notifications Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/audit/">
+                                The Audit Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/media/">
+                                The Media Module                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../sortable/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/row-sorting/">
+                                Row Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/column-sorting/">
+                                Column Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/customization/">
+                                Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/advanced/">
+                                Advanced Usage                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/api-reference/">
+                                API Reference                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../boost/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../boost/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../boost/mcp-tools/">
+                                MCP Server &amp; Tools                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../boost/guidelines-and-skills/">
+                                Guidelines &amp; Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Core</span>
+                            </nav>
+                            <p class="eyebrow">Core</p>
+                            <h1>Lifecycle And Queues</h1>
+                                                            <p class="lead">What runs around the callback — before, after, on failure — how to stop a run from inside a hook, and what changes when the work belongs on a queue.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#lifecycle-hooks">Lifecycle Hooks</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#halt-execution">Halt Execution</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#a-halt-that-only-tells-you-something">A halt that only tells you something</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#where-a-halt-can-be-raised">Where a halt can be raised</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#a-halt-with-no-action-at-all">A halt with no action at all</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#the-halt-api">The halt API</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#running-on-a-queue">Running On A Queue</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#what-crosses-the-boundary">What crosses the boundary</a>
+                                        </li>
+                                                                            <li class="level-3">
+                                            <a href="#what-does-not-cross-it">What does not cross it</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#plugin-hooks-actionexecuting-actionexecuted">Plugin Hooks: action.executing / action.executed</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#related">Related</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>Between the click and the notification there is a fixed order of steps, and every
+one of them is a hook you can take. This page is that order — what runs when,
+what each hook is handed, how to stop the run from inside one, and what is
+different once the work is long enough to belong on a queue.</p>
+<h2 id="lifecycle-hooks">Lifecycle Hooks</h2>
+<p>The order is fixed, and every step is a place you can take:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What runs</th>
+<th>Worth knowing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Modal</td>
+<td>the confirmation, form, infolist or wizard, when the action declares one</td>
+<td>its form is validated before the pipeline starts</td>
+</tr>
+<tr>
+<td>2. <code>before()</code></td>
+<td>your callbacks, in declaration order</td>
+<td><strong>skipped on the re-run</strong> after a halt was confirmed (<code>$confirmed</code> is true there)</td>
+</tr>
+<tr>
+<td>3. <code>action()</code></td>
+<td>the work itself</td>
+<td>receives <code>$record</code> / <code>$records</code>, <code>$data</code>, <code>$confirmed</code>, <code>$halt</code></td>
+</tr>
+<tr>
+<td>4. Redirect and notification</td>
+<td>the result's redirect, then <code>successNotification()</code> or <code>failureNotification()</code></td>
+<td>recorded here, <em>before</em> step 5</td>
+</tr>
+<tr>
+<td>5. <code>after()</code></td>
+<td>your callbacks</td>
+<td><strong>skipped when the run halted</strong>, so a halt's side effects cannot fire twice</td>
+</tr>
+</tbody>
+</table>
+<p>Three consequences worth having in mind before writing a hook:</p>
+<ul>
+<li><strong>A <code>before()</code> that halts stops everything after it.</strong> The work does not run and
+neither do the after callbacks — which is the point, but it also means cleanup
+does not belong in <code>after()</code>.</li>
+<li><strong>The notification is decided before <code>after()</code> runs.</strong> An after callback cannot
+change what the user is told; raise a notification of its own instead.</li>
+<li><strong>A queued action leaves before the pipeline is built.</strong> <code>before()</code> and
+<code>after()</code> are browser work, so the job runs the callback and nothing else — see
+<a href="#running-on-a-queue">Running On A Queue</a>.</li>
+</ul>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;publish&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">before</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validate</span><span style="color: #E1E4E8;">())</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">update</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;published&#39;</span><span style="color: #E1E4E8;">]))</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">after</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; </span><span style="color: #B392F0;">event</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">new</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Published</span><span style="color: #E1E4E8;">($record)))</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">successNotification</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Published!&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">failureNotification</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Publish failed.&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<h2 id="halt-execution">Halt Execution</h2>
+<p>Halt pauses execution and shows a secondary modal for user confirmation:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;process&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">before</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> ($record, </span><span style="color: #79B8FF;">Action</span><span style="color: #E1E4E8;"> $action) {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> ($record</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">has_warnings) {</span></div><div class='line'><span style="color: #E1E4E8;">            $action</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">halt</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Warnings Detected&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;There are unresolved warnings. Continue anyway?&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">        }</span></div><div class='line'><span style="color: #E1E4E8;">    })</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($record) =&gt; $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">process</span><span style="color: #E1E4E8;">());</span></div></code></pre>
+<p>A halt may carry a form of its own — the question the action turned out to need
+an answer to. The action is re-executed once it is confirmed, with <code>$confirmed</code>
+true and the halt form's values merged into <code>$data</code>:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;archive&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> ($record, </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data, </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $confirmed, </span><span style="color: #F97583;">callable</span><span style="color: #E1E4E8;"> $halt) {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">if</span><span style="color: #E1E4E8;"> (</span><span style="color: #F97583;">!</span><span style="color: #E1E4E8;"> $confirmed) {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $halt()                                        </span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Why is this being archived?&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">([</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #79B8FF;">Select</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;reason&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ArchiveReason</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #79B8FF;">DateTimePicker</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;review_at&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                ]);                                               </span></div><div class='line'><span style="color: #E1E4E8;">        }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">        $record</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">archive</span><span style="color: #E1E4E8;">($data[</span><span style="color: #9ECBFF;">&#39;reason&#39;</span><span style="color: #E1E4E8;">], $data[</span><span style="color: #9ECBFF;">&#39;review_at&#39;</span><span style="color: #E1E4E8;">]);</span></div><div class='line'><span style="color: #E1E4E8;">    });</span></div></code></pre>
+<p>The halt form is validated before the action runs again — its fields' own rules
+first, then any extra rules the halt declared over the bag as a whole:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$halt()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">TextInput</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;reason&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">required</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">minLength</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">10</span><span style="color: #E1E4E8;">)])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validation</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;reason&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;not_in:test&#39;</span><span style="color: #E1E4E8;">], [</span><span style="color: #9ECBFF;">&#39;reason.not_in&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Pick a real reason.&#39;</span><span style="color: #E1E4E8;">]);</span></div></code></pre>
+<p>A failure leaves the modal open with the message on the field, and the action is
+not re-executed. Declared rules are written against bare field names and reported
+on the matching field.</p>
+<p><code>$data</code> is dehydrated here too, on the same terms as an action modal's — the
+halt form's fields shape their own values, and keys the halt carried over from
+the first attempt pass through as they were.</p>
+<h3 id="a-halt-that-only-tells-you-something">A halt that only tells you something</h3>
+<p>Not every halt is a question. <code>informative()</code> — spelled <code>noSubmit()</code> where that
+reads better — drops the submit button, the form and its rules, leaving a modal
+with one way out. The action is not re-executed, because there is nothing to
+confirm:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$action</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">halt</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">informative</span><span style="color: #E1E4E8;">()                                  </span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Nothing to export&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;The filter you applied matches no rows.&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<h3 id="where-a-halt-can-be-raised">Where a halt can be raised</h3>
+<p>Anywhere an action runs. The pipeline that raises one lives in <code>wire-core</code>, so a
+halt works the same on a table, on a resource page, and on a plain Livewire
+component composing <code>WithActions</code> — the last of which only became true in 2.0,
+when the modal's rendering moved into core beside the engine. Before that a halt
+outside a table set state nothing drew: the action stopped, and the screen said
+nothing at all.</p>
+<p>The only thing a host owes a halt is the modal host it already renders for
+action modals:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">x-wire-actions::modal-host</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:component</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;$this&quot;</span><span style="color: #E1E4E8;"> /&gt;</span></div></code></pre>
+<p><strong>A halt with fields needs a cache store that survives a request.</strong> The schema is
+declared inside a callback, so it cannot be rebuilt on the next render the way an
+action's form can: it is parked in the cache under the component's id and read
+back on every render until the halt closes. On a store that keeps nothing
+(<code>array</code>, or none), the modal still opens and still validates — it simply comes
+back without its fields after a failed validation. A halt with no form is
+unaffected.</p>
+<h3 id="a-halt-with-no-action-at-all">A halt with no action at all</h3>
+<p>An action is not what makes a halt work. The object is a modal description, its
+state is five keys, and its resume is a method name plus scalars — none of which
+is about actions, and since 2.0 none of it is inside them either.
+<code>InteractsWithHalt</code> is that mechanism on its own, so <strong>any</strong> Livewire component
+can stop and ask:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\ActionHalt</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireCore\Actions\Concerns\InteractsWithHalt</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">OrderCard</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">InteractsWithHalt</span><span style="color: #E1E4E8;">;                                       </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">archive</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">halt</span><span style="color: #E1E4E8;">(                                             </span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #79B8FF;">ActionHalt</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">confirmDanger</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Archive this order?&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;It leaves the active list.&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #B392F0;">then</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&#39;archiveConfirmed&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #B392F0;">arguments</span><span style="color: #E1E4E8;">: [</span><span style="color: #9ECBFF;">&#39;id&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">$this</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">order</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">id],</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        );</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">archiveConfirmed</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data, </span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $arguments)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">void</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">        </span><span style="color: #79B8FF;">Order</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">findOrFail</span><span style="color: #E1E4E8;">($arguments[</span><span style="color: #9ECBFF;">&#39;id&#39;</span><span style="color: #E1E4E8;">])</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">archive</span><span style="color: #E1E4E8;">();          </span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-blade"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">{{-- Only for a component that raises halts without the action runtime; a host</span></div><div class='line'><span style="color: #6A737D;">     rendering the action modal host already draws them. --}}</span></div><div class='line'><span style="color: #E1E4E8;">&lt;</span><span style="color: #FDAEB7;">x-wire-actions::halt-host</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">:component</span><span style="color: #E1E4E8;">=</span><span style="color: #9ECBFF;">&quot;$this&quot;</span><span style="color: #E1E4E8;"> /&gt;</span></div></code></pre>
+<p><strong>The resume is a name, not a closure</strong>, and that is not a limitation of the
+implementation — it is what the request boundary allows. A halt is drawn, read
+and answered on a <em>later</em> request than the one that raised it, and a closure does
+not survive that trip. So a halt carries what the action pipeline has always
+carried: a method name and scalars. <code>$then</code> is called as
+<code>$then(array $data, array $arguments)</code> once the user confirms, <code>$data</code> being
+whatever the halt collected.</p>
+<p><code>$then</code> must name a <strong>public</strong> method, and the rule is a boundary rather than a
+convention: the halt's state is a public Livewire property, so the browser can
+rewrite the name before confirming. A public method is one it could already call
+directly, so naming it here grants nothing new — a private or protected one would
+have been a way in, and is refused.</p>
+<p>What a component without <code>wire-forms</code> gives up is fields: <code>form()</code> needs the form
+layer to render, validate and dehydrate a schema. A halt there is a confirmation
+— heading, description, two buttons — and rules it declares are still checked
+against the data it is submitted with. A host composing <code>WithActions</code> or
+<code>WithTable</code> has the form layer already and loses nothing.</p>
+<h3 id="the-halt-api">The halt API</h3>
+<p>A halt <strong>is</strong> a modal, so it speaks the vocabulary the modal classes own —
+<code>heading()</code>, <code>description()</code>, <code>width()</code>, <code>closeOnEscape()</code>. An <strong>action</strong>
+prefixes the same settings (<code>modalHeading()</code>, <code>modalWidth()</code>) because an action
+is a button that <em>has</em> a modal, and its own <code>icon()</code> and <code>color()</code> belong to the
+button. That is the rule behind what can look like two spellings of one thing.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">heading</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Closure</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $heading)              </span><span style="color: #6A737D;">// the modal&#39;s title; a closure is resolved at once, see below</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">description</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Closure</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $description)      </span><span style="color: #6A737D;">// the sentence under it</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">icon</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Icon</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $icon, </span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $color </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">color</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">Color</span><span style="color: #F97583;">|</span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;"> $color)                    </span><span style="color: #6A737D;">// the accent, and the submit button&#39;s</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">danger</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $danger </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)                        </span><span style="color: #6A737D;">// intent, not a hue: fills color only when nothing chose one</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">width</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string|</span><span style="color: #79B8FF;">ModalWidth</span><span style="color: #E1E4E8;"> $width)                    </span><span style="color: #6A737D;">// &#39;sm&#39;|&#39;md&#39;|&#39;lg&#39;|&#39;xl&#39;|&#39;2xl&#39;…&#39;7xl&#39;|&#39;full&#39; — default &#39;md&#39;</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">maxHeight</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $maxHeight)                       </span><span style="color: #6A737D;">// a CSS length for the body before it scrolls</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">closeOnClickAway</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $close </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)               </span><span style="color: #6A737D;">// default true</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">closeOnEscape</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $close </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)                  </span><span style="color: #6A737D;">// false for a confirmation worth reading</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">id</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $id)                                     </span><span style="color: #6A737D;">// a stable DOM id, when something outside must address it</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">submitLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $label)                        </span><span style="color: #6A737D;">// default: the framework&#39;s &quot;Confirm&quot;</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cancelLabel</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $label)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">informative</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $informative </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)              </span><span style="color: #6A737D;">// no submit, no form, no rules — a dead end with a Close</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">noSubmit</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $noSubmit </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)                    </span><span style="color: #6A737D;">// the same thing, under the name that reads better at a call site</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">form</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array|</span><span style="color: #79B8FF;">ModalForm</span><span style="color: #E1E4E8;"> $fields)                      </span><span style="color: #6A737D;">// fields answered before the action re-runs</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">validation</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $rules, </span><span style="color: #F97583;">?array</span><span style="color: #E1E4E8;"> $messages </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">?array</span><span style="color: #E1E4E8;"> $attributes </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">fillForm</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array</span><span style="color: #E1E4E8;"> $data)                              </span><span style="color: #6A737D;">// prefill the halt form — keys are bare field names</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">skipBeforeOnConfirm</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $skip </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)             </span><span style="color: #6A737D;">// default true; false re-runs before() on the confirmed pass</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">redirectAfterConfirm</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $url)                 </span><span style="color: #6A737D;">// where to go once the confirmation goes through</span></div></code></pre>
+<p>Five presets set a heading, a description, an icon and a colour in one call:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">confirmDelete</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $recordName </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">confirmDanger</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $heading, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">confirmWarning</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $heading, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">info</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $heading, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">success</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">string</span><span style="color: #E1E4E8;"> $heading, </span><span style="color: #F97583;">?string</span><span style="color: #E1E4E8;"> $description </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">null</span><span style="color: #E1E4E8;">)</span></div></code></pre>
+<p>Three of these have a rule worth stating outright, because each was a trap:</p>
+<ul>
+<li><strong>A closure heading is resolved when you write it, not when the modal draws.</strong>
+A halt is serialized into component state the moment it is raised, and the
+scope that could answer the closure is gone by the next request.</li>
+<li><strong><code>form()</code> and <code>informative()</code> overrule each other, last call wins.</strong>
+<code>informative()</code> drops the form and its rules; declaring a form afterwards takes
+the halt back out of informative. Before 2.0 the order decided it silently:
+<code>-&gt;informative()-&gt;form([...])</code> kept the instance, rendered no fields, and left
+the modal with no submit.</li>
+<li><strong><code>skipBeforeOnConfirm(false)</code> really re-runs the hooks now.</strong> It was read by
+nothing before 2.0. A <code>before()</code> that raises the halt must guard itself with
+<code>$confirmed</code>, or it will raise the same halt again — which is why the default
+skips them.</li>
+</ul>
+<h2 id="running-on-a-queue">Running On A Queue</h2>
+<p>Most actions should stay synchronous — a user who clicks Delete expects the row
+gone when the page comes back, and moving that to a worker buys nothing but a
+race. <code>-&gt;queue()</code> is for the long tail: a bulk action over ten thousand rows, a
+recalculation that would time out.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;recalculate&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">queue</span><span style="color: #E1E4E8;">()                   </span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onQueue</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;reports&#39;</span><span style="color: #E1E4E8;">)        </span><span style="color: #6A737D;">// naming a queue implies -&gt;queue()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">onConnection</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;redis&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">fn</span><span style="color: #E1E4E8;"> ($records) =&gt; </span><span style="color: #79B8FF;">Report</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">rebuild</span><span style="color: #E1E4E8;">($records));</span></div></code></pre>
+<p>The click dispatches a job and returns immediately; the user gets a "running in
+the background" notification, and a second one when it finishes.</p>
+<h3 id="what-crosses-the-boundary">What crosses the boundary</h3>
+<p><strong>Names and keys, never objects.</strong> The job carries the host class, the action's
+name, the record keys and the submitted form data — all scalars. Not the action,
+which holds closures; not the models, which would be stale by the time a worker
+picks them up and would make a ten-thousand-row bulk action a megabyte of
+payload. The job rebuilds the host, asks it for the action by name, and reads the
+records fresh.</p>
+<p>That is worth knowing rather than hidden: a row edited between the click and the
+run is acted on <strong>as it is when the job runs</strong>, not as it looked when queued.</p>
+<h3 id="what-does-not-cross-it">What does not cross it</h3>
+<p>A queued action has <strong>no browser</strong>. The bindings a synchronous callback receives
+for the modal — <code>$set</code>, <code>$setParent</code>, <code>$close</code>, <code>$replace</code>, <code>$halt</code> — are bound
+to throw, not to no-op:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">Action</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;recalculate&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">queue</span><span style="color: #E1E4E8;">()</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">action</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> ($records, $close) {</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Report</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">rebuild</span><span style="color: #E1E4E8;">($records);</span></div><div class='line'><span style="color: #E1E4E8;">    $close();   </span><span style="color: #6A737D;">// QueuedActionException: needs the browser it no longer has</span></div><div class='line'><span style="color: #E1E4E8;">});</span></div></code></pre>
+<p>A no-op would look like it worked, and the developer would find out when a user
+reported that the modal never closed. Report back with a notification instead —
+which is what the <a href="../../notifications/">database driver</a>
+exists for, since by then the request that started the job is gone.</p>
+<p>An action renamed or removed between dispatch and run throws for the same
+reason: the job carries the name, so there is nothing left to execute and saying
+so beats failing silently.</p>
+<h2 id="plugin-hooks-actionexecuting-actionexecuted">Plugin Hooks: action.executing / action.executed</h2>
+<p>Beside the per-action callbacks above, two plugin hooks fire around <strong>every</strong>
+action — which is what an installed package reaches for, because it never holds
+the action's builder:</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$manager</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">hook</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Hook</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">ActionExecuting</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> (</span><span style="color: #79B8FF;">ActionExecutingPayload</span><span style="color: #E1E4E8;"> $payload) {</span></div><div class='line line-focus'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">Log</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">info</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;running&#39;</span><span style="color: #E1E4E8;">, [</span><span style="color: #9ECBFF;">&#39;action&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> $payload</span><span style="color: #F97583;">-&gt;</span><span style="color: #E1E4E8;">actionName]);   </span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $payload;</span></div><div class='line'><span style="color: #E1E4E8;">}, </span><span style="color: #B392F0;">for</span><span style="color: #E1E4E8;">: </span><span style="color: #9ECBFF;">&#39;invoices&#39;</span><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p><code>for:</code> narrows a callback to one host — the registry key a page declares, or its
+class. Without it the callback runs for every action in the application.</p>
+<p><strong>A Laravel event fires at the same moment, ten lines apart, and the two are not
+interchangeable.</strong> <code>ActionExecuting</code> and <code>ActionExecuted</code> are the observation half:
+audit trails, telemetry and metrics belong there and cannot change what runs. The
+hook is the half that can. See <a href="../../plugins/hooks/">Hooks</a>.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="../">Actions</a> — the callback these hooks surround</li>
+<li><a href="../modals/">Action Modals</a> — what may run before the callback does</li>
+<li><a href="../../notifications/">Notifications</a> — how a finished or failed run reports itself</li>
+<li><a href="../../../forms/save-lifecycle/">Save Lifecycle</a> — the same idea on the form side</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../modals/">
+                                        <span>← Previous</span>
+                                        <strong>Action Modals</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../appearance/">
+                                        <span>Next →</span>
+                                        <strong>Buttons And Appearance</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#lifecycle-hooks">
+                                            Lifecycle Hooks                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#halt-execution">
+                                            Halt Execution                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#a-halt-that-only-tells-you-something">
+                                            A halt that only tells you something                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#where-a-halt-can-be-raised">
+                                            Where a halt can be raised                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#a-halt-with-no-action-at-all">
+                                            A halt with no action at all                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#the-halt-api">
+                                            The halt API                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#running-on-a-queue">
+                                            Running On A Queue                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#what-crosses-the-boundary">
+                                            What crosses the boundary                                        </a>
+                                    </li>
+                                                                    <li class="level-3">
+                                        <a href="#what-does-not-cross-it">
+                                            What does not cross it                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#plugin-hooks-actionexecuting-actionexecuted">
+                                            Plugin Hooks: action.executing / action.executed                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#related">
+                                            Related                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>
