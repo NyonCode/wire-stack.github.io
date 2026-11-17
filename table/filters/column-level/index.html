@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en" data-search-index="../../../search-index.json">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Column-Level Filters | WireStack Docs</title>
+    <meta name="description" content="A filter in a column&#039;s own header — a row of open filters or a funnel per column — with operators, counts, value lists, date presets and a right-click &quot;Only this value&quot;.">
+    <link rel="canonical" href="https://wirestack.nyoncode.cz/table/filters/column-level/">
+    <link rel="alternate" hreflang="en" href="https://wirestack.nyoncode.cz/table/filters/column-level/">
+    <link rel="alternate" hreflang="cs" href="https://wirestack.nyoncode.cz/cs/table/filters/column-level/">
+    <link rel="alternate" hreflang="x-default" href="https://wirestack.nyoncode.cz/table/filters/column-level/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WireStack Docs">
+    <meta property="og:locale" content="en">
+    <meta property="og:title" content="Column-Level Filters | WireStack Docs">
+    <meta property="og:description" content="A filter in a column&#039;s own header — a row of open filters or a funnel per column — with operators, counts, value lists, date presets and a right-click &quot;Only this value&quot;.">
+    <meta property="og:url" content="https://wirestack.nyoncode.cz/table/filters/column-level/">
+    <meta property="og:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://wirestack.nyoncode.cz/assets/brand/github/social-preview.png">
+    <meta name="twitter:title" content="Column-Level Filters | WireStack Docs">
+    <meta name="twitter:description" content="A filter in a column&#039;s own header — a row of open filters or a funnel per column — with operators, counts, value lists, date presets and a right-click &quot;Only this value&quot;.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="../../../assets/brand/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../../assets/brand/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../../assets/brand/apple-touch-icon.png">
+    <link rel="stylesheet" href="../../../assets/site.css">
+    <script>
+        // Remember the locale the visitor is actually reading — explicit
+        // navigation always wins and refreshes the stored preference.
+        (function () {
+            try {
+                var s = {"storageKey":"wire-docs-locale","maxAgeDays":90,"current":"en","default":"en","paths":{"en":"","cs":"cs"}};
+                if (s.storageKey) {
+                    localStorage.setItem(s.storageKey, JSON.stringify({ code: s.current, ts: Date.now() }));
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('wire-docs-theme');
+                var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <script>
+        // Opt into entrance/scroll motion unless the visitor prefers less of it.
+        try {
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('has-motion');
+            }
+        } catch (e) {}
+    </script>
+    <script defer src="../../../assets/gsap.min.js"></script>
+    <script defer src="../../../assets/scrolltrigger.min.js"></script>
+    <script defer src="../../../assets/site.js"></script>
+</head>
+<body
+    class="docs-body"
+    data-copy-label="Copy"
+    data-copied-label="Copied"
+    data-copy-aria-label="Copy code"
+>
+    <div class="site-shell">
+        <aside class="site-sidebar" data-sidebar>
+            <div class="sidebar-header">
+                <a class="brand-link" href="../../../">
+                    <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64"><defs><linearGradient id="ws-mark-g0" gradientUnits="userSpaceOnUse" x1="46" y1="4" x2="34" y2="60"><stop offset="0.0" stop-color="#FBBF24"/><stop offset="0.1" stop-color="#FAB81F"/><stop offset="0.2" stop-color="#F9B11A"/><stop offset="0.3" stop-color="#F7A913"/><stop offset="0.4" stop-color="#F5A00C"/><stop offset="0.5" stop-color="#F6920D"/><stop offset="0.6" stop-color="#F78210"/><stop offset="0.7" stop-color="#F97615"/><stop offset="0.8" stop-color="#F66622"/><stop offset="0.9" stop-color="#F25532"/><stop offset="1.0" stop-color="#EF4444"/></linearGradient><linearGradient id="ws-mark-g1" gradientUnits="userSpaceOnUse" x1="46" y1="4" x2="34" y2="60"><stop offset="0.0" stop-color="#EDAD20"/><stop offset="0.1" stop-color="#ECA61B"/><stop offset="0.2" stop-color="#ECA016"/><stop offset="0.3" stop-color="#EA9810"/><stop offset="0.4" stop-color="#E98E0D"/><stop offset="0.5" stop-color="#EB810E"/><stop offset="0.6" stop-color="#EC7413"/><stop offset="0.7" stop-color="#EC6819"/><stop offset="0.8" stop-color="#E85827"/><stop offset="0.9" stop-color="#E54937"/><stop offset="1.0" stop-color="#E4423F"/></linearGradient><linearGradient id="ws-mark-g2" gradientUnits="userSpaceOnUse" x1="46" y1="4" x2="34" y2="60"><stop offset="0.0" stop-color="#FBBF24"/><stop offset="0.1" stop-color="#FAB81F"/><stop offset="0.2" stop-color="#F9B11A"/><stop offset="0.3" stop-color="#F7A913"/><stop offset="0.4" stop-color="#F5A00C"/><stop offset="0.5" stop-color="#F6920D"/><stop offset="0.6" stop-color="#F78210"/><stop offset="0.7" stop-color="#F97615"/><stop offset="0.8" stop-color="#F66622"/><stop offset="0.9" stop-color="#F25532"/><stop offset="1.0" stop-color="#EF4444"/></linearGradient><linearGradient id="ws-mark-g3" gradientUnits="userSpaceOnUse" x1="46" y1="4" x2="34" y2="60"><stop offset="0.0" stop-color="#EDAD20"/><stop offset="0.1" stop-color="#ECA61B"/><stop offset="0.2" stop-color="#ECA016"/><stop offset="0.3" stop-color="#EA9810"/><stop offset="0.4" stop-color="#E98E0D"/><stop offset="0.5" stop-color="#EB810E"/><stop offset="0.6" stop-color="#EC7413"/><stop offset="0.7" stop-color="#EC6819"/><stop offset="0.8" stop-color="#E85827"/><stop offset="0.9" stop-color="#E54937"/><stop offset="1.0" stop-color="#E4423F"/></linearGradient><linearGradient id="ws-mark-g4" gradientUnits="userSpaceOnUse" x1="46" y1="4" x2="34" y2="60"><stop offset="0.0" stop-color="#FBBF24"/><stop offset="0.1" stop-color="#FAB81F"/><stop offset="0.2" stop-color="#F9B11A"/><stop offset="0.3" stop-color="#F7A913"/><stop offset="0.4" stop-color="#F5A00C"/><stop offset="0.5" stop-color="#F6920D"/><stop offset="0.6" stop-color="#F78210"/><stop offset="0.7" stop-color="#F97615"/><stop offset="0.8" stop-color="#F66622"/><stop offset="0.9" stop-color="#F25532"/><stop offset="1.0" stop-color="#EF4444"/></linearGradient><filter id="ws-mark-sh" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.8"/></filter><clipPath id="ws-mark-c0"><path d="M46.74 4.17A5.67 5.67 0 0 1 54.53 9.42L54.53 15.71A3.30 3.30 0 0 1 52.48 18.77L24.64 30.18A1.01 1.01 0 0 1 23.87 30.18L14.16 26.18A4.77 4.77 0 0 1 14.18 17.35Z"/></clipPath><clipPath id="ws-mark-c1"><path d="M21.41 14.43A1.01 1.01 0 0 1 22.17 14.43L51.83 26.89A4.49 4.49 0 0 1 51.82 35.17L43.26 38.74A1.01 1.01 0 0 1 42.45 38.72L27.14 31.52A0.00 0.00 0 0 0 27.13 31.52L14.16 26.18A4.77 4.77 0 0 1 14.18 17.35Z"/></clipPath><clipPath id="ws-mark-c3"><path d="M23.16 31.39A1.01 1.01 0 0 1 23.92 31.39L51.91 43.06A4.55 4.55 0 0 1 51.92 51.46L43.23 55.11A1.01 1.01 0 0 1 42.46 55.12L13.99 43.70A4.63 4.63 0 0 1 13.97 35.11Z"/></clipPath><linearGradient id="ws-mark-x0" gradientUnits="userSpaceOnUse" x1="30.0" y1="0" x2="34.5" y2="0"><stop offset="0" stop-color="#D35A0A" stop-opacity="0"/><stop offset="1" stop-color="#D35A0A" stop-opacity=".12"/></linearGradient></defs><path d="M46.21 41.01A1.01 1.01 0 0 1 46.99 41.01L51.91 43.06A4.55 4.55 0 0 1 51.92 51.46L30.52 60.45A5.92 5.92 0 0 1 22.77 57.28L22.77 57.28A5.92 5.92 0 0 1 25.93 49.53Z" fill="url(#ws-mark-g4)"/><path d="M23.16 31.39A1.01 1.01 0 0 1 23.92 31.39L51.91 43.06A4.55 4.55 0 0 1 51.92 51.46L43.23 55.11A1.01 1.01 0 0 1 42.46 55.12L13.99 43.70A4.63 4.63 0 0 1 13.97 35.11Z" fill="url(#ws-mark-g3)"/><g clip-path="url(#ws-mark-c3)"><path d="M42.83 23.42A1.01 1.01 0 0 1 43.59 23.43L51.83 26.89A4.49 4.49 0 0 1 51.82 35.17L23.22 47.09A1.01 1.01 0 0 1 22.46 47.10L13.99 43.70A4.63 4.63 0 0 1 13.97 35.11Z" transform="translate(0 3.2)" fill="#C2380F" filter="url(#ws-mark-sh)"/></g><path d="M42.83 23.42A1.01 1.01 0 0 1 43.59 23.43L51.83 26.89A4.49 4.49 0 0 1 51.82 35.17L23.22 47.09A1.01 1.01 0 0 1 22.46 47.10L13.99 43.70A4.63 4.63 0 0 1 13.97 35.11Z" fill="url(#ws-mark-g2)"/><path d="M21.41 14.43A1.01 1.01 0 0 1 22.17 14.43L51.83 26.89A4.49 4.49 0 0 1 51.82 35.17L43.26 38.74A1.01 1.01 0 0 1 42.45 38.72L27.14 31.52A0.00 0.00 0 0 0 27.13 31.52L14.16 26.18A4.77 4.77 0 0 1 14.18 17.35Z" fill="url(#ws-mark-g1)"/><g clip-path="url(#ws-mark-c1)"><path d="M46.74 4.17A5.67 5.67 0 0 1 54.53 9.42L54.53 15.71A3.30 3.30 0 0 1 52.48 18.77L24.64 30.18A1.01 1.01 0 0 1 23.87 30.18L14.16 26.18A4.77 4.77 0 0 1 14.18 17.35Z" transform="translate(0 3.2)" fill="#D35A0A" filter="url(#ws-mark-sh)"/></g><path d="M46.74 4.17A5.67 5.67 0 0 1 54.53 9.42L54.53 15.71A3.30 3.30 0 0 1 52.48 18.77L24.64 30.18A1.01 1.01 0 0 1 23.87 30.18L14.16 26.18A4.77 4.77 0 0 1 14.18 17.35Z" fill="url(#ws-mark-g0)"/><path d="M21.41 14.43A1.01 1.01 0 0 1 22.17 14.43L51.83 26.89A4.49 4.49 0 0 1 51.82 35.17L43.26 38.74A1.01 1.01 0 0 1 42.45 38.72L27.14 31.52A0.00 0.00 0 0 0 27.13 31.52L14.16 26.18A4.77 4.77 0 0 1 14.18 17.35Z" clip-path="url(#ws-mark-c0)" fill="url(#ws-mark-x0)"/></svg>
+</span>
+                    <span class="brand-name">WireStack</span>
+                </a>
+                <button class="sidebar-close" type="button" data-nav-close aria-label="Close navigation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <div class="locale-switcher" data-locale-switcher>
+    <button class="locale-trigger" type="button" data-locale-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch language">
+        <svg class="locale-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="locale-current">English</span>
+        <svg class="locale-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="locale-menu" data-locale-menu role="listbox" hidden>
+        <p class="locale-menu-title">Language</p>
+                    <a
+                class="locale-item is-current"
+                href="../../../table/filters/column-level/"
+                role="option"
+                aria-selected="true"
+                data-locale-code="en"
+            >
+                <span class="locale-item-label">English</span>
+                                    <svg class="locale-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </a>
+                    <a
+                class="locale-item"
+                href="../../../cs/table/filters/column-level/"
+                role="option"
+                aria-selected="false"
+                data-locale-code="cs"
+            >
+                <span class="locale-item-label">Čeština</span>
+                            </a>
+            </div>
+</div>
+                <div class="version-switcher" data-version-switcher>
+    <button class="version-trigger" type="button" data-version-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="Switch documentation version">
+        <span class="version-current">v2.x</span>
+        <svg class="version-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="version-menu" data-version-menu role="listbox" hidden>
+        <p class="version-menu-title">Version</p>
+                                    <a class="version-item is-current" href="../../../" role="option" aria-selected="true">
+                    <span class="version-item-label">v2.x</span>
+                                            <span class="version-tag is-current">Latest</span>
+                                    </a>
+                                                <a class="version-item" href="../../../v1/" role="option" aria-selected="false">
+                    <span class="version-item-label">v1.x</span>
+                                            <span class="version-tag">LTS</span>
+                                    </a>
+                        </div>
+</div>
+            </div>
+
+            <nav class="sidebar-nav">
+            <section class="nav-section">
+            <h2>Start Here</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../documentation/">
+                                Wire Documentation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/installation/">
+                                Installing Wire                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/getting-started/">
+                                Getting Started                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/configuration/">
+                                Configuration                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/authorization/">
+                                Authorization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/theming/">
+                                Theming &amp; Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/testing/">
+                                Testing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/cookbook/">
+                                Cookbook                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/error-handling/">
+                                Error Handling                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/troubleshooting/">
+                                Troubleshooting                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/upgrade/">
+                                Upgrade Guide                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../start/project-map/">
+                                Project Map                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Forms</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../forms/overview/">
+                                Wire Forms                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/validation/">
+                                Form Validation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/reactive-fields/">
+                                Reactive Fields                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/save-lifecycle/">
+                                Save Lifecycle                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../forms/custom-fields/">
+                                Extending Forms                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Fields</span>
+                                <span class="nav-group-count">35</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/">
+                                            Form Fields                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/alert/">
+                                            Alert                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/belongs-to-select/">
+                                            BelongsToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/builder/">
+                                            Builder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/button/">
+                                            Button                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/checkbox/">
+                                            Checkbox                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/checkbox-list/">
+                                            CheckboxList                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/code-editor/">
+                                            CodeEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/color-picker/">
+                                            ColorPicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/date-range-picker/">
+                                            DateRangePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/date-time-picker/">
+                                            DateTimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/file-upload/">
+                                            FileUpload                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/hidden/">
+                                            Hidden                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/html/">
+                                            Html                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/key-value/">
+                                            KeyValue                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/markdown-editor/">
+                                            MarkdownEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/money-input/">
+                                            MoneyInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/morph-to-select/">
+                                            MorphToSelect                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/otp-input/">
+                                            OtpInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/phone-input/">
+                                            PhoneInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/placeholder/">
+                                            Placeholder                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/radio/">
+                                            Radio                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/rating/">
+                                            Rating                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/repeater/">
+                                            Repeater                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/rich-editor/">
+                                            RichEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/select/">
+                                            Select                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/signature-pad/">
+                                            SignaturePad                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/slider/">
+                                            Slider                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/tags/">
+                                            Tags                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/textarea/">
+                                            Textarea                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/text-input/">
+                                            TextInput                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/time-picker/">
+                                            TimePicker                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/tiptap-editor/">
+                                            TiptapEditor                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/toggle/">
+                                            Toggle                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../forms/fields/view-field/">
+                                            ViewField                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Table</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../overview/">
+                                Wire Table                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Columns</span>
+                                <span class="nav-group-count">25</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../columns/">
+                                            Columns                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/relations/">
+                                            Relation Paths &amp; Dot Notation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/casts/">
+                                            Enum &amp; JSON Casts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/badge/">
+                                            BadgeColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/boolean/">
+                                            BooleanColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/button/">
+                                            ButtonColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/checkbox/">
+                                            CheckboxColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/color/">
+                                            ColorColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/icon/">
+                                            IconColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/image/">
+                                            ImageColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/metric/">
+                                            MetricColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/money/">
+                                            MoneyColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/phone/">
+                                            PhoneColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/poll/">
+                                            PollColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/rating/">
+                                            RatingColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/select/">
+                                            SelectColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/split/">
+                                            SplitColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/stacked/">
+                                            StackedColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/tags/">
+                                            TagsColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/text/">
+                                            TextColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/text-input/">
+                                            TextInputColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/toggle/">
+                                            ToggleColumn                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/editing/">
+                                            Editing &amp; Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/fill-handle/">
+                                            Fill Handle (Excel-style AutoFill)                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../columns/patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group is-open" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="true">
+                                <span class="nav-group-label">Filters</span>
+                                <span class="nav-group-count">12</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../">
+                                            Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../date/">
+                                            DateFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../number-range/">
+                                            NumberRangeFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../query-builder/">
+                                            QueryBuilderFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../select/">
+                                            SelectFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../ternary/">
+                                            TernaryFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../text/">
+                                            TextFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../trashed/">
+                                            TrashedFilter                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../relationships/">
+                                            Relationship &amp; Sub-Row Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="is-active" href="./">
+                                            Column-Level Filters                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../custom/">
+                                            Custom Filter Class                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../patterns/">
+                                            Patterns &amp; Recipes                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../actions/">
+                                Table Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../record-actions/">
+                                Record Actions                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../selection/">
+                                Selecting Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../gestures/">
+                                The Gesture Layer                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../inactive-records/">
+                                Inactive Records                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../exports/">
+                                Table Exports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../imports/">
+                                Table Imports                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../summaries/">
+                                Summaries                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../grouping/">
+                                Row Grouping                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../sub-rows/">
+                                Sub-Rows                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../relation-managers/">
+                                Relation Managers                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../data-sources/">
+                                Data Sources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../notifications/">
+                                Table Notifications                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../advanced/">
+                                Advanced Features                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Core</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../core/overview/">
+                                Wire Core                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Foundation</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../core/foundation/">
+                                            Foundation                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/foundation/icons/">
+                                            Icons                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/foundation/colors/">
+                                            Colors                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/foundation/enums/">
+                                            Enums                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/foundation/blade-components/">
+                                            Blade Components                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Actions</span>
+                                <span class="nav-group-count">6</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../core/actions/">
+                                            Actions                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/actions/modals/">
+                                            Action Modals                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/actions/lifecycle/">
+                                            Lifecycle And Queues                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/actions/appearance/">
+                                            Buttons And Appearance                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/actions/standalone/">
+                                            Actions Outside A Table                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/actions/workflow/">
+                                            Workflow And Transitions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../core/modals/">
+                                Modals                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Notifications</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../core/notifications/">
+                                            Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/notifications/toasts/">
+                                            Toasts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/notifications/persistent/">
+                                            Persistent Notifications                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/notifications/usage/">
+                                            Where To Send From                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/notifications/custom-drivers/">
+                                            Custom Drivers                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Widgets</span>
+                                <span class="nav-group-count">7</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../core/widgets/">
+                                            Widgets                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/widgets/stats/">
+                                            Stats                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/widgets/charts/">
+                                            Charts                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/widgets/progress/">
+                                            ProgressWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/widgets/list/">
+                                            ListWidget                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/widgets/custom/">
+                                            Tables And Custom Views                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/widgets/dashboards/">
+                                            Dashboards                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Infolists</span>
+                                <span class="nav-group-count">3</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../core/infolists/">
+                                            Infolists                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/infolists/entries/">
+                                            Entries                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/infolists/actions/">
+                                            Infolist Actions                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../core/record-panels/">
+                                Editable Panels                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Schema</span>
+                                <span class="nav-group-count">9</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/overview/">
+                                            Schema                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/layout/fieldset/">
+                                            Fieldset                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/layout/flex/">
+                                            Flex                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/layout/grid/">
+                                            Grid                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/layout/section/">
+                                            Section                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/layout/tabs/">
+                                            Tabs                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/layout/wizard/">
+                                            Wizard                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/callout/">
+                                            Callout                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/schema/empty-state/">
+                                            Empty State                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../core/global-search/">
+                                Global Search                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../core/tours/">
+                                Tour                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../core/tour-step/">
+                                TourStep                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../core/tour-welcome/">
+                                TourWelcome                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../core/audit/">
+                                Audit Log                            </a>
+                        </li>
+                                                                                <li class="nav-group" data-nav-group>
+                            <button class="nav-group-toggle" type="button" aria-expanded="false">
+                                <span class="nav-group-label">Plugins</span>
+                                <span class="nav-group-count">5</span>
+                                <span class="nav-group-chevron" aria-hidden="true"></span>
+                            </button>
+                            <ul>
+                                                                    <li>
+                                        <a class="" href="../../../core/plugins/">
+                                            Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/plugins/registration/">
+                                            Registering Plugins                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/plugins/hooks/">
+                                            Hooks                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/plugins/extending/">
+                                            Extending Surfaces                                        </a>
+                                    </li>
+                                                                    <li>
+                                        <a class="" href="../../../core/plugins/examples/">
+                                            Examples And Testing                                        </a>
+                                    </li>
+                                                            </ul>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Panels</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../panels/overview/">
+                                Panels                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/resources/">
+                                Resources                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/pages/">
+                                Pages                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/navigation/">
+                                Navigation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/clusters/">
+                                Clusters                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/routing/">
+                                Routing                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/tenancy/">
+                                Tenancy                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/modules/">
+                                Modules                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../panels/cli/">
+                                Command Line                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Admin</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../admin/overview/">
+                                The Admin Shell                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../admin/layout/">
+                                The Layout                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../admin/sidebar/">
+                                The Sidebar                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../admin/branding/">
+                                Branding And Theme                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Modules</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../modules/">
+                                Ready-Made Modules                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/users/">
+                                The Users Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/teams-and-two-factor/">
+                                Teams and Two-Factor                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/auth/">
+                                The Auth Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/settings/">
+                                The Settings Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/tenants/">
+                                The Companies Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/notifications/">
+                                The Notifications Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/audit/">
+                                The Audit Module                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../modules/media/">
+                                The Media Module                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Sortable</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../sortable/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/row-sorting/">
+                                Row Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/column-sorting/">
+                                Column Reordering                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/board/">
+                                Board                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/customization/">
+                                Customization                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/advanced/">
+                                Advanced Usage                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../sortable/api-reference/">
+                                API Reference                            </a>
+                        </li>
+                                                </ul>
+        </section>
+            <section class="nav-section">
+            <h2>Boost</h2>
+            <ul>
+                                                            <li>
+                            <a class="" href="../../../boost/overview/">
+                                Introduction                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../boost/installation/">
+                                Installation                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../boost/mcp-tools/">
+                                MCP Server &amp; Tools                            </a>
+                        </li>
+                                                                                <li>
+                            <a class="" href="../../../boost/guidelines-and-skills/">
+                                Guidelines &amp; Skills                            </a>
+                        </li>
+                                                </ul>
+        </section>
+    </nav>
+        </aside>
+
+        <div class="site-overlay" data-nav-close></div>
+
+        <main class="site-main">
+            <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+            <header class="topbar">
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <div class="search-shell" data-search-root>
+                    <input
+                        type="search"
+                        class="search-input"
+                        placeholder="Search documentation…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        data-search-input
+                    >
+                    <span class="search-kbd"><kbd>⌘</kbd><kbd>K</kbd></span>
+                    <button class="search-cancel" type="button" data-search-close>Cancel</button>
+                    <div
+                        class="search-results"
+                        data-search-results
+                        data-empty-title="No matches"
+                        data-empty-hint="Try a package name, field type, or API term."
+                        hidden
+                    ></div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="icon-button search-trigger" type="button" data-search-open aria-label="Search documentation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+            </header>
+            <div class="search-backdrop" data-search-close></div>
+
+            <div class="page-body">
+                <div class="content-shell">
+                    <article class="docs-article">
+                                                <div class="page-hero">
+                            <nav class="breadcrumb" aria-label="Breadcrumb">
+                                <a href="../../../">Docs</a>
+                                <span class="sep">/</span>
+                                <span class="current">Table</span>
+                            </nav>
+                            <p class="eyebrow">Table</p>
+                            <h1>Column-Level Filters</h1>
+                                                            <p class="lead">A filter in a column&#039;s own header — a row of open filters or a funnel per column — with operators, counts, value lists, date presets and a right-click &quot;Only this value&quot;.</p>
+                            
+                            
+                                                                                </div>
+
+                                                    <details class="mobile-toc">
+                                <summary>
+                                    <span class="mobile-toc-label">On this page</span>
+                                    <svg class="mobile-toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul>
+                                                                            <li class="level-2">
+                                            <a href="#one-filter-engine">One filter engine</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#indicator-chips-shareable-urls">Indicator chips &amp; shareable URLs</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#two-layouts">Two Layouts</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#operators-on-a-column">Operators On A Column</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#counts-and-value-lists">Counts And Value Lists</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#date-presets">Date Presets</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#filter-from-a-cell">Filter From A Cell</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#extended-example">Extended Example</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#column-and-table-methods">Column And Table Methods</a>
+                                        </li>
+                                                                            <li class="level-2">
+                                            <a href="#related">Related</a>
+                                        </li>
+                                                                    </ul>
+                            </details>
+                        
+                        
+<p>In addition to dedicated filter components, any column can have an inline filter directly in its header cell. See <a href="../../columns/editing/#column-level-filtering">Columns — Column-Level Filtering</a>.</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsSelect</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;active&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Active&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;inactive&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Inactive&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">BadgeColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsMultiSelect</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Admin&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">]) </span><span style="color: #6A737D;">// pick several → whereIn</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;price&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsNumberRange</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">0</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">10000</span><span style="color: #E1E4E8;">)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsDateRange</span><span style="color: #E1E4E8;">()</span></div></code></pre>
+<p>Column filters use the <code>$columnFilters</code> Livewire property (separate from <code>$tableFilters</code>).</p>
+<h2 id="one-filter-engine">One filter engine</h2>
+<p>A column header filter is a <strong>placement</strong> of the same canonical <code>Filter</code> object used by the dedicated <a href="../">filter panel</a> — not a separate engine. The <code>filterAs*()</code> helpers are thin factories over <code>TextFilter</code>, <code>SelectFilter</code>, <code>DateFilter</code>, <code>NumberRangeFilter</code> and <code>TernaryFilter</code>; the column owns <em>where</em> the control renders (the header cell) and <em>which attribute</em> it targets, while the <code>Filter</code> owns <em>how</em> it applies, renders, and persists. Because of that, every column filter is planned through the same <code>QueryPlanner</code> as a panel filter (joins + qualification handled once), and inherits authorization (<code>-&gt;can()</code> / <code>-&gt;visible()</code>) for free.</p>
+<p>You can also pass a ready-made filter with <code>-&gt;filter()</code> when you need full control:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Filters\SelectFilter</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filter</span><span style="color: #E1E4E8;">(</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #79B8FF;">SelectFilter</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;status&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">options</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Status</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">searchable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">);</span></div></code></pre>
+<p>Filters whose SQL the planner cannot express as one clause — date (<code>whereDate</code>), boolean (<code>= false OR IS NULL</code>), and the operators that keep <code>NULL</code> rows (<em>does not contain</em>, <em>is none of</em>) — transparently fall back to the shared <code>Filter::apply()</code>, exactly as they do in the panel.</p>
+<p>Header filters always apply live. <code>Table::deferFilters()</code> holds back the
+<a href="../#the-filter-panel">filter panel</a> only.</p>
+<h2 id="indicator-chips-shareable-urls">Indicator chips &amp; shareable URLs</h2>
+<p>Because header filters are canonical <code>Filter</code> objects, they share the panel's active-filter UX:</p>
+<ul>
+<li><strong>Indicator chips</strong> — an active column filter shows a removable chip in the toolbar alongside panel-filter chips. The chip label comes from <code>Filter::getIndicator()</code> (option labels, range bounds, formatted dates); the × button clears just that column filter, and the "reset all" link clears every active filter.</li>
+<li><strong>Query-string persistence</strong> — with <code>Table::queryString()</code>, column filters are written to the URL under a <code>col_&lt;column&gt;</code> parameter (ranges use <code>col_&lt;column&gt;_min</code> / <code>_max</code>, etc.), so a shared or reloaded URL reproduces the same view. Relation (dotted) column names are skipped, as with panel filters.</li>
+</ul>
+<h2 id="two-layouts">Two Layouts</h2>
+<p>Where the header filters are drawn is the table's choice, resolved in this order:
+<code>Table::columnFilterLayout()</code>, then <code>wire-table.defaults.column_filter_layout</code>,
+then <code>'row'</code>.</p>
+<ul>
+<li><strong><code>ColumnFilterLayout::Row</code></strong> (default) — a second header row with every
+filter open at once, each in a cell as wide as its column. Quick on a wide
+screen with a few filters; cramped on a narrow column, and a phone scrolls the
+filters sideways with the data.</li>
+<li><strong><code>ColumnFilterLayout::Popover</code></strong> — the header stays one row high. A
+filterable column carries a funnel beside its label, <strong>filled while the column
+is filtered</strong>, so a narrowed table says <em>where</em> it is narrowed. The funnel opens
+that one filter — operator picker, value, <em>Clear</em>, <em>Done</em> — in a panel sized for
+the filter rather than the column; on a phone it is a bottom sheet with a
+grabber.</li>
+</ul>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Enums\ColumnFilterLayout</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">$table</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnFilterLayout</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ColumnFilterLayout</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">Popover</span><span style="color: #E1E4E8;">)   </span><span style="color: #6A737D;">// or &#39;popover&#39;</span></div></code></pre>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// config/wire-table.php</span></div><div class='line'><span style="color: #9ECBFF;">&#39;defaults&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> [</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #9ECBFF;">&#39;column_filter_layout&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">env</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;WIRE_TABLE_COLUMN_FILTER_LAYOUT&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;row&#39;</span><span style="color: #E1E4E8;">), </span><span style="color: #6A737D;">// &#39;row&#39; | &#39;popover&#39;</span></div><div class='line'><span style="color: #E1E4E8;">],</span></div></code></pre>
+<p>Both layouts draw the same control bound to the same <code>columnFilters.&lt;column&gt;</code>
+state, so chips, URLs and saved views do not know which one drew it.</p>
+<h2 id="operators-on-a-column">Operators On A Column</h2>
+<p><code>-&gt;filterOperators()</code> hands the column's filter the same operator picker a panel
+filter gets (<a href="../#operators">Filters → Operators</a>). Call it <strong>after</strong> the
+<code>filterAs*()</code> that chooses the filter — on a column with no filter yet it sets up
+a text filter:</p>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Enums\FilterOperator</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterOperators</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;contains&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;not_contains&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;ends_with&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;is_empty&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;is_not_empty&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">BadgeColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsMultiSelect</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Administrator&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterOperators</span><span style="color: #E1E4E8;">([</span><span style="color: #79B8FF;">FilterOperator</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">In</span><span style="color: #E1E4E8;">, </span><span style="color: #79B8FF;">FilterOperator</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">NotIn</span><span style="color: #E1E4E8;">])</span></div></code></pre>
+<p>With a picker the column's state becomes <code>{value, operator}</code> and the URL carries
+the operator as <code>col_&lt;column&gt;_op</code>.</p>
+<h2 id="counts-and-value-lists">Counts And Value Lists</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">BadgeColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsMultiSelect</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Administrator&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">])</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterWithCounts</span><span style="color: #E1E4E8;">()                   </span><span style="color: #6A737D;">// Administrator (4), Editor (11)</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;city&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsValueList</span><span style="color: #E1E4E8;">(</span><span style="color: #B392F0;">limit</span><span style="color: #E1E4E8;">: </span><span style="color: #79B8FF;">200</span><span style="color: #E1E4E8;">)        </span><span style="color: #6A737D;">// the column&#39;s own values, counted, searchable</span></div></code></pre>
+<p><code>-&gt;filterWithCounts()</code> turns on <a href="../select/#how-it-works"><code>SelectFilter::withCounts()</code></a>
+for the column's select filter (call it after <code>filterAsSelect()</code> /
+<code>filterAsMultiSelect()</code>; on any other filter it does nothing).
+<code>-&gt;filterAsValueList()</code> is a spreadsheet's <em>set filter</em>: a searchable
+multi-select whose options are the column's distinct values, most common first,
+capped at <code>$limit</code>, each with its count unless <code>withCounts: false</code>.</p>
+<p>Counts are taken under every other filter and the search, never under the
+column's own value. <strong>A column that hides its cell on some records with
+<code>visibleForRecord()</code> is never counted and never lists its values</strong> — the list
+would print what those cells keep out of sight. Relation (dotted) columns and
+custom data sources are not counted either.</p>
+<h2 id="date-presets">Date Presets</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">date</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterPresets</span><span style="color: #E1E4E8;">()                      </span><span style="color: #6A737D;">// a date range filter with every preset</span></div></code></pre>
+<p><code>-&gt;filterPresets()</code> makes the column's filter a date range if it is not one
+already, then offers <a href="../date/#presets"><code>DateFilter::presets()</code></a> — <code>true</code> for all,
+or a list of <code>DatePreset</code> cases or values. The preset is stored by name, so a
+bookmarked <em>Last 7 days</em> stays relative; the URL carries <code>col_&lt;column&gt;_preset</code>.</p>
+<h2 id="filter-from-a-cell">Filter From A Cell</h2>
+<p><code>Table::cellFilterMenu()</code> lets a right-click on a cell set that column's header
+filter from the value in it:</p>
+<ul>
+<li><strong>Only this value</strong> — keep the records holding exactly this value;</li>
+<li><strong>Exclude this value</strong> — drop them. Offered only when the filter has the
+negative operator on its picker (<em>is not</em> for a single value, <em>is none of</em> for
+a multi-select).</li>
+</ul>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">$table</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cellFilterMenu</span><span style="color: #E1E4E8;">()</span></div></code></pre>
+<p>What each filter writes:</p>
+<table>
+<thead>
+<tr>
+<th>Column filter</th>
+<th>Only this value</th>
+<th>Exclude this value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text, no picker</td>
+<td>the value (the filter's own comparison, <em>contains</em> by default)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>text with <em>is</em> / <em>is not</em> on the picker</td>
+<td><em>is</em> value</td>
+<td><em>is not</em> value</td>
+</tr>
+<tr>
+<td>multi-select (with <em>is any of</em> / <em>is none of</em>)</td>
+<td><em>is any of</em> [value]</td>
+<td><em>is none of</em> [value]</td>
+</tr>
+<tr>
+<td>date</td>
+<td>that day (a range from it to itself)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>number range</td>
+<td>min = max = the value</td>
+<td>—</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>yes / no</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The value is read from the record on the server</strong> (<code>filterByCellValue()</code>),
+never from the page: the cell shows a formatted value (<em>12. 3. 2026</em>,
+<em>Administrator</em>), and the filter compares what is stored. A cell that
+<code>visibleForRecord()</code> hides is ignored, and a row that has its own
+<a href="../../advanced/#row-context-menu">row context menu</a> keeps that menu instead.</p>
+<p>A select answers with <em>is any of</em> / <em>is none of</em> — the exact match it offers.
+A filter whose picker has no exact match at all — a text filter offered only
+<em>contains</em> and <em>starts with</em> — cannot say "only this value", so its column gets
+no cell menu.</p>
+<h2 id="extended-example">Extended Example</h2>
+<p>The users list from the workbench preview: funnels instead of a filter row,
+operators on the text columns, counts on the role, presets on the join date, and
+the cell menu.</p>
+<pre class="torchlight has-focus-lines" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #E1E4E8;">&lt;?php</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">namespace</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">App\Livewire</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">App\Models\User</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Livewire\Component</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Columns\BadgeColumn</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Columns\BooleanColumn</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Columns\TextColumn</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Concerns\WithTable</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Enums\ColumnFilterLayout</span><span style="color: #E1E4E8;">;</span></div><div class='line'><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">NyonCode\WireTable\Table</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #F97583;">class</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">ListUsers</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">extends</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">Component</span></div><div class='line'><span style="color: #E1E4E8;">{</span></div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">use</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">WithTable</span><span style="color: #E1E4E8;">;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">table</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">Table</span><span style="color: #E1E4E8;"> $table)</span><span style="color: #F97583;">:</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">Table</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> $table</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">model</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">User</span><span style="color: #F97583;">::class</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnFilterLayout</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ColumnFilterLayout</span><span style="color: #F97583;">::</span><span style="color: #79B8FF;">Popover</span><span style="color: #E1E4E8;">) </span></div><div class='line line-focus'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cellFilterMenu</span><span style="color: #E1E4E8;">() </span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columns</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;name&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">sortable</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterable</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterOperators</span><span style="color: #E1E4E8;">(), </span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;email&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterable</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterOperators</span><span style="color: #E1E4E8;">([</span><span style="color: #9ECBFF;">&#39;contains&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;not_contains&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;ends_with&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;is_empty&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;is_not_empty&#39;</span><span style="color: #E1E4E8;">]), </span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">BadgeColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsMultiSelect</span><span style="color: #E1E4E8;">([</span></div><div class='line'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;admin&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Administrator&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;manager&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Manager&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;editor&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Editor&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">                        </span><span style="color: #9ECBFF;">&#39;viewer&#39;</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">=&gt;</span><span style="color: #E1E4E8;"> </span><span style="color: #9ECBFF;">&#39;Viewer&#39;</span><span style="color: #E1E4E8;">,</span></div><div class='line'><span style="color: #E1E4E8;">                    ], </span><span style="color: #9ECBFF;">&#39;Any role&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterOperators</span><span style="color: #E1E4E8;">() </span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterWithCounts</span><span style="color: #E1E4E8;">(), </span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">BooleanColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;is_active&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsBoolean</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Active&#39;</span><span style="color: #E1E4E8;">, </span><span style="color: #9ECBFF;">&#39;Inactive&#39;</span><span style="color: #E1E4E8;">),</span></div><div class='line'><span style="color: #E1E4E8;">                </span><span style="color: #79B8FF;">TextColumn</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">make</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;created_at&#39;</span><span style="color: #E1E4E8;">)</span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">label</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;Joined&#39;</span><span style="color: #E1E4E8;">)</span></div><div class='line'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">date</span><span style="color: #E1E4E8;">()</span></div><div class='line line-focus'><span style="color: #E1E4E8;">                    </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterPresets</span><span style="color: #E1E4E8;">(), </span></div><div class='line'><span style="color: #E1E4E8;">            ])</span></div><div class='line'><span style="color: #E1E4E8;">            </span><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">queryString</span><span style="color: #E1E4E8;">();</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #E1E4E8;">    </span><span style="color: #F97583;">public</span><span style="color: #E1E4E8;"> </span><span style="color: #F97583;">function</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">render</span><span style="color: #E1E4E8;">()</span></div><div class='line'><span style="color: #E1E4E8;">    {</span></div><div class='line'><span style="color: #E1E4E8;">        </span><span style="color: #F97583;">return</span><span style="color: #E1E4E8;"> </span><span style="color: #B392F0;">view</span><span style="color: #E1E4E8;">(</span><span style="color: #9ECBFF;">&#39;livewire.list-users&#39;</span><span style="color: #E1E4E8;">);</span></div><div class='line'><span style="color: #E1E4E8;">    }</span></div><div class='line'><span style="color: #E1E4E8;">}</span></div></code></pre>
+<p>Right-click <em>Editor</em> in the role column and pick <em>Exclude this value</em>: the role
+funnel fills, the chip reads <code>Role: is none of Editor</code>, the URL gains
+<code>col_role_op=not_in</code> beside the value, and the counts beside the other roles
+stay as they were.</p>
+<h2 id="column-and-table-methods">Column And Table Methods</h2>
+<pre class="torchlight" style="background-color: #24292e; --theme-selection-background: #39414a;" data-torchlight-processed="3449c9e5e332f1dbb81505cd739fbf3f"><code class="language-php"><!-- Syntax highlighted by torchlight.dev --><div class='line'><span style="color: #6A737D;">// On a column (CanBeFiltered)</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterOperators</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array|bool</span><span style="color: #E1E4E8;"> $operators </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)   </span><span style="color: #6A737D;">// true = every operator the filter type supports, or list&lt;FilterOperator|string&gt;</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterWithCounts</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $condition </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)         </span><span style="color: #6A737D;">// record count beside each option of the column&#39;s select filter</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterAsValueList</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">int</span><span style="color: #E1E4E8;"> $limit </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">100</span><span style="color: #E1E4E8;">, </span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $withCounts </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">) </span><span style="color: #6A737D;">// searchable multi-select over the column&#39;s distinct values</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">filterPresets</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">array|bool</span><span style="color: #E1E4E8;"> $presets </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)        </span><span style="color: #6A737D;">// date range filter with named presets: true = all, or list&lt;DatePreset|string&gt;</span></div><div class='line'>&nbsp;</div><div class='line'><span style="color: #6A737D;">// On the table</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">columnFilterLayout</span><span style="color: #E1E4E8;">(</span><span style="color: #79B8FF;">ColumnFilterLayout</span><span style="color: #F97583;">|string</span><span style="color: #E1E4E8;"> $layout) </span><span style="color: #6A737D;">// &#39;row&#39; (default, config wire-table.defaults.column_filter_layout) | &#39;popover&#39;</span></div><div class='line'><span style="color: #F97583;">-&gt;</span><span style="color: #B392F0;">cellFilterMenu</span><span style="color: #E1E4E8;">(</span><span style="color: #F97583;">bool</span><span style="color: #E1E4E8;"> $enabled </span><span style="color: #F97583;">=</span><span style="color: #E1E4E8;"> </span><span style="color: #79B8FF;">true</span><span style="color: #E1E4E8;">)             </span><span style="color: #6A737D;">// right-click a cell: &quot;Only this value&quot; / &quot;Exclude this value&quot; — default false</span></div></code></pre>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="../">Filters</a> — operators, the filter panel and the shared filter API</li>
+<li><a href="../select/">SelectFilter</a> — counts and options read from the data</li>
+<li><a href="../date/">DateFilter</a> — presets and date operators</li>
+<li><a href="../../columns/editing/#column-level-filtering">Columns — Column-Level Filtering</a> — the <code>filterAs*()</code> helpers</li>
+</ul>
+
+                                                    <nav class="page-nav" aria-label="Pagination">
+                                                                    <a class="page-nav-link is-prev" href="../relationships/">
+                                        <span>← Previous</span>
+                                        <strong>Relationship &amp; Sub-Row Filters</strong>
+                                    </a>
+                                
+                                                                    <a class="page-nav-link is-next" href="../custom/">
+                                        <span>Next →</span>
+                                        <strong>Custom Filter Class</strong>
+                                    </a>
+                                                            </nav>
+                                            </article>
+
+                                            <aside class="page-toc">
+                            <p class="toc-title">On this page</p>
+                            <ul>
+                                                                    <li class="level-2">
+                                        <a href="#one-filter-engine">
+                                            One filter engine                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#indicator-chips-shareable-urls">
+                                            Indicator chips &amp; shareable URLs                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#two-layouts">
+                                            Two Layouts                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#operators-on-a-column">
+                                            Operators On A Column                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#counts-and-value-lists">
+                                            Counts And Value Lists                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#date-presets">
+                                            Date Presets                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#filter-from-a-cell">
+                                            Filter From A Cell                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#extended-example">
+                                            Extended Example                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#column-and-table-methods">
+                                            Column And Table Methods                                        </a>
+                                    </li>
+                                                                    <li class="level-2">
+                                        <a href="#related">
+                                            Related                                        </a>
+                                    </li>
+                                                            </ul>
+                        </aside>
+                                    </div>
+            </div>
+
+            <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+        </main>
+    </div>
+</body>
+</html>
